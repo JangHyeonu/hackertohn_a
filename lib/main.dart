@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:seeya_hackthon_a/firebase_options.dart';
 
 void main() async {
+  // 파이어베이스 초기화
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //
+
   runApp(const MyApp());
 }
 

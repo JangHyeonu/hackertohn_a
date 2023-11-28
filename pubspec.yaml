@@ -47,7 +47,10 @@ dependencies:
   image_picker: ^1.0.4
   # 알림 관련
   flutter_local_notifications: ^16.2.0
+  # 파이어베이스
   firebase_core: ^2.23.0
+  # 상태관리
+  riverpod: ^2.4.9
 
 dev_dependencies:
   flutter_test:
