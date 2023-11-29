@@ -51,6 +51,10 @@ dependencies:
   firebase_core: ^2.23.0
   # 상태관리
   riverpod: ^2.4.9
+  # 파이어스토어 (DB)
+  cloud_firestore: ^4.13.2
+  # 파이어베이스 인증
+  firebase_auth: ^4.14.1
 
 dev_dependencies:
   flutter_test:
@@ -75,8 +79,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/image/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
