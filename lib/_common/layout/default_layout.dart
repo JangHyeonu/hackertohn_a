@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seeya_hackthon_a/_common/view/login_popup_screen.dart';
 
+// 상단의 앱바를 포함한 기본 레이아웃
 class DefaultLayout extends StatelessWidget {
   final bool appBarLeftUseYn;
   final Widget child;
@@ -15,7 +16,8 @@ class DefaultLayout extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      // 앱바 상단 리스트바
+      
+      // 앱바 우측 상단 리스트바 메뉴
       endDrawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -26,6 +28,17 @@ class DefaultLayout extends StatelessWidget {
               accountName: Text("임시계정명"),
               accountEmail: Text("임시계정@google.com"),
             ),
+            TextButton(
+              child: const Text("로그인"),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const LoginPopupScreen(),
+                );
+              },
+            ),
+
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('홈 화면'),
@@ -33,7 +46,6 @@ class DefaultLayout extends StatelessWidget {
                 if(context.canPop()) {
                   context.pop();
                 }
-
                 context.go("/");
               },
             ),
@@ -47,9 +59,10 @@ class DefaultLayout extends StatelessWidget {
               title: const Text('마이 페이지'),
               onTap: () => {},
             ),
-            TextButton(
-              onPressed: () {},
-              child: const Text("로그아웃"),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('설정'),
+              onTap: () => {},
             ),
           ],
         ),

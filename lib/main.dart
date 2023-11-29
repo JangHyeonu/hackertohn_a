@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
+import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
 import 'package:seeya_hackthon_a/firebase_options.dart';
@@ -29,17 +30,17 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      
+
       // 앱바 상단에 debug 마크 지우기
       debugShowCheckedModeBanner: false,
-      
+
       // 라우팅
       routerConfig: GoRouter(
         initialLocation: "/",
         routes: [
           GoRoute(
             path: "/",
-            builder: (context, state) => const MyHomePage()
+            builder: (context, state) => const MainScreen(),
           ),
           GoRoute(
             path: "/business",
@@ -52,20 +53,6 @@ class MyApp extends StatelessWidget {
             builder: (context, state) => const BusinessMainScreen()
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const DefaultLayout(
-      appBarLeftUseYn: false,
-      child: Center(
-        child: Text("A"),
       ),
     );
   }
