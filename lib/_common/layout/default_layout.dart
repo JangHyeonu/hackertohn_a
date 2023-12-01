@@ -6,9 +6,10 @@ import 'package:seeya_hackthon_a/_common/view/login_popup_screen.dart';
 class DefaultLayout extends StatelessWidget {
   final bool appBarLeftUseYn;
   final Widget child;
+  final Color? backgroundColor;
 
   const DefaultLayout(
-      {required this.appBarLeftUseYn, required this.child, super.key});
+      {required this.appBarLeftUseYn, required this.child, this.backgroundColor, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class DefaultLayout extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
 
+      backgroundColor: backgroundColor,
 
       // 앱바 우측 상단 리스트바 메뉴
       endDrawer: Drawer(
@@ -44,7 +46,7 @@ class DefaultLayout extends StatelessWidget {
               leading: const Icon(Icons.home),
               title: const Text('홈 화면'),
               onTap: () {
-                if(context.canPop()) {
+                while(context.canPop()) {
                   context.pop();
                 }
                 context.go("/");

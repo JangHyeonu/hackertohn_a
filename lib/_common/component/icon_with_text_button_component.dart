@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class IconWithTextButtonComponent extends StatelessWidget {
   final IconData icon;
   final String text;
+  final Function() onTab;
 
   const IconWithTextButtonComponent({
     required this.icon,
     required this.text,
+    required this.onTab,
     super.key});
 
   @override
@@ -15,7 +17,7 @@ class IconWithTextButtonComponent extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height / 6,
         child: InkWell(
-          onTap: () {},
+          onTap: onTab,
           child: Ink(
             width: MediaQuery.of(context).size.width / 2,
             color: Colors.grey[300],

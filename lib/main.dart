@@ -9,6 +9,7 @@ import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
 import 'package:seeya_hackthon_a/event/view/event_detail_screen.dart';
 import 'package:seeya_hackthon_a/firebase_options.dart';
+import 'package:seeya_hackthon_a/user/view/user_join_screen.dart';
 import 'package:wakelock/wakelock.dart';
 
 void main() async {
@@ -51,9 +52,20 @@ class MyApp extends StatelessWidget {
               GoRoute(
                 path: "join",
                 builder: (context, state) => const JoinScreen(),
+                routes: [
+                  GoRoute(
+                    path: "user",
+                    builder: (context, state) => const UserJoinScreen(),
+                  ),
+                  GoRoute(
+                    path: "business",
+                    builder: (context, state) => const BusinessJoinScreen(),
+                  ),
+                ]
               ),
             ]
           ),
+
           GoRoute(
             path: "/event/detail/:eventId",
             builder: (context, state) => EventDetailScreen(id: state.pathParameters["eventId"]!),
@@ -61,12 +73,6 @@ class MyApp extends StatelessWidget {
 
           GoRoute(
             path: "/business",
-            routes: [
-              GoRoute(
-                path: "join",
-                builder: (context, state) => const BusinessJoinScreen(),
-              ),
-            ],
             builder: (context, state) => const BusinessMainScreen()
           ),
         ],

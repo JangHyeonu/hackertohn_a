@@ -57,6 +57,10 @@ dependencies:
   firebase_auth: ^4.14.1
   # 기기 화면 자동꺼짐 방지
   wakelock: ^0.6.2
+  # 구글 회원가입
+  google_sign_in: ^6.1.6
+  # 토스트 메시지
+  fluttertoast: ^8.2.4
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TextFormButtonComponent extends StatelessWidget {
   final String buttonText;
-  final void buttonClickEvent;
+  final Function() buttonClickEvent;
   final double textFormWidth;
   final InputDecoration? inputDecoration;
 
@@ -28,7 +28,7 @@ class TextFormButtonComponent extends StatelessWidget {
             width: textFormWidth,
           ),
           ElevatedButton(
-            onPressed: () => buttonClickEvent,
+            onPressed: buttonClickEvent,
             child: Text(buttonText),
           ),
         ],
