@@ -16,7 +16,8 @@ class DefaultLayout extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      
+
+
       // 앱바 우측 상단 리스트바 메뉴
       endDrawer: Drawer(
         child: ListView(

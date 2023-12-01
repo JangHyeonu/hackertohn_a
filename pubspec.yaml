@@ -55,6 +55,8 @@ dependencies:
   cloud_firestore: ^4.13.2
   # 파이어베이스 인증
   firebase_auth: ^4.14.1
+  # 기기 화면 자동꺼짐 방지
+  wakelock: ^0.6.2
 
 dev_dependencies:
   flutter_test:

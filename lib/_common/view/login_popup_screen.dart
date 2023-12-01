@@ -20,9 +20,31 @@ class LoginPopupScreen extends StatelessWidget {
           ),
         ],
       ),
-      content: ElevatedButton(
-        onPressed: () {},
-        child: const Text("Google 계정으로 로그인"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 50,
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text("Google 계정으로 로그인"),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 50,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  context.go("/join");
+                },
+                child: const Text("회원가입"),
+              ),
+            ],
+          ),
+        ],
       )
     );
   }

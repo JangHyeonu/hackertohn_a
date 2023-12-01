@@ -3,10 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
+import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
 import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
+import 'package:seeya_hackthon_a/event/view/event_detail_screen.dart';
 import 'package:seeya_hackthon_a/firebase_options.dart';
+import 'package:wakelock/wakelock.dart';
 
 void main() async {
   // 파이어베이스 초기화
@@ -15,6 +18,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   //
+
+  // 핸드폰 연결 시 화면 자동꺼짐 방지
+  Wakelock.enable();
 
   runApp(const MyApp());
 }
@@ -41,7 +47,18 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/",
             builder: (context, state) => const MainScreen(),
+            routes: [
+              GoRoute(
+                path: "join",
+                builder: (context, state) => const JoinScreen(),
+              ),
+            ]
           ),
+          GoRoute(
+            path: "/event/detail/:eventId",
+            builder: (context, state) => EventDetailScreen(id: state.pathParameters["eventId"]!),
+          ),
+
           GoRoute(
             path: "/business",
             routes: [
