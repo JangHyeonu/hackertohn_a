@@ -2,15 +2,19 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/auth/google_auth.dart';
+import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
-class LoginPopupScreen extends StatelessWidget {
+class LoginPopupScreen extends ConsumerWidget {
   const LoginPopupScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(userProvider.notifier);
+
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -40,6 +44,8 @@ class LoginPopupScreen extends StatelessWidget {
                   return;
                 }
 
+                state.login(userCredential: value);
+
                 // 로그인 성공
                 Fluttertoast.showToast(
                   msg: "로그인 성공",
@@ -47,6 +53,7 @@ class LoginPopupScreen extends StatelessWidget {
                   backgroundColor: Colors.white
                 ).then((value) {
                   if(value != null && value) {
+
                     if(context.canPop()) {
                       context.pop();
                     }

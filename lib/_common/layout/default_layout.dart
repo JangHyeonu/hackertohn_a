@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/view/login_popup_screen.dart';
+import 'package:seeya_hackthon_a/user/model/user_model.dart';
+import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 // 상단의 앱바를 포함한 기본 레이아웃
-class DefaultLayout extends StatelessWidget {
+class DefaultLayout extends ConsumerStatefulWidget {
   final bool appBarLeftUseYn;
   final Widget child;
   final Color? backgroundColor;
@@ -12,65 +16,119 @@ class DefaultLayout extends StatelessWidget {
       {required this.appBarLeftUseYn, required this.child, this.backgroundColor, super.key});
 
   @override
+  ConsumerState<DefaultLayout> createState() => _DefaultLayoutState();
+}
+
+class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
+  @override
   Widget build(BuildContext context) {
+    final state = ref.watch(userProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
 
-      backgroundColor: backgroundColor,
+      backgroundColor: widget.backgroundColor,
 
       // 앱바 우측 상단 리스트바 메뉴
       endDrawer: Drawer(
         child: ListView(
           children: <Widget>[
-            const UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/image/temp_user.png"),
-              ),
-              accountName: Text("임시계정명"),
-              accountEmail: Text("임시계정@google.com"),
-            ),
-            TextButton(
-              child: const Text("로그인"),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => const LoginPopupScreen(),
-                );
-              },
-            ),
+            drawerHeader(state),
+            (state == null || state.email == "" ?
+              TextButton(
+                child: const Text("로그인"),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const LoginPopupScreen(),
+                  );
+                },
+              )
+                :
+              TextButton(
+                child: const Text("로그아웃"),
+                onPressed: () {
+                  ref.read(userProvider.notifier).logout();
 
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('홈 화면'),
-              onTap: () {
-                while(context.canPop()) {
-                  context.pop();
-                }
-                context.go("/");
-              },
+                  Fluttertoast.showToast(
+                      msg: "로그아웃",
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.white
+                  );
+                },
+              )
             ),
-            ListTile(
-              leading: const Icon(Icons.add_alert_rounded),
-              title: const Text('나의 알림'),
-              onTap: () => {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('마이 페이지'),
-              onTap: () => {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('설정'),
-              onTap: () => {},
-            ),
+            drawerBody(state),
           ],
         ),
       ),
-      body: child,
+      body: widget.child,
+    );
+  }
+
+  UserAccountsDrawerHeader drawerHeader(UserModel? state) {
+    if(state == null || state.email == "") {
+      return const UserAccountsDrawerHeader(
+        currentAccountPicture: CircleAvatar(
+          backgroundImage: AssetImage("assets/image/temp_user.png"),
+        ),
+        accountName: Text("guest"),
+        accountEmail: Text("guest@google.com"),
+      );
+    } else {
+      return UserAccountsDrawerHeader(
+        currentAccountPicture: CircleAvatar(
+          backgroundImage: NetworkImage(state!.photoUrl!),
+        ),
+        accountName: Text(state!.displayName!),
+        accountEmail: Text(state!.email!),
+      );
+    }
+  }
+
+  // 사이드바 홈화면 (     ) 설정 사이의 리스트 추가를 위함
+  Widget drawerBody(UserModel? state) {
+    List<ListTile> customColumn = List.empty();
+
+    if(!(state == null || state.email == "")) {
+      customColumn = [
+        ListTile(
+          leading: const Icon(Icons.add_alert_rounded),
+          title: const Text('나의 알림'),
+          onTap: () => {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.person),
+          title: const Text('마이 페이지'),
+          onTap: () {
+            context.go("/user/my-page");
+          },
+        ),
+      ];
+    }
+
+    return Column(
+      children: [
+        ListTile(
+          leading: const Icon(Icons.home),
+          title: const Text('홈 화면'),
+          onTap: () {
+            while(context.canPop()) {
+              context.pop();
+            }
+            context.go("/");
+          },
+        ),
+        ...customColumn,
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text('설정'),
+          onTap: () => {},
+        ),
+      ],
     );
   }
 }
