@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
     final data = TempConst.tempListData;
 
     return DefaultLayout(
-      appBarLeftUseYn: false,
+      sideBarOffYn: false,
       child: SingleChildScrollView(
         child: Column(
           children: [

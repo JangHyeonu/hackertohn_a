@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
 import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
+import 'package:seeya_hackthon_a/business/view/business_auth_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
 import 'package:seeya_hackthon_a/event/view/event_detail_screen.dart';
@@ -93,8 +94,14 @@ class MyApp extends StatelessWidget {
 
           // Login & 사업자 등록 유저 관련 route
           GoRoute(
-              path: "/business",
-              builder: (context, state) => const BusinessMainScreen()
+            path: "/business",
+            builder: (context, state) => const BusinessMainScreen(),
+            routes: [
+              GoRoute(
+                path: "auth",
+                builder: (context, state) => const BusinessAuthScreen(),
+              )
+            ]
           ),
 
         ],

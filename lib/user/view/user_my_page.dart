@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
@@ -11,7 +12,7 @@ class UserMyPage extends ConsumerWidget {
     final state = ref.watch(userProvider);
 
     return DefaultLayout(
-      appBarLeftUseYn: false,
+      sideBarOffYn: false,
       child: Container(
         color: Colors.white10,
         child: ListView(
@@ -28,7 +29,8 @@ class UserMyPage extends ConsumerWidget {
                     accountName: Text(state!.displayName!),
                     accountEmail: Text(state!.email!),
                     otherAccountsPictures: [
-                      IconButton(onPressed: (){}, icon: Icon(Icons.add_alert), color: Colors.white,)
+                      IconButton(onPressed: (){}, icon: Icon(Icons.person), color: Colors.white),
+                      IconButton(onPressed: (){}, icon: Icon(Icons.business), color: Colors.white)
                     ],
                   ),
                 ],
@@ -36,10 +38,50 @@ class UserMyPage extends ConsumerWidget {
               // height: MediaQuery.of(context).size.height / 4,
             ),
 
+            // Container(
+            //   color: Colors.white24,
+            //   child: Column(
+            //     children: [
+            //       Row(
+            //         children: [
+            //           CircleAvatar(backgroundImage: NetworkImage(state!.photoUrl!)),
+            //           Column(
+            //             children: [
+            //               IconButton(onPressed: (){}, icon: Icon(Icons.person)),
+            //               Text("일반사용자"),
+            //             ],
+            //           ),
+            //           SizedBox(width: 8.0,),
+            //           Column(
+            //             children: [
+            //               IconButton(onPressed: (){}, icon: Icon(Icons.business)),
+            //               Text("사업자"),
+            //             ],
+            //           )
+            //         ],
+            //       ),
+            //       Text(state!.displayName!),
+            //       Text(state!.email!)
+            //     ],
+            //   ),
+            //   // height: MediaQuery.of(context).size.height / 4,
+            // ),
+
             // body
             Container(
               child: Column(
                 children: [
+
+                  ListTile(
+                    onTap: () {
+                      context.push("/business/auth");
+                    },
+                    tileColor: Colors.grey[200],
+                    title: Text("사업자 계정 인증"),
+                    subtitle: Text("사업자를 인증하면 행사를 등록할 수 있어요"),
+                    style: ListTileStyle.drawer,
+                  ),
+                  SizedBox(height: 8.0,),
 
                   // body-list1
                   Container(
@@ -53,6 +95,7 @@ class UserMyPage extends ConsumerWidget {
                             child: Text("나의 활동"),
                           ),
                         ),
+
                         ListTile(
                           onTap: () {},
                           tileColor: Colors.grey[200],
@@ -62,7 +105,7 @@ class UserMyPage extends ConsumerWidget {
                         ListTile(
                           onTap: () {},
                           tileColor: Colors.grey[200],
-                          title: Text("나의 활동 기능 2"),
+                          title: Text("기능 2"),
                         ),
                       ],
                     ),
@@ -89,7 +132,7 @@ class UserMyPage extends ConsumerWidget {
                         ListTile(
                           onTap: () {},
                           tileColor: Colors.grey[200],
-                          title: Text("기타 기능 2"),
+                          title: Text("기능 2"),
                         ),
                       ],
                     ),

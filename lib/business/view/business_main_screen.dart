@@ -7,7 +7,7 @@ class BusinessMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const DefaultLayout(
-      appBarLeftUseYn: false,
+      sideBarOffYn: false,
       child: Center(
         child: Text("BusinessMain"),
       ),

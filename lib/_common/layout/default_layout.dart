@@ -8,12 +8,13 @@ import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 // 상단의 앱바를 포함한 기본 레이아웃
 class DefaultLayout extends ConsumerStatefulWidget {
-  final bool appBarLeftUseYn;
+  final bool sideBarOffYn;
   final Widget child;
   final Color? backgroundColor;
+  final String? title;
 
   const DefaultLayout(
-      {required this.appBarLeftUseYn, required this.child, this.backgroundColor, super.key});
+      {required this.sideBarOffYn, required this.child, this.backgroundColor, this.title, super.key});
 
   @override
   ConsumerState<DefaultLayout> createState() => _DefaultLayoutState();
@@ -27,12 +28,14 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        title: Text(widget.title ?? ""),
+        centerTitle: true,
       ),
 
       backgroundColor: widget.backgroundColor,
 
       // 앱바 우측 상단 리스트바 메뉴
-      endDrawer: Drawer(
+      endDrawer: !widget.sideBarOffYn ? Drawer(
         child: ListView(
           children: <Widget>[
             drawerHeader(state),
@@ -64,7 +67,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
             drawerBody(state),
           ],
         ),
-      ),
+      ) : null,
       body: widget.child,
     );
   }
@@ -85,6 +88,9 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         ),
         accountName: Text(state!.displayName!),
         accountEmail: Text(state!.email!),
+        otherAccountsPictures: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.add_alert), color: Colors.white)
+        ],
       );
     }
   }

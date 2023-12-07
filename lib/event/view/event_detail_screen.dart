@@ -14,7 +14,7 @@ class EventDetailScreen extends StatelessWidget {
     final data = TempConst.tempListData.firstWhere((element) => element["id"] == id);
     
     return DefaultLayout(
-      appBarLeftUseYn: false,
+      sideBarOffYn: false,
       child: Column(
         children: [
           Container(

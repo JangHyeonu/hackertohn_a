@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,16 +50,16 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA-jPahprpBrrrW6QAtKtHxOXt0prYmX4Q',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['aosFirebaseApiKey']!,
     appId: '1:733213618617:android:a8131b62b30fcae49d8668',
     messagingSenderId: '733213618617',
     projectId: 'seeya-hackthon-a',
     storageBucket: 'seeya-hackthon-a.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCBrtX1cn5K6bU6-eaPc-fFZBrzA09ufrQ',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['iosFirebaseApiKey']!,
     appId: '1:733213618617:ios:fcfa0a89b1dcc1249d8668',
     messagingSenderId: '733213618617',
     projectId: 'seeya-hackthon-a',

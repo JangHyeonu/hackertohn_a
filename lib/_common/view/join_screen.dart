@@ -9,7 +9,7 @@ class JoinScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      appBarLeftUseYn: false,
+      sideBarOffYn: false,
       backgroundColor: Colors.grey[200],
       child: Row(
         children: [
