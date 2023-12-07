@@ -17,6 +17,12 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
   final picker = ImagePicker();
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
 
+  TextEditingController textController1 = TextEditingController();  // 사업자 등록번호
+  TextEditingController textController2 = TextEditingController();  // 상호명
+  TextEditingController textController3 = TextEditingController();  // 업종
+  TextEditingController textController4 = TextEditingController();  // 대표자명
+  TextEditingController textController5 = TextEditingController();  // 사업자등록증 사진첨부 여부
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(businessProvider);
@@ -29,6 +35,35 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
           padding: const EdgeInsets.fromLTRB(32, 8, 32, 8),
           child: Column(
             children: [
+              TextFormField(
+                controller: textController1,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.onetwothree),
+                  label: Text("사업자 등록번호"),
+                ),
+              ),
+              TextFormField(
+                controller: textController2,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.abc),
+                  label: Text("상호명"),
+                ),
+              ),
+              TextFormField(
+                controller: textController3,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.abc),
+                  label: Text("업종"),
+                ),
+              ),
+              TextFormField(
+                controller: textController4,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.abc),
+                  label: Text("대표자명"),
+                ),
+              ),
               TextFormField(
                 onTap: () async {
                   image = await picker.pickImage(source: ImageSource.gallery);
@@ -44,44 +79,29 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 // readOnly: true,
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 2.25,
-                child: state.docImgPath != "none" ? Image.file(File(state.docImgPath ?? "")) : Center(child: Text("사진을 첨부해주세요")),
-              ),
-
-              TextFormField(
-                onChanged: (value) {
-
-                },
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.abc),
-                  label: Text("상호명"),
-                ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-
-                },
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.abc),
-                  label: Text("업종"),
-                ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-
-                },
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.abc),
-                  label: Text("대표자명"),
+                height: MediaQuery.of(context).size.height / 2.75,
+                child: state.businessImagePath == "none" || state.businessImagePath == null ? const Center(child: Text("사진을 첨부해주세요")) : Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                  child: Image.file(File(state.businessImagePath ?? "none")),
                 ),
               ),
               const SizedBox(height: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(onPressed: (){}, child: Text("취소")),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(businessProvider.notifier).cancelBusinessAuth();
+                    },
+                    child: Text("취소")
+                  ),
                   const SizedBox(width: 8.0),
-                  ElevatedButton(onPressed: (){}, child: Text("인증 신청"))
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(businessProvider.notifier).applyBusinessAuth(textController1.text, textController2.text, textController3.text, textController4.text);
+                    }, 
+                    child: Text("인증 신청")
+                  ),
                 ],
               )
             ],
