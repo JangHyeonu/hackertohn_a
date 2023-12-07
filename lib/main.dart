@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
             routes: [
               GoRoute(
                 path: "auth",
-                builder: (context, state) => const BusinessAuthScreen(),
+                builder: (context, state) => BusinessAuthScreen(),
               )
             ]
           ),
