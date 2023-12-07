@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
@@ -16,6 +17,9 @@ import 'package:seeya_hackthon_a/user/view/user_my_page.dart';
 import 'package:wakelock/wakelock.dart';
 
 void main() async {
+  // .env 파일 초기화
+  await dotenv.load(fileName: "config.env");
+
   // 파이어베이스 초기화
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
