@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/business/model/business_model.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
@@ -25,24 +27,21 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     state = model;
   }
 
-  void cancelBusinessAuth() {
-    state = state.copyWith(
-      businessNumber: null,
-      businessTitle: null,
-      businessCategory: null,
-      businessName: null,
+  void cancelBusinessAuth(BuildContext context) {
+    BusinessModel model = state.copyWith(
+      businessNumber: "",
+      businessTitle: "",
+      businessCategory: "",
+      businessName: "",
       businessImagePath: "none",
     );
-  }
 
-  void applyBusinessAuth(String param1, String param2, String param3, String param4) {
-    BusinessModel model = state.copyWith(
-      businessNumber: param1,
-      businessTitle: param2,
-      businessCategory: param3,
-      businessName: param4,
-    );
+    context.pop();
 
     state = model;
+  }
+
+  void applyBusinessAuth(BusinessModel state) {
+    this.state = state;
   }
 }

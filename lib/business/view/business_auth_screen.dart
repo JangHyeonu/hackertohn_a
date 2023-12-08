@@ -17,12 +17,6 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
   final picker = ImagePicker();
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
 
-  TextEditingController textController1 = TextEditingController();  // 사업자 등록번호
-  TextEditingController textController2 = TextEditingController();  // 상호명
-  TextEditingController textController3 = TextEditingController();  // 업종
-  TextEditingController textController4 = TextEditingController();  // 대표자명
-  TextEditingController textController5 = TextEditingController();  // 사업자등록증 사진첨부 여부
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(businessProvider);
@@ -36,7 +30,12 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
           child: Column(
             children: [
               TextFormField(
-                controller: textController1,
+                onChanged: (value) {
+                  state.businessNumber = value;
+                },
+                controller: TextEditingController(
+                  text: state.businessNumber
+                ),
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.onetwothree),
@@ -44,24 +43,39 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 ),
               ),
               TextFormField(
-                controller: textController2,
+                onChanged: (value) {
+                  state.businessTitle = value;
+                },
+                controller: TextEditingController(
+                    text: state.businessTitle
+                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("상호명"),
                 ),
               ),
               TextFormField(
-                controller: textController3,
+                onChanged: (value) {
+                  state.businessCategory = value;
+                },
+                controller: TextEditingController(
+                    text: state.businessCategory
+                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("업종"),
                 ),
               ),
               TextFormField(
-                controller: textController4,
+                onChanged: (value) {
+                  state.businessName = value;
+                },
+                controller: TextEditingController(
+                    text: state.businessName
+                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
-                  label: Text("대표자명"),
+                  label: const Text("대표자명"),
                 ),
               ),
               TextFormField(
@@ -91,16 +105,16 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      ref.read(businessProvider.notifier).cancelBusinessAuth();
+                      ref.read(businessProvider.notifier).cancelBusinessAuth(context);
                     },
-                    child: Text("취소")
+                    child: const Text("취소")
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
                     onPressed: () {
-                      ref.read(businessProvider.notifier).applyBusinessAuth(textController1.text, textController2.text, textController3.text, textController4.text);
+                      ref.read(businessProvider.notifier).applyBusinessAuth(state);
                     }, 
-                    child: Text("인증 신청")
+                    child: const Text("인증 신청")
                   ),
                 ],
               )

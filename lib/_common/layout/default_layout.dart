@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seeya_hackthon_a/_common/component/text_form_button_component.dart';
 import 'package:seeya_hackthon_a/_common/view/login_popup_screen.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
@@ -12,9 +13,11 @@ class DefaultLayout extends ConsumerStatefulWidget {
   final Widget child;
   final Color? backgroundColor;
   final String? title;
+  final bool? isResize;
+  final Widget? bottomSheetWidget;
 
   const DefaultLayout(
-      {required this.sideBarOffYn, required this.child, this.backgroundColor, this.title, super.key});
+      {required this.sideBarOffYn, required this.child, this.backgroundColor, this.title, this.isResize, this.bottomSheetWidget, super.key});
 
   @override
   ConsumerState<DefaultLayout> createState() => _DefaultLayoutState();
@@ -31,8 +34,10 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         title: Text(widget.title ?? ""),
         centerTitle: true,
       ),
-
       backgroundColor: widget.backgroundColor,
+
+      resizeToAvoidBottomInset : widget.isResize,
+      bottomSheet: widget.bottomSheetWidget,
 
       // 앱바 우측 상단 리스트바 메뉴
       endDrawer: !widget.sideBarOffYn ? Drawer(

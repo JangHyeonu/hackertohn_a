@@ -29,8 +29,8 @@ class UserMyPage extends ConsumerWidget {
                     accountName: Text(state!.displayName!),
                     accountEmail: Text(state!.email!),
                     otherAccountsPictures: [
-                      IconButton(onPressed: (){}, icon: Icon(Icons.person), color: Colors.white),
-                      IconButton(onPressed: (){}, icon: Icon(Icons.business), color: Colors.white)
+                      IconButton(onPressed: (){}, icon: const Icon(Icons.person), color: Colors.white),
+                      IconButton(onPressed: (){}, icon: const Icon(Icons.business), color: Colors.white)
                     ],
                   ),
                 ],

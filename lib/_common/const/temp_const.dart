@@ -30,5 +30,17 @@ class TempConst {
       "date": "2023-12-09",
       "distance": "10",
     },
+    {
+      "id": "6",
+      "title": "행사 제목 5",
+      "date": "2023-12-09",
+      "distance": "10",
+    },
+    {
+      "id": "7",
+      "title": "행사 제목 5",
+      "date": "2023-12-09",
+      "distance": "10",
+    },
   ];
 }
