@@ -29,6 +29,7 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
           padding: const EdgeInsets.fromLTRB(32, 8, 32, 8),
           child: Column(
             children: [
+              // 사업자 등록번호
               TextFormField(
                 onChanged: (value) {
                   state.businessNumber = value;
@@ -42,42 +43,64 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                   label: Text("사업자 등록번호"),
                 ),
               ),
+
+              // 상호명
               TextFormField(
                 onChanged: (value) {
                   state.businessTitle = value;
                 },
                 controller: TextEditingController(
-                    text: state.businessTitle
+                  text: state.businessTitle
                 ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("상호명"),
                 ),
               ),
+
+              // 주소
+              TextFormField(
+                onChanged: (value) {
+                  state.businessAddress = value;
+                },
+                controller: TextEditingController(
+                  text: state.businessAddress
+                ),
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.abc),
+                  label: Text("주소"),
+                ),
+              ),
+
+              // 업종
               TextFormField(
                 onChanged: (value) {
                   state.businessCategory = value;
                 },
                 controller: TextEditingController(
-                    text: state.businessCategory
+                  text: state.businessCategory
                 ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("업종"),
                 ),
               ),
+              
+              // 대표자명
               TextFormField(
                 onChanged: (value) {
                   state.businessName = value;
                 },
                 controller: TextEditingController(
-                    text: state.businessName
+                  text: state.businessName
                 ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: const Text("대표자명"),
                 ),
               ),
+
+              // 첨부 사진
               TextFormField(
                 onTap: () async {
                   image = await picker.pickImage(source: ImageSource.gallery);

@@ -3,15 +3,12 @@ class BusinessModel {
   String? userModelId;
   String? email;
 
-  // 계정의 사업자 권한 인증 상태
-  String? state;  // apply, approve, reject
-  // 사용 권한
-  String auth = "user";   // user, business
-
   // 사업자 등록번호
   String? businessNumber;
   // 사업자 상호명
   String? businessTitle;
+  // 사업장 주소
+  String? businessAddress;
   // 사업자 업종
   String? businessCategory;
   // 사업자 대표자명
@@ -22,24 +19,24 @@ class BusinessModel {
   BusinessModel({
     this.userModelId,
     this.email,
-    this.state,
     this.businessNumber,
     this.businessTitle,
+    this.businessAddress,
     this.businessCategory,
     this.businessName,
     this.businessImagePath,
   });
 
   BusinessModel copyWith({
-    String? userModelId, String? email, String? state,
-    String? businessNumber, String? businessTitle, String? businessCategory, String? businessName, String? businessImagePath,
+    String? userModelId, String? email,
+    String? businessNumber, String? businessTitle, String? businessAddress, String? businessCategory, String? businessName, String? businessImagePath,
   }) {
     return BusinessModel(
       userModelId: userModelId ?? this.userModelId,
       email: email ?? this.email,
-      state: state ?? this.state,
       businessNumber: businessNumber ?? this.businessNumber,
       businessTitle: businessTitle ?? this.businessTitle,
+      businessAddress: businessAddress ?? this.businessAddress,
       businessCategory: businessCategory ?? this.businessCategory,
       businessName: businessName ?? this.businessName,
       businessImagePath: businessImagePath ?? this.businessImagePath,

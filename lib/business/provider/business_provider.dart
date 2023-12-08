@@ -31,6 +31,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     BusinessModel model = state.copyWith(
       businessNumber: "",
       businessTitle: "",
+      businessAddress: "",
       businessCategory: "",
       businessName: "",
       businessImagePath: "none",
@@ -43,5 +44,5 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
 
   void applyBusinessAuth(BusinessModel state) {
     this.state = state;
-  }
+}
 }

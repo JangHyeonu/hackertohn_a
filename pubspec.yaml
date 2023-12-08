@@ -61,7 +61,10 @@ dependencies:
   google_sign_in: ^6.1.6
   # 토스트 메시지
   fluttertoast: ^8.2.4
+  # 상태관리
   flutter_riverpod: ^2.4.9
+  # GPS 활용
+  geolocator: ^10.1.0
 
 dev_dependencies:
   flutter_test:
