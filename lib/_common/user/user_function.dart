@@ -35,6 +35,7 @@ class UserFunction {
         });
 
     // 조회한 유저 정보 모델에 담기
+    UserStateNotifier.getInstance().login(userCredential: credential);
     UserStateNotifier.getInstance().setJoinType(JOIN_TYPE.GOOGLE_OAUTH);
   }
 
