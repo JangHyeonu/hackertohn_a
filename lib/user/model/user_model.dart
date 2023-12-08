@@ -1,9 +1,12 @@
+import 'package:seeya_hackthon_a/_common/user/user_function.dart';
+
 class UserModel {
   final String? userModelId;
   final String? email;
   final String? displayName;
   final String? phoneNumber;
   final String? photoUrl;
+  late final JOIN_TYPE? joinType;
 
   // 계정의 사업자 권한 인증 상태
   final String? state;  // apply, approve, reject

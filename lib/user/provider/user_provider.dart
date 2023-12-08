@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:seeya_hackthon_a/_common/user/user_function.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 
 // 전역 상태 관리
@@ -12,7 +14,20 @@ final userProvider = StateNotifierProvider<UserStateNotifier, UserModel?>((ref) 
 });
 
 class UserStateNotifier extends StateNotifier<UserModel?> {
-  UserStateNotifier() : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: ""));
+  static UserStateNotifier? _instance;
+  static UserStateNotifier getInstance() {
+    _instance ??= UserStateNotifier();
+    return _instance!;
+  }
+
+
+  UserStateNotifier() : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
+    _instance ??= this;
+  }
+
+  void setJoinType(JOIN_TYPE joinType) {
+    state!.joinType = joinType;
+  }
 
   void login({
     required UserCredential userCredential
