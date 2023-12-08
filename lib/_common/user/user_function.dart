@@ -8,6 +8,7 @@ class UserFunction {
 
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+
   // 로그인 처리 :: 현재 google auth
   static OAuthLogin({required UserCredential credential}) async {
     debugPrint("OAuthLogin :: ");
@@ -24,7 +25,7 @@ class UserFunction {
           userData = result.data(),
           debugPrint("OAuthLogin :: search in firestore : ${userData}"),
           if(userData == null) {
-            Join(regType: "GOOGLE_OAUTH", uid: credential.user!.uid),
+            Join(joinType: JOIN_TYPE.GOOGLE_OAUTH, uid: credential.user!.uid),
           }
         });
   }
@@ -35,22 +36,22 @@ class UserFunction {
   }
 
   // 회원 가입
-  static Join({required String regType, String? uid, String? userId, String? userPassword}) async {
+  static Join({required JOIN_TYPE joinType, String? uid, String? userId, String? userPassword}) async {
     debugPrint("OAuthJoin :: ");
     try {
       if(uid != null) {
-        await _firestore.collection("user").doc("${regType.toLowerCase()}_${uid}")
+        await _firestore.collection("user").doc("${joinType.name.toLowerCase()}_${uid}")
             .set({
           "id":userId,
           "password":userPassword,
-          "reg_type":regType,
+          "reg_type":joinType.name.toString(),
           "reg_datetime":DateTime.now(),
         });
       } else {
         await _firestore.collection("user").add({
           "id":userId,
           "password":userPassword,
-          "reg_type":regType,
+          "reg_type":joinType.name.toString(),
           "reg_datetime":DateTime.now(),
         });
       }
@@ -60,4 +61,9 @@ class UserFunction {
     }
   }
 
+}
+
+enum JOIN_TYPE {
+  REGIST,
+  GOOGLE_OAUTH,
 }
