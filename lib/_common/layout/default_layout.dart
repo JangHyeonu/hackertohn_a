@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:seeya_hackthon_a/_common/component/text_form_button_component.dart';
 import 'package:seeya_hackthon_a/_common/view/login_popup_screen.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
@@ -116,6 +115,13 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           title: const Text('마이 페이지'),
           onTap: () {
             context.go("/user/my-page");
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.person),
+          title: const Text('행사 등록'),
+          onTap: () {
+            context.go("/event/edit");
           },
         ),
       ];

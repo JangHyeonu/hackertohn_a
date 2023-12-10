@@ -12,7 +12,36 @@
           "package_name": "com.shkta.seeya_hackthon_a"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "733213618617-4t4hjrk7panaa4kd2sootg3kni3rik60.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shkta.seeya_hackthon_a",
+            "certificate_hash": "f059b7b5f4f53c9fbc911c5f5b24d2f58567c0df"
+          }
+        },
+        {
+          "client_id": "733213618617-csud11k58nabpqaic3rtderqnq3uk0fu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shkta.seeya_hackthon_a",
+            "certificate_hash": "cef2ab1c4168ffb830ec71ed4d4ee2adb1841a47"
+          }
+        },
+        {
+          "client_id": "733213618617-otodss75qt19bh07o471g9g2s0r4flh1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shkta.seeya_hackthon_a",
+            "certificate_hash": "3342add9e0a2ca0210e9572a8839a664e1f776f1"
+          }
+        },
+        {
+          "client_id": "733213618617-dlmkfhhoehvi5tmimm2ab6o5pqup404m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA-jPahprpBrrrW6QAtKtHxOXt0prYmX4Q"
@@ -20,7 +49,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733213618617-dlmkfhhoehvi5tmimm2ab6o5pqup404m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "733213618617-uava82f2h9dh3ibprel8cbs8cp81kjqa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shkta.seeyaHackthona"
+              }
+            }
+          ]
         }
       }
     }

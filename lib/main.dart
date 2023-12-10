@@ -1,16 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
 import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_auth_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
 import 'package:seeya_hackthon_a/event/view/event_detail_screen.dart';
+import 'package:seeya_hackthon_a/event/view/event_edit_screen.dart';
+import 'package:seeya_hackthon_a/event/view/event_list_screen.dart';
 import 'package:seeya_hackthon_a/firebase_options.dart';
 import 'package:seeya_hackthon_a/user/view/user_join_screen.dart';
 import 'package:seeya_hackthon_a/user/view/user_my_page.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
       // 라우팅
       routerConfig: GoRouter(
         initialLocation: "/",
+        debugLogDiagnostics: true,
         routes: [
           GoRoute(
             path: "/",
@@ -80,8 +82,32 @@ class MyApp extends StatelessWidget {
 
           // Event 관련 route
           GoRoute(
-            path: "/event/detail/:eventId",
-            builder: (context, state) => EventDetailScreen(id: state.pathParameters["eventId"]!),
+            path: "/event",
+            builder: (context, state) => const EventListScreen(),
+            routes: [
+              GoRoute(
+                path: "list",
+                builder: (context, state) => const EventListScreen(),
+              ),
+              GoRoute(
+                path: "edit",
+                builder: (context, state) => const EventEditScreen(),
+              ),
+              GoRoute(
+                path: "edit/:id",
+                builder: (context, state) => const EventEditScreen(),
+              ),
+              GoRoute(
+                path: "detail/:eventId",
+                builder: (context, state) {
+                  if(state.pathParameters["eventId"] == null) {
+                    context.push("/event/list");
+                  }
+                  return EventDetailScreen(id: state.pathParameters["eventId"]!);
+                },
+                // builder: (context, state) => EventDetailScreen(id: state.pathParameters["eventId"]!),
+              ),
+            ]
           ),
 
           // Login 유저 관련 route

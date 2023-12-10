@@ -7,7 +7,8 @@ class EventDetailScreen extends StatelessWidget {
 
   const EventDetailScreen({
     required this.id,
-    super.key});
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class EventDetailScreen extends StatelessWidget {
             width: double.infinity,
             child: Column(
               children: [
-
+                Container()
               ],
             ),
           ),
