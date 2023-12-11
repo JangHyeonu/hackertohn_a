@@ -22,10 +22,16 @@ class EventRepository {
 
   Future<Map<String, dynamic>> read(String eventId) async {
     Map<String, dynamic> result = {};
+    if(eventId == null || eventId == "") {
+      return result;
+    }
 
     final docRef = _firestore.collection("event").doc(eventId);
-    docRef.get().then((doc) => {
-      if(doc.data() != null) { result = doc.data() as Map<String, dynamic> },
+    await docRef.get().then((doc) => {
+      if(doc.data() != null) {
+        result = doc.data() as Map<String, dynamic>,
+      },
+      result["eventId"] = doc.id,
     });
 
     return result;

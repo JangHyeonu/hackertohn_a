@@ -28,9 +28,15 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     // final data = TempConst.tempListData.firstWhere((element) => element["id"] == id);
     final state = ref.watch(eventProvider);
 
-    // DB에서 행사 데이터 조회
-    ref.read(eventProvider.notifier).read(eventId);
-    debugPrint("event detail build");
+    // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
+    if(eventId != state.eventId) {
+      // DB에서 데이터 조회
+      ref.read(eventProvider.notifier).read(eventId ?? "");
+      // TODO : 로딩
+      return const DefaultLayout(sideBarOffYn: false, child: Column(),);
+    }
+
+    debugPrint("event detail build :: targetEventId : ${eventId} / stateEventId : ${state.eventId}");
 
     return DefaultLayout(
       sideBarOffYn: false,

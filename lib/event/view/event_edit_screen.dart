@@ -22,10 +22,15 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final state = ref.watch(eventProvider);
 
-    // DB에서 데이터 조회
-    ref.read(eventProvider.notifier).read(eventId ?? "");
+    // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
+    if(eventId != state.eventId) {
+      // DB에서 데이터 조회
+      ref.read(eventProvider.notifier).read(eventId ?? "");
+    }
+
     debugPrint("event edit build");
 
     return DefaultLayout (
