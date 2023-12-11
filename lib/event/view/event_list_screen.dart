@@ -1,18 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/component/banner_component.dart';
 import 'package:seeya_hackthon_a/event/component/event_list_component.dart';
 import 'package:seeya_hackthon_a/_common/component/text_form_button_component.dart';
 import 'package:seeya_hackthon_a/_common/const/temp_const.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
+import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
-// 메인 화면
-class EventListScreen extends StatelessWidget {
-  const EventListScreen({super.key});
+class EventListScreen extends ConsumerStatefulWidget {
+  int? pageNo;
+
+  EventListScreen({
+    this.pageNo,
+    super.key
+  });
+
+  @override
+  ConsumerState<EventListScreen> createState() => EventListScreenState(pageNo);
+}
+
+class EventListScreenState extends ConsumerState<EventListScreen> {
+  int _pageNo = 1;
+  EventListScreenState(int? pageNo) {
+     this._pageNo = pageNo ?? 1;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final data = TempConst.tempListData;
+
+    // 행사 목록 관리 provider
+    final state = ref.watch(eventListProvider);
+
+    // DB에서 행사 목록 조회
+    ref.read(eventListProvider.notifier).readList(_pageNo);
 
     return DefaultLayout(
 
@@ -56,21 +77,21 @@ class EventListScreen extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.height / 2,
                   child: ListView.separated(
-                    itemCount: data.length,
+                    itemCount: state.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          context.push("/event/detail/${data[index]["id"]!}");
+                          context.push("/event/detail/${state[index].eventId!}");
                         },
                         child: Ink(
                           decoration: BoxDecoration(
                               color: Colors.grey[200]
                           ),
                           child: EventListComponent(
-                            id: data[index]["id"]!,
-                            title: data[index]["title"]!,
-                            date: data[index]["date"]!,
-                            distance: data[index]["distance"]!,
+                            eventId: state[index].eventId!,
+                            title: state[index].title ?? "-",
+                            startDatetime: state[index].startDatetime,
+                            endDatetime: state[index].endDatetime,
                           ),
                         ),
                       );
@@ -87,6 +108,4 @@ class EventListScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }

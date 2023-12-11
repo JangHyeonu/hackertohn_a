@@ -8,17 +8,25 @@ import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
 
 class EventEditScreen extends ConsumerStatefulWidget {
-  const EventEditScreen({super.key});
+  final String? eventId;
+  const EventEditScreen({this.eventId, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => EventEditScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => EventEditScreenState(eventId);
 }
 
 class EventEditScreenState extends ConsumerState<EventEditScreen> {
+  final String? eventId;
+
+  EventEditScreenState(this.eventId);
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(eventProvider);
+
+    // DB에서 데이터 조회
+    ref.read(eventProvider.notifier).read(eventId ?? "");
+    debugPrint("event edit build");
 
     return DefaultLayout (
       sideBarOffYn: false,

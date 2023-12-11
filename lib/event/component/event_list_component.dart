@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class EventListComponent extends StatelessWidget {
-  final String id;
-  final String title;
-  final String date;
-  final String distance;
+  String eventId;
+  String title;
+  String? content;
+  String? location;
+  DateTime? startDatetime;
+  DateTime? endDatetime;
+  String? caution;
 
-  const EventListComponent({
-    required this.id,
+  String? register;
+  DateTime? regDatetime;
+
+  EventListComponent({
+    required this.eventId,
     required this.title,
-    required this.date,
-    required this.distance,
-    super.key});
+    this.content,
+    this.location,
+    this.startDatetime,
+    this.endDatetime,
+    this.caution,
+    this.register,
+    this.regDatetime,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +35,8 @@ class EventListComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(title),
-          Text(date),
-          Text(distance),
+          Text((startDatetime != null) ? DateFormat("YYYY.MM.dd").format(startDatetime!) : "-"),
+          //Text(distance),
         ],
       ),
     );

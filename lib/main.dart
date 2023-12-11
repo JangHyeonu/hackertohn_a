@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         routes: [
           GoRoute(
             path: "/",
-            builder: (context, state) => const MainScreen(),
+            builder: (context, state) => EventListScreen(),
             routes: [
               GoRoute(
                 path: "join",
@@ -83,19 +83,19 @@ class MyApp extends StatelessWidget {
           // Event 관련 route
           GoRoute(
             path: "/event",
-            builder: (context, state) => const EventListScreen(),
+            builder: (context, state) => EventListScreen(),
             routes: [
               GoRoute(
                 path: "list",
-                builder: (context, state) => const EventListScreen(),
+                builder: (context, state) => EventListScreen(),
               ),
               GoRoute(
                 path: "edit",
-                builder: (context, state) => const EventEditScreen(),
+                builder: (context, state) => EventEditScreen(),
               ),
               GoRoute(
-                path: "edit/:id",
-                builder: (context, state) => const EventEditScreen(),
+                path: "edit/:eventId",
+                builder: (context, state) => EventEditScreen(eventId: state.pathParameters["eventId"]!),
               ),
               GoRoute(
                 path: "detail/:eventId",
@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
                   if(state.pathParameters["eventId"] == null) {
                     context.push("/event/list");
                   }
-                  return EventDetailScreen(id: state.pathParameters["eventId"]!);
+                  return EventDetailScreen(eventId: state.pathParameters["eventId"]!);
                 },
                 // builder: (context, state) => EventDetailScreen(id: state.pathParameters["eventId"]!),
               ),

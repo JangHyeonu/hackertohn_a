@@ -37,18 +37,18 @@ class EventNotifier extends StateNotifier<EventModel>{
 
 class EventListNotifier extends StateNotifier<List<EventModel>> {
   // 목록 조회 데이터
-  List<EventModel>? _eventList;
+  // List<EventModel>? _eventList;
 
   EventListNotifier() : super([]);
 
   final EventRepository _repository = EventRepository();
 
-  List<EventModel> readList(int pageNo) {
+  List<EventModel>? readList(int pageNo) {
     _repository.readList(pageNo)
         .then((result) => {
-          _eventList = EventModel.listOf(result),
+          state = EventModel.listOf(result),
     });
 
-    return _eventList!;
+    return state;
   }
 }

@@ -67,10 +67,12 @@ class MainScreen extends StatelessWidget {
                             color: Colors.grey[200]
                           ),
                           child: EventListComponent(
-                            id: data[index]["id"]!,
+                            // id: data[index]["id"]!,
+                            // title: data[index]["title"]!,
+                            // date: data[index]["date"]!,
+                            // distance: data[index]["distance"]!,
+                            eventId: data[index]["id"]!,
                             title: data[index]["title"]!,
-                            date: data[index]["date"]!,
-                            distance: data[index]["distance"]!,
                           ),
                         ),
                       );
