@@ -89,8 +89,19 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           currentDate: state.startDatetime ?? DateTime.now(),
                         );
                         setState(() {
-                          state.startDatetime = selectedDate;
+                          // 이전 데이터가 없으면 치환
+                          if(state.startDatetime == null) {
+                            state.startDatetime = selectedDate;
+                          // 이전 데이터가 있으면 시, 분 데이터 유지
+                          } else {
+                            state.startDatetime = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day, state.startDatetime!.hour, state.startDatetime!.minute);
+                          }
                         });
+
+                        // 행사 종료일이 없거나 행사 시작일 보다 빠른 경우 행사 시작일과 시기를 맞춤
+                        if(state.endDatetime == null || state.endDatetime!.isBefore(state.startDatetime!)) {
+                          state.endDatetime = state.startDatetime!;
+                        }
                       },
                       controller: TextEditingController(
                         text: (state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state!.startDatetime!) : "",
@@ -120,6 +131,11 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           selectedTime!.hour,
                           selectedTime!.minute,
                         );
+
+                        // 행사 종료일이 없거나 행사 시작일 보다 빠른 경우 행사 시작일과 시기를 맞춤
+                        if(state.endDatetime == null || state.endDatetime!.isBefore(state.startDatetime!)) {
+                          state.endDatetime = state.startDatetime!;
+                        }
                       },
                       controller: TextEditingController(
                           text: (state.startDatetime != null) ? DateFormat("HH:mm").format(state!.startDatetime!) : "",
@@ -136,14 +152,20 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           context: context,
                           firstDate: DateTime.now(),
                           lastDate: DateTime(2024, DateTime.now().month, DateTime.now().day),
-                          currentDate: state.startDatetime ?? DateTime.now(),
+                          currentDate: state.endDatetime ?? DateTime.now(),
                         );
                         setState(() {
-                          state.startDatetime = selectedDate;
+                          // 이전 데이터가 없으면 치환
+                          if(state.endDatetime == null) {
+                            state.endDatetime = selectedDate;
+                            // 이전 데이터가 있으면 시, 분 데이터 유지
+                          } else {
+                            state.endDatetime = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day, state.endDatetime!.hour, state.endDatetime!.minute);
+                          }
                         });
                       },
                       controller: TextEditingController(
-                        text: (state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state!.startDatetime!) : "",
+                        text: (state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state!.endDatetime!) : "",
                       ),
                       decoration: const InputDecoration(
                         icon: Icon(Icons.date_range),
@@ -154,7 +176,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                       readOnly: true,
                       onTap: () async {
                         // 년, 월, 일 데이터가 없는 경우
-                        if(state.startDatetime == null) {
+                        if(state.endDatetime == null) {
                           Fluttertoast.showToast(msg: "년,월,일을 먼저 선택해주세요");
                           FocusScope.of(context).previousFocus();
                           return;
@@ -163,16 +185,16 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           context: context,
                           initialTime: TimeOfDay.now(),
                         );
-                        state.startDatetime = DateTime(
-                          state.startDatetime!.year,
-                          state.startDatetime!.month,
-                          state.startDatetime!.day,
+                        state.endDatetime = DateTime(
+                          state.endDatetime!.year,
+                          state.endDatetime!.month,
+                          state.endDatetime!.day,
                           selectedTime!.hour,
                           selectedTime!.minute,
                         );
                       },
                       controller: TextEditingController(
-                        text: (state.startDatetime != null) ? DateFormat("HH:mm").format(state!.startDatetime!) : "",
+                        text: (state.endDatetime != null) ? DateFormat("HH:mm").format(state!.endDatetime!) : "",
                       ),
                       decoration: const InputDecoration(
                         icon: Icon(Icons.access_time_filled),
