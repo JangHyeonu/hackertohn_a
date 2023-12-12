@@ -40,31 +40,59 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
 
     return DefaultLayout(
       sideBarOffYn: false,
-      child: Column(
-        children: [
-          Container(
-            color: Colors.yellow,
-            height: MediaQuery.of(context).size.height / 5,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Text("제목 : ${state.title ?? "-"}"),
-              ],
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 5,
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  Text(
+                    state.title ?? "-",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text("사업자명 : ${state.title ?? "-"}"),
+                  Text("주소 : ${state.title ?? "-"}"),
+                  Text("행사일시 : ${state.title ?? "-"}"),
+                ],
+              ),
             ),
-          ),
-          Container(
-            color: Colors.orange,
-            height: MediaQuery.of(context).size.height / 1.5,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Text("내용 : ${state.content ?? ""}"),
-                Text("시작 시간 : ${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) : "-"}"),
-                Text("종료 시간 : ${(state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"}"),
-              ],
+            Container(
+              color: Colors.orange,
+              height: MediaQuery.of(context).size.height / 1.7,
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("시작 일시 : ${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) : "-"}"),
+                      Text("종료 일시 : ${(state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"}"),
+                    ],
+                  ),
+                  Text("내용 : ${state.content ?? ""}"),
+                  Expanded(
+                    child: Container(
+                      color: Colors.yellow,
+                      height: MediaQuery.of(context).size.height / 10,
+                      width: double.infinity,
+                      child: Text("지도"),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       )
     );
   }

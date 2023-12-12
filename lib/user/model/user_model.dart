@@ -10,8 +10,8 @@ class UserModel {
   final String? photoUrl;
   late final JOIN_TYPE? joinType;
 
-  // 계정의 사업자 권한 인증 상태
-  final String? state;  // apply, approve, reject
+  // // 계정의 사업자 권한 인증 상태
+  // final String? state;  // apply, approve, reject
   // 사용 권한
   final String auth = "user";   // user, business
 
@@ -21,7 +21,7 @@ class UserModel {
     this.displayName,
     this.phoneNumber,
     this.photoUrl,
-    this.state,
+    // this.state,
   });
 
   UserModel copyWith({
@@ -34,7 +34,7 @@ class UserModel {
       displayName: displayName ?? this.displayName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
-      state: state ?? this.state,
+      // state: state ?? this.state,
     );
   }
 
@@ -50,7 +50,7 @@ class UserModel {
       "displayName" : displayName,
       "phoneNumber" : phoneNumber,
       "photoUrl" : photoUrl,
-      "state" : state,
+      // "state" : state,
       "auth" : auth,
     };
   }
