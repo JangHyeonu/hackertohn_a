@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:seeya_hackthon_a/_common/user/user_function.dart';
+import 'package:seeya_hackthon_a/business/model/business_model.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
@@ -21,33 +22,30 @@ class BusinessRepository {
   });
 
   // 사업자 인증 데이터 DB에 저장
-  Future<void> applyBusinessAuth() async {
+  Future<bool> applyBusinessAuth(BusinessModel businessModel) async {
+    bool isInsert = false;
     UserModel? model = userState;
 
     if(model == null) {
-      return;
+      return isInsert;
     }
 
-    String uId = "${model.joinType!.name.toLowerCase()}_${model.userModelId!}";
+    // joinType 오류로 데이터 직접 기입
+    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${model.userModelId!}";
 
     // DB에서 계정정보 조회
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore.collection("user").doc(uId).get();
 
-    if(documentSnapshot.id != null) {
+    // 계정정보 존재 & businessAuth 인증 칼럼 없을 때 DB 삽입
+    if(documentSnapshot != null && !(documentSnapshot.data()!.containsKey("businessAuth"))) {
 
-      // todo : 나중에 UserModel 객체를 쓰는 쪽으로 수정하기
-      DocumentReference<Map<String, dynamic>> updateUserModel = documentSnapshot.reference;
-      // updateUserModel.update();
+      Map<String, dynamic> businessAuthMap = businessModel.update("apply").toJson();
 
-      _firestore.collection("user").doc(uId).update({"id":"id"});
-
-
+      _firestore.collection("user").doc(uId).update({"businessAuth": businessAuthMap});
+      isInsert = true;
     }
 
-
-
-
-
+    return isInsert;
   }
 
 

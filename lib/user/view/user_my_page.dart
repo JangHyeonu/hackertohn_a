@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
+import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 class UserMyPage extends ConsumerWidget {
@@ -10,6 +12,7 @@ class UserMyPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(userProvider);
+    final businessState = ref.watch(businessProvider);
 
     return DefaultLayout(
       sideBarOffYn: false,
@@ -74,6 +77,15 @@ class UserMyPage extends ConsumerWidget {
 
                   ListTile(
                     onTap: () {
+                      if(businessState.applyState == "apply") {
+                        Fluttertoast.showToast(
+                            msg: "신청서가 접수되어 인증이 진행 중입니다.",
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.white
+                        );
+                        return;
+                      }
+
                       context.push("/business/auth");
                     },
                     tileColor: Colors.grey[200],

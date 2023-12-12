@@ -67,6 +67,9 @@ dependencies:
   geolocator: ^10.1.0
   # DateTimeFormat
   intl: ^0.19.0
+  # json 변환
+  json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:

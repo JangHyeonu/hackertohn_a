@@ -14,22 +14,30 @@ final businessProvider = StateNotifierProvider<BusinessStateNotifier, BusinessMo
 
   return BusinessStateNotifier(
     userState: userState,
-    businessRepository: businessRepository
+    businessRepository: businessRepository,
+    ref: ref,
   );
 
 });
 
 class BusinessStateNotifier extends StateNotifier<BusinessModel> {
+  final UserModel? userState;
   final BusinessRepository businessRepository;
+  final Ref ref;
 
   BusinessStateNotifier({
-    UserModel? userState,
+    this.userState,
     required this.businessRepository,
-  }) : super(BusinessModel(businessImagePath: "none")) {
+    required this.ref,
+  }) : super(
+      BusinessModel(
+        businessImagePath: "none"
+      ),
+  ) {
     // 상태관리 인스턴스 호출 시 상태관리 대상 BusinessModel 인스턴스 초기화 (유저의 ID, Email 정보 주입)
     if(userState != null) {
-      state.userModelId = userState.userModelId;
-      state.email = userState.email;
+      state.userModelId = userState?.userModelId;
+      state.email = userState?.email;
     }
   }
 
@@ -47,6 +55,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
       businessCategory: "",
       businessName: "",
       businessImagePath: "none",
+      applyState: null,
     );
 
     context.pop();
@@ -54,11 +63,26 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     state = model;
   }
 
-  void applyBusinessAuth(BusinessModel state) {
+  Future<String> applyBusinessAuth(BusinessModel state, BuildContext context) async {
 
-    businessRepository.applyBusinessAuth();
+    if(state == null) {
+      return state.applyState!;
+    }
 
+    // 사용자의 인증 입력 데이터 DB 저장 로직
+    bool isInsert = await businessRepository.applyBusinessAuth(state);
 
-    this.state = state;
-}
+    // DB 저장 시 user의 상태 변경 -> state값은 user에 있는지? user 안의 business에 있는지?
+    // if(isInsert) {
+    //   ref.read(userProvider.notifier).setState("apply");
+    // }
+
+    // 위젯 트리에 state(인스턴스)가 있을 경우에만 상태값 변경
+    if(mounted) {
+      this.state = state;
+    }
+
+    return state.applyState!;
+  }
+
 }

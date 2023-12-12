@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
@@ -135,7 +137,23 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                   const SizedBox(width: 8.0),
                   ElevatedButton(
                     onPressed: () {
-                      ref.read(businessProvider.notifier).applyBusinessAuth(state);
+                      ref.read(businessProvider.notifier).applyBusinessAuth(state, context).then(
+                        (value) {
+                          if(context.canPop()) {
+                            context.pop();
+                          }
+
+                          if(state.applyState == "apply") {
+                            Fluttertoast.showToast(
+                              msg: "신청서가 접수되었습니다.\n인증까지 약 2~3일이 소요될 수 있습니다.",
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.white,
+                              toastLength: Toast.LENGTH_LONG
+                            );
+                          }
+                        }
+                      );
+
                     }, 
                     child: const Text("인증 신청")
                   ),

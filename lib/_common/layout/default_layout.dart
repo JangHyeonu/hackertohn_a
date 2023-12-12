@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/view/login_popup_screen.dart';
+import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
