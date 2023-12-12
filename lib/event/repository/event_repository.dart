@@ -9,12 +9,19 @@ class EventRepository {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> readList(int pageNo) async {
-    QuerySnapshot<Map<String, dynamic>> _snapshot = await _firestore.collection("event").limit(10).get();
+    QuerySnapshot<Map<String, dynamic>> _snapshot = await _firestore.collection("event")
+        .where("startDatetime", isGreaterThanOrEqualTo: DateTime.now())
+        .orderBy("startDatetime")
+        .limit(10)
+        .get();
     List<Map<String, dynamic>> result = _snapshot.docs.map((e) => e.data()).toList();
     Map<int, QueryDocumentSnapshot<Map<String, dynamic>>> docs = _snapshot.docs.asMap();
 
     for(int i = 0; i < result.length; i++) {
       result[i]["eventId"] = docs[i]?.id;
+
+      if(result[i]["startDatetime"] != null) result[i]["startDatetime"] = (result[i]["startDatetime"] as Timestamp).toDate();
+      if(result[i]["endDatetime"] != null) result[i]["endDatetime"] = (result[i]["endDatetime"] as Timestamp).toDate();
     }
 
     return result;
@@ -32,6 +39,9 @@ class EventRepository {
         result = doc.data() as Map<String, dynamic>,
       },
       result["eventId"] = doc.id,
+
+      if(result["startDatetime"] != null) result["startDatetime"] = (result["startDatetime"] as Timestamp).toDate(),
+      if(result["endDatetime"] != null) result["endDatetime"] = (result["endDatetime"] as Timestamp).toDate(),
     });
 
     return result;
@@ -45,15 +55,19 @@ class EventRepository {
     }
 
     model.regDatetime = DateTime.now();
+
+    Map<String, dynamic> dataMap = model.toMap();
+    dataMap["startDatetime"] = Timestamp.fromDate(model.startDatetime!);
+    dataMap["endDatetime"] = Timestamp.fromDate(model.endDatetime!);
     try {
       // 새로 추가
-      if(model.eventId == null) {
+      if(model.eventId == null || model.eventId == "") {
         model.register = writer;
-        _firestore.collection("event").add(model.toMap());
+        _firestore.collection("event").add(dataMap);
       }
       // 내용 변경
       else {
-        _firestore.collection("event").doc(model.eventId).set(model.toMap());
+        _firestore.collection("event").doc(model.eventId).set(dataMap);
       }
     } catch(exception) {
       debugPrint("$exception");

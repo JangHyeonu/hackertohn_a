@@ -59,8 +59,8 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
             child: Column(
               children: [
                 Text("내용 : ${state.content ?? ""}"),
-                Text("시작 시간 : ${(state.startDatetime != null) ? DateFormat("YYYY.MM.DD").format(state.startDatetime!) : "-"}"),
-                Text("종료 시간 : ${(state.endDatetime != null) ? DateFormat("YYYY.MM.DD").format(state.endDatetime!) : "-"}"),
+                Text("시작 시간 : ${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) : "-"}"),
+                Text("종료 시간 : ${(state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"}"),
               ],
             ),
           ),

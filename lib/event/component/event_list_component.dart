@@ -35,7 +35,7 @@ class EventListComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(title),
-          Text((startDatetime != null) ? DateFormat("YYYY.MM.dd").format(startDatetime!) : "-"),
+          Text((startDatetime != null) ? DateFormat("yyyy.MM.dd").format(startDatetime!) : "-"),
           //Text(distance),
         ],
       ),

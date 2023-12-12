@@ -2,7 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
@@ -24,9 +26,8 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
   Widget build(BuildContext context) {
 
     final state = ref.watch(eventProvider);
-
-    // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
-    if(eventId != state.eventId) {
+    
+    if(eventId != state.eventId) { // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
       // DB에서 데이터 조회
       ref.read(eventProvider.notifier).read(eventId ?? "");
     }
@@ -78,10 +79,106 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         label: Text("행사 장소"),
                       ),
                     ),
-                    InputDatePickerFormField(
-                      fieldLabelText: "행사 기간",
-                      firstDate: state.startDatetime ?? DateTime.now(),
-                      lastDate: state.endDatetime ?? DateTime.now()),
+                    TextFormField(
+                      readOnly: true,
+                      onTap: () async {
+                        final selectedDate = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2024, DateTime.now().month, DateTime.now().day),
+                          currentDate: state.startDatetime ?? DateTime.now(),
+                        );
+                        setState(() {
+                          state.startDatetime = selectedDate;
+                        });
+                      },
+                      controller: TextEditingController(
+                        text: (state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state!.startDatetime!) : "",
+                      ),
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.date_range),
+                        label: Text("행사 시작일"),
+                      ),
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      onTap: () async {
+                        // 년, 월, 일 데이터가 없는 경우
+                        if(state.startDatetime == null) {
+                          Fluttertoast.showToast(msg: "년,월,일을 먼저 선택해주세요");
+                          FocusScope.of(context).previousFocus();
+                          return;
+                        }
+                        final selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        state.startDatetime = DateTime(
+                          state.startDatetime!.year,
+                          state.startDatetime!.month,
+                          state.startDatetime!.day,
+                          selectedTime!.hour,
+                          selectedTime!.minute,
+                        );
+                      },
+                      controller: TextEditingController(
+                          text: (state.startDatetime != null) ? DateFormat("HH:mm").format(state!.startDatetime!) : "",
+                      ),
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.access_time_filled),
+                        label: Text("행사 시작 시간"),
+                      ),
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      onTap: () async {
+                        final selectedDate = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2024, DateTime.now().month, DateTime.now().day),
+                          currentDate: state.startDatetime ?? DateTime.now(),
+                        );
+                        setState(() {
+                          state.startDatetime = selectedDate;
+                        });
+                      },
+                      controller: TextEditingController(
+                        text: (state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state!.startDatetime!) : "",
+                      ),
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.date_range),
+                        label: Text("행사 종료일"),
+                      ),
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      onTap: () async {
+                        // 년, 월, 일 데이터가 없는 경우
+                        if(state.startDatetime == null) {
+                          Fluttertoast.showToast(msg: "년,월,일을 먼저 선택해주세요");
+                          FocusScope.of(context).previousFocus();
+                          return;
+                        }
+                        final selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        state.startDatetime = DateTime(
+                          state.startDatetime!.year,
+                          state.startDatetime!.month,
+                          state.startDatetime!.day,
+                          selectedTime!.hour,
+                          selectedTime!.minute,
+                        );
+                      },
+                      controller: TextEditingController(
+                        text: (state.startDatetime != null) ? DateFormat("HH:mm").format(state!.startDatetime!) : "",
+                      ),
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.access_time_filled),
+                        label: Text("행사 종료 시간"),
+                      ),
+                    ),
                     TextFormField(
                       onChanged: (value) {
                         state.caution = value;
@@ -102,6 +199,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                 OutlinedButton(
                     onPressed: () => {
                       ref.read(eventProvider.notifier).regist(),
+                      ref.read(eventProvider).eventId = "registered-event",
                       context.go("/event/list"),
                     },
                     child: const Text("등록하기")
