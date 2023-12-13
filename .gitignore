@@ -1,6 +1,7 @@
 # env 파일
 *.env
 google-services.json
+AndroidManifest.xml
 
 # Miscellaneous
 *.class
