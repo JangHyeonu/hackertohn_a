@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
 import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
 import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
+import 'package:seeya_hackthon_a/alarm/view/alarm_list_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_auth_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
@@ -115,19 +116,23 @@ class MyApp extends StatelessWidget {
               ),
             ]
           ),
-
           // Login 유저 관련 route
           GoRoute(
             path: "/user",
-            builder: (context, state) => const MainScreen(),
+            // TODO :: (임시처리함) 현재 이 주소로 연결될 페이지가 없으므로 이벤트 목록 페잊레 연결해 둠
+            builder: (context, state) => EventListScreen(pageNo: 1),
+            // builder: (context, state) => const MainScreen(),
             routes: [
               GoRoute(
-                  path: "my-page",
-                  builder: (context, state) => const UserMyPage(),
+                path: "my-page",
+                builder: (context, state) => const UserMyPage(),
+              ),
+              GoRoute(
+                path: "alarm",
+                builder: (context, state) => AlarmListScreen(),
               ),
             ]
           ),
-
           // Login & 사업자 등록 유저 관련 route
           GoRoute(
             path: "/business",

@@ -109,7 +109,9 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         ListTile(
           leading: const Icon(Icons.add_alert_rounded),
           title: const Text('나의 알림'),
-          onTap: () => {},
+          onTap: () {
+            context.go("/user/alarm");
+          },
         ),
         ListTile(
           leading: const Icon(Icons.person),
