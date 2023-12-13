@@ -33,7 +33,6 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
 
     // DB에서 행사 목록 조회
     ref.read(eventListProvider.notifier).readList(_pageNo);
-    print("Aaaaaaaaaaaaaaaaaaaaa");
   }
 
   @override

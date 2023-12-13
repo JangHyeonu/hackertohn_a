@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:seeya_hackthon_a/_common/google_maps/custom_google_maps.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
@@ -46,61 +47,78 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 5,
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-        
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        state.register ?? "-",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 2.0),
+                    Container(
+                      width: double.infinity,
+                      // alignment: Alignment.centerRight,
+                      child: Text("${state.regDatetime ?? "2023-01-01"}")
+                    ),
+                    SizedBox(height: 8.0),
+                    Row(
+                      children: [
+                        Text("행사시간 : "),
+                        Text("${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) + " ~ " : "-"}"),
+                        Text((state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.0,),
+              Container(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       state.title ?? "-",
                       style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold
                       ),
                     ),
-                    Text("사업자명 : ${state.title ?? "-"}"),
-                    Text("주소 : ${state.title ?? "-"}"),
-                    Text("행사일시 : ${state.title ?? "-"}"),
-                  ],
-                ),
-              ),
-              Container(
-                color: Colors.orange,
-                height: MediaQuery.of(context).size.height / 1.7,
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-        
-                  children: [
+                    SizedBox(height: 8.0,),
                     Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(16.0),
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: Text(state.content ?? ""),
+                    ),
+                    SizedBox(height: 32.0,),
+                    // 지도 및 주소, 일시 정보
+                    Container(
+                      width: double.infinity,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("시작 일시 : ${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) : "-"}"),
-                              Text("종료 일시 : ${(state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"}"),
-                            ],
+                          Text("행사장소 : ${state.location ?? "-"}"),
+                          SizedBox(height: 8.0,),
+                          Container(
+                              height: 300,
+                              child: CustomGoogleMaps()
                           ),
                         ],
                       ),
                     ),
-                    Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Text("내용 : ${state.content ?? ""}"),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Colors.yellow,
-                        height: MediaQuery.of(context).size.height / 10,
-                        width: double.infinity,
-                        child: Text("지도"),
-                      ),
-                    ),
+
                   ],
                 ),
               ),
+
             ],
           ),
         ),
