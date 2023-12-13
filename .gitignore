@@ -1,5 +1,6 @@
 # env 파일
 *.env
+google-services.json
 
 # Miscellaneous
 *.class
