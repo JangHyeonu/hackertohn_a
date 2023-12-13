@@ -4,4 +4,10 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--  사용자의 디테일한 정보 접근 권한  -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--  사용자의 덜 디테일한 정보 접근 권한  -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--  앱 백그라운드 상태에서 위치정보 접근 권한  -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 </manifest>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:seeya_hackthon_a/_common/google_maps/custom_google_maps.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
@@ -108,8 +109,8 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                           Text("행사장소 : ${state.location ?? "-"}"),
                           SizedBox(height: 8.0,),
                           Container(
-                              height: 300,
-                              child: CustomGoogleMaps()
+                            height: 300,
+                            child: CustomGoogleMaps()
                           ),
                         ],
                       ),

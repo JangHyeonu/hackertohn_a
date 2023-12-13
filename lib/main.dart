@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
 import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
 import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_auth_screen.dart';
@@ -27,14 +28,19 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-
   // 핸드폰 연결 시 화면 자동꺼짐 방지
   Wakelock.enable();
 
+  //
+  CustomGeolocator.requestGeolocatorPermission();
+
   runApp(
     // 전역 상태관리를 위해 전체를 ProviderScope로 감싸줌
-    const ProviderScope(child: MyApp())
+    const ProviderScope(
+      child: MyApp(),
+    ),
   );
+
 }
 
 class MyApp extends StatelessWidget {
