@@ -11,9 +11,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// ```dart
 /// import 'firebase_options.dart';
 /// // ...
-// await Firebase.initializeApp(
-   // options: DefaultFirebaseOptions.currentPlatform,
-// );
+/// await Firebase.initializeApp(
+///   options: DefaultFirebaseOptions.currentPlatform,
+/// );
 /// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
@@ -52,18 +52,20 @@ class DefaultFirebaseOptions {
 
   static FirebaseOptions android = FirebaseOptions(
     apiKey: dotenv.env['aosFirebaseApiKey']!,
-    appId: '1:733213618617:android:a8131b62b30fcae49d8668',
-    messagingSenderId: '733213618617',
-    projectId: 'seeya-hackthon-a',
-    storageBucket: 'seeya-hackthon-a.appspot.com',
+    appId: '1:1058783966809:android:df802099bd3befcb042348',
+    messagingSenderId: '1058783966809',
+    projectId: 'seeya-hackthon-a2',
+    storageBucket: 'seeya-hackthon-a2.appspot.com',
   );
 
   static FirebaseOptions ios = FirebaseOptions(
     apiKey: dotenv.env['iosFirebaseApiKey']!,
-    appId: '1:733213618617:ios:fcfa0a89b1dcc1249d8668',
-    messagingSenderId: '733213618617',
-    projectId: 'seeya-hackthon-a',
-    storageBucket: 'seeya-hackthon-a.appspot.com',
+    appId: '1:1058783966809:ios:2639c845a95ef8b1042348',
+    messagingSenderId: '1058783966809',
+    projectId: 'seeya-hackthon-a2',
+    storageBucket: 'seeya-hackthon-a2.appspot.com',
+    androidClientId: '1058783966809-16anv95efsg3c96rstsqkrilkcqnpj97.apps.googleusercontent.com',
+    iosClientId: '1058783966809-b7fq03pujnjrvv4trtp0jve86j1qp428.apps.googleusercontent.com',
     iosBundleId: 'com.shkta.seeyaHackthona',
   );
 }

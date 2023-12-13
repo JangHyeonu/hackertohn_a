@@ -31,7 +31,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
     if(eventId != state.eventId) {
       // DB에서 데이터 조회
-      ref.read(eventProvider.notifier).read(eventId ?? "");
+      // ref.read(eventProvider.notifier).read(eventId ?? "");
       // TODO : 로딩
       return const DefaultLayout(sideBarOffYn: false, child: Column(),);
     }
@@ -40,58 +40,69 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
 
     return DefaultLayout(
       sideBarOffYn: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 5,
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: [
-                  Text(
-                    state.title ?? "-",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 5,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+        
+                  children: [
+                    Text(
+                      state.title ?? "-",
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
-                  ),
-                  Text("사업자명 : ${state.title ?? "-"}"),
-                  Text("주소 : ${state.title ?? "-"}"),
-                  Text("행사일시 : ${state.title ?? "-"}"),
-                ],
+                    Text("사업자명 : ${state.title ?? "-"}"),
+                    Text("주소 : ${state.title ?? "-"}"),
+                    Text("행사일시 : ${state.title ?? "-"}"),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              color: Colors.orange,
-              height: MediaQuery.of(context).size.height / 1.7,
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("시작 일시 : ${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) : "-"}"),
-                      Text("종료 일시 : ${(state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"}"),
-                    ],
-                  ),
-                  Text("내용 : ${state.content ?? ""}"),
-                  Expanded(
-                    child: Container(
-                      color: Colors.yellow,
-                      height: MediaQuery.of(context).size.height / 10,
-                      width: double.infinity,
-                      child: Text("지도"),
+              Container(
+                color: Colors.orange,
+                height: MediaQuery.of(context).size.height / 1.7,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+        
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("시작 일시 : ${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) : "-"}"),
+                              Text("종료 일시 : ${(state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"}"),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Container(
+                      height: MediaQuery.of(context).size.height / 5,
+                      child: Text("내용 : ${state.content ?? ""}"),
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: Colors.yellow,
+                        height: MediaQuery.of(context).size.height / 10,
+                        width: double.infinity,
+                        child: Text("지도"),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       )
     );

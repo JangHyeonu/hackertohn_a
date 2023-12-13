@@ -48,7 +48,6 @@ dependencies:
   # 알림 관련
   flutter_local_notifications: ^16.2.0
   # 파이어베이스
-  firebase_core: ^2.23.0
   # 상태관리
   riverpod: ^2.4.9
   # 파이어스토어 (DB)
@@ -70,6 +69,7 @@ dependencies:
   # json 변환
   json_serializable: ^6.7.1
   json_annotation: ^4.8.1
+  firebase_core: ^2.24.2
 
 dev_dependencies:
   flutter_test:
