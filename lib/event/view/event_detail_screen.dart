@@ -31,7 +31,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
     if(eventId != state.eventId) {
       // DB에서 데이터 조회
-      // ref.read(eventProvider.notifier).read(eventId ?? "");
+      ref.read(eventProvider.notifier).read(eventId ?? "");
       // TODO : 로딩
       return const DefaultLayout(sideBarOffYn: false, child: Column(),);
     }

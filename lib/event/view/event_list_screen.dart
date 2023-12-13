@@ -27,13 +27,19 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-
-    // 행사 목록 관리 provider
-    final state = ref.watch(eventListProvider);
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
     // DB에서 행사 목록 조회
-    // ref.read(eventListProvider.notifier).readList(_pageNo);
+    ref.read(eventListProvider.notifier).readList(_pageNo);
+    print("Aaaaaaaaaaaaaaaaaaaaa");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 행사 목록 관리 provider
+    final state = ref.watch(eventListProvider);
 
     return DefaultLayout(
 
