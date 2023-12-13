@@ -48,7 +48,7 @@ class EventRepository {
   }
 
   Future<bool> regist(EventModel model) async {
-    String? writer = UserStateNotifier.getInstance().state?.userModelId ?? "";
+    String? writer = UserStateNotifier.getInstance2().state?.userModelId ?? "";
 
     if(writer == "") {
       return false;

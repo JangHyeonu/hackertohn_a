@@ -102,7 +102,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
 
   // 사이드바 홈화면 (     ) 설정 사이의 리스트 추가를 위함
   Widget drawerBody(UserModel? state) {
-    List<ListTile> customColumn = List.empty();
+    List<Widget> customColumn = List.empty();
 
     if(!(state == null || state.email == "")) {
       customColumn = [
@@ -120,13 +120,29 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
             context.go("/user/my-page");
           },
         ),
-        ListTile(
-          leading: const Icon(Icons.person),
-          title: const Text('행사 등록'),
-          onTap: () {
-            context.go("/event/edit");
-          },
-        ),
+        state.auth == "business" ?
+          ExpansionTile(
+            title: const Text('나의 행사'),
+            shape: InputBorder.none,
+            leading: const Icon(Icons.business),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('행사 등록'),
+                      onTap: () {
+                        context.go("/event/edit");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        : Container(),
       ];
     }
 

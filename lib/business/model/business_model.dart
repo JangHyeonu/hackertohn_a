@@ -48,6 +48,21 @@ class BusinessModel {
     );
   }
 
+  factory BusinessModel.fromJson(Map<String, dynamic>? json) {
+    return BusinessModel(
+      userModelId: json?['userModelId'],
+      email: json?['email'],
+      businessNumber: json?['businessNumber'],
+      businessTitle: json?['businessTitle'],
+      businessAddress: json?['businessAddress'],
+      businessCategory: json?['businessCategory'],
+      businessName: json?['businessName'],
+      businessImagePath: json?['businessImagePath'],
+      applyState: json?['applyState'],
+    );
+
+  }
+
   Map<String, dynamic> toJson() {
     return {
       // "userModelId" : userModelId,

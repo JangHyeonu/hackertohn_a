@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:seeya_hackthon_a/_common/user/user_function.dart';
+import 'package:seeya_hackthon_a/business/model/business_model.dart';
+import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 
 // 전역 상태 관리
@@ -10,23 +13,29 @@ import 'package:seeya_hackthon_a/user/model/user_model.dart';
 // 첫번째 요소는 그 객체의 필드, 메소드 등을 담은 클래스? 의 개념임
 // userProvider 변수를 호출하여 전역에서 UserModel 객체를 활용할 수 있고 상태를 감지함
 final userProvider = StateNotifierProvider<UserStateNotifier, UserModel?>((ref) {
-  return UserStateNotifier();
+  return UserStateNotifier(ref: ref);
 });
 
 class UserStateNotifier extends StateNotifier<UserModel?> {
+  Ref? ref;
+
   static UserStateNotifier? _instance;
-  static UserStateNotifier getInstance() {
+  static UserStateNotifier getInstance2() {
     _instance ??= UserStateNotifier();
     return _instance!;
   }
 
+  UserStateNotifier getInstance() {
+    _instance ??= UserStateNotifier(ref: ref);
+    return _instance!;
+  }
 
-  UserStateNotifier() : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
+  UserStateNotifier({this.ref}) : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
     _instance ??= this;
   }
 
   void setJoinType(JOIN_TYPE joinType) {
-    state!.joinType = joinType;
+    state?.joinType = joinType;
   }
 
   // 유저의 비즈니스 계정 인증 신청에 따른 상태값 변경
@@ -38,23 +47,28 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     state = updatedUser;
   }
 
-  void login({
+  void login ({
     required UserCredential userCredential
-  }) {
+  }) async {
     if(userCredential == null) {
       return;
     }
 
     User user = userCredential.user!;
+    BusinessModel? businessAuth;
+
+    businessAuth = await ref!.read(businessProvider.notifier).getBusinessAuth(user.uid);
 
     UserModel loginUser = UserModel(
       userModelId: user.uid,
       email: user.email ?? "",
       displayName: user.displayName ?? "",
       phoneNumber: user.phoneNumber,
-      photoUrl: user.photoURL
+      photoUrl: user.photoURL,
+      businessModel: businessAuth,
     );
-
+    
+    // 여기서 businessModel이 안들어가는 이유 찾기
     state = loginUser;
   }
 

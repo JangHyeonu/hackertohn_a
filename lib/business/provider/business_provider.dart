@@ -85,4 +85,18 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     return state.applyState!;
   }
 
+  // businessAuth 조회하기
+  Future<BusinessModel?> getBusinessAuth(String uid) async {
+    Map<String, dynamic>? businessAuthMap = await businessRepository.selectBusinessAuth(uid);
+
+    BusinessModel businessModel = BusinessModel.fromJson(businessAuthMap);
+
+    if(mounted) {
+      state = businessModel;
+    }
+
+    return state;
+  }
+
+
 }

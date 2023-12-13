@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:seeya_hackthon_a/_common/user/user_function.dart';
+import 'package:seeya_hackthon_a/business/model/business_model.dart';
 
 @JsonSerializable()
 class UserModel {
@@ -9,6 +10,8 @@ class UserModel {
   final String? phoneNumber;
   final String? photoUrl;
   late final JOIN_TYPE? joinType;
+
+  final BusinessModel? businessModel;
 
   // // 계정의 사업자 권한 인증 상태
   // final String? state;  // apply, approve, reject
@@ -21,12 +24,13 @@ class UserModel {
     this.displayName,
     this.phoneNumber,
     this.photoUrl,
+    this.businessModel,
     // this.state,
   });
 
   UserModel copyWith({
     String? userModelId, String? email,
-    String? displayName, String? phoneNumber, String? photoUrl, String? state
+    String? displayName, String? phoneNumber, String? photoUrl, String? state, BusinessModel? businessModel,
   }) {
     return UserModel(
       userModelId: userModelId ?? this.userModelId,
@@ -34,6 +38,7 @@ class UserModel {
       displayName: displayName ?? this.displayName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
+      businessModel: businessModel ?? this.businessModel,
       // state: state ?? this.state,
     );
   }

@@ -35,7 +35,7 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
 
     ref.read(alarmListProvider.notifier).readList(1);
 
-    debugPrint("::: ${UserStateNotifier.getInstance().state?.userModelId}");
+    debugPrint("::: ${UserStateNotifier.getInstance2().state?.userModelId}");
     debugPrint("::: ${ref.read(alarmListProvider).length}");
   }
 

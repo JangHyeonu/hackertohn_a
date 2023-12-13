@@ -48,6 +48,22 @@ class BusinessRepository {
     return isInsert;
   }
 
+  // 유저의 BusinessAuth 정보 가져오기
+  Future<Map<String, dynamic>?> selectBusinessAuth(String uid) async {
+    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${uid}";
+
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore.collection("user").doc(uId).get();
+
+    if(documentSnapshot.data() == null) {
+      return null;
+    }
+
+    Map<String, dynamic>? dataMap = documentSnapshot.data();
+    Map<String, dynamic>? businessAuthMap = dataMap!["businessAuth"];
+
+    return businessAuthMap;
+
+  }
 
 
 
