@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/auth/google_auth.dart';
-import 'package:seeya_hackthon_a/_common/user/user_function.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 class LoginPopupScreen extends ConsumerWidget {
@@ -12,7 +11,7 @@ class LoginPopupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(userProvider.notifier);
+    // final state = ref.watch(userProvider);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -43,9 +42,7 @@ class LoginPopupScreen extends ConsumerWidget {
                   return;
                 }
 
-                state.login(userCredential: value);
-
-                UserFunction.OAuthLogin(credential: value);
+                ref.read(userProvider.notifier).login(userCredential: value);
 
                 // 로그인 성공
                 Fluttertoast.showToast(

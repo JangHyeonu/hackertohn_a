@@ -3,8 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:seeya_hackthon_a/user/model/user_model.dart';
-import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 class UserFunction {
 
@@ -21,22 +19,22 @@ class UserFunction {
     }
 
     Map<String, dynamic>? userData;
-    // DB에서 유저 정보 조회
-    await _firestore.collection("user").doc("google_auth_${credential.user!.uid}").get()
+        // DB에서 유저 정보 조회
+        await _firestore.collection("user").doc("google_auth_${credential.user!.uid}").get()
         .then((result) => {
-          userData = result.data(),
-          debugPrint("OAuthLogin :: search in firestore : ${userData}"),
-          if(userData == null) {
-            Join(joinType: JOIN_TYPE.GOOGLE_OAUTH, uid: credential.user!.uid),
-            // 새로 등록한 유저 정보 다시 조회
-            _firestore.collection("user").doc("google_auth_${credential.user!.uid}").get()
+      userData = result.data(),
+      debugPrint("OAuthLogin :: search in firestore : ${userData}"),
+      if(userData == null) {
+        Join(joinType: JOIN_TYPE.GOOGLE_OAUTH, uid: credential.user!.uid),
+        // 새로 등록한 유저 정보 다시 조회
+        _firestore.collection("user").doc("google_auth_${credential.user!.uid}").get()
             .then((value) => userData = result.data(),)
-          }
-        });
+      }
+    });
 
     // 조회한 유저 정보 모델에 담기
-    UserStateNotifier.getInstance2().login(userCredential: credential);
-    UserStateNotifier.getInstance2().setJoinType(JOIN_TYPE.GOOGLE_OAUTH);
+    // UserStateNotifier.getInstance2().login(userCredential: credential);
+    // UserStateNotifier.getInstance2().setJoinType(JOIN_TYPE.GOOGLE_OAUTH);
   }
 
   // 로그아웃

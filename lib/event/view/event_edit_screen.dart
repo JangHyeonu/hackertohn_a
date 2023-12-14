@@ -222,7 +222,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                     onPressed: () => {
                       ref.read(eventProvider.notifier).regist(),
                       ref.read(eventProvider).eventId = "registered-event",
-                      context.go("/event/list"),
+                      context.go("/"),
                     },
                     child: const Text("등록하기")
                 )

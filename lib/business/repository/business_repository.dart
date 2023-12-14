@@ -8,8 +8,6 @@ import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 final businessRepositoryProvider = Provider<BusinessRepository>((ref) {
   final userState = ref.watch(userProvider);
 
-  final userFunction = UserFunction();
-
   return BusinessRepository(userState: userState);
 });
 
@@ -49,7 +47,7 @@ class BusinessRepository {
   }
 
   // 유저의 BusinessAuth 정보 가져오기
-  Future<Map<String, dynamic>?> selectBusinessAuth(String uid) async {
+  Future<Map<String, dynamic>?> selectBusinessAuth(String? uid) async {
     String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${uid}";
 
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore.collection("user").doc(uId).get();
@@ -64,6 +62,9 @@ class BusinessRepository {
     return businessAuthMap;
 
   }
+
+
+
 
 
 

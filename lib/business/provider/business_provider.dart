@@ -86,8 +86,13 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
   }
 
   // businessAuth 조회하기
-  Future<BusinessModel?> getBusinessAuth(String uid) async {
+  Future<BusinessModel?> getBusinessAuth(String? uid) async {
     Map<String, dynamic>? businessAuthMap = await businessRepository.selectBusinessAuth(uid);
+
+    // 승인 상태이면 사업자 권한 제공
+    // if(businessAuthMap?["applyState"] == "approve") {
+    //   setUpdateAuth(uid, "business");
+    // }
 
     BusinessModel businessModel = BusinessModel.fromJson(businessAuthMap);
 
@@ -97,6 +102,11 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
 
     return state;
   }
+
+  // void setUpdateAuth(String? uid, String auth) {
+  //   businessRepository.updateBusinessAuth(uid, auth);
+  // }
+
 
 
 }

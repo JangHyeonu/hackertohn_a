@@ -10,13 +10,10 @@ class UserModel {
   final String? phoneNumber;
   final String? photoUrl;
   late final JOIN_TYPE? joinType;
-
   final BusinessModel? businessModel;
 
-  // // 계정의 사업자 권한 인증 상태
-  // final String? state;  // apply, approve, reject
   // 사용 권한
-  final String auth = "user";   // user, business
+  late final String? auth;   // user, business
 
   UserModel({
     this.userModelId,
@@ -25,8 +22,10 @@ class UserModel {
     this.phoneNumber,
     this.photoUrl,
     this.businessModel,
-    // this.state,
-  });
+    auth,
+  }) {
+    this.auth = (auth == null || auth == "") ? "guest" : auth;
+  }
 
   UserModel copyWith({
     String? userModelId, String? email,

@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:seeya_hackthon_a/_common/user/user_function.dart';
 import 'package:seeya_hackthon_a/business/model/business_model.dart';
 import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
+import 'package:seeya_hackthon_a/user/repository/user_repository.dart';
 
 // 전역 상태 관리
 // StateNotifierProvider는 제네릭 안의 첫번째, 두번째 요소를 활용하여 상태를 관리함
@@ -13,24 +13,31 @@ import 'package:seeya_hackthon_a/user/model/user_model.dart';
 // 첫번째 요소는 그 객체의 필드, 메소드 등을 담은 클래스? 의 개념임
 // userProvider 변수를 호출하여 전역에서 UserModel 객체를 활용할 수 있고 상태를 감지함
 final userProvider = StateNotifierProvider<UserStateNotifier, UserModel?>((ref) {
-  return UserStateNotifier(ref: ref);
+  final userRepository = ref.watch(userRepositoryProvider);
+
+  return UserStateNotifier(ref: ref, userRepository: userRepository);
 });
 
 class UserStateNotifier extends StateNotifier<UserModel?> {
   Ref? ref;
+  UserRepository? userRepository;
 
   static UserStateNotifier? _instance;
+
   static UserStateNotifier getInstance2() {
     _instance ??= UserStateNotifier();
     return _instance!;
   }
 
   UserStateNotifier getInstance() {
-    _instance ??= UserStateNotifier(ref: ref);
+    _instance ??= UserStateNotifier(ref: ref, userRepository: userRepository);
     return _instance!;
   }
 
-  UserStateNotifier({this.ref}) : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
+  UserStateNotifier({
+    this.ref,
+    this.userRepository,
+  }) : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
     _instance ??= this;
   }
 
@@ -47,6 +54,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     state = updatedUser;
   }
 
+  // 로그인 처리
   void login ({
     required UserCredential userCredential
   }) async {
@@ -54,21 +62,36 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
       return;
     }
 
-    User user = userCredential.user!;
+    // 파이어베이스 인증 후 user 데이터 조회
+    Map<String, dynamic>? userMap = await userRepository!.fireBaseAuth(credential: userCredential);
+
+    if(userMap == null) {
+      return;
+    }
+
+    // User user = userCredential.user!;
     BusinessModel? businessAuth;
 
-    businessAuth = await ref!.read(businessProvider.notifier).getBusinessAuth(user.uid);
+    // 해당 user의 businessAuth 데이터 조회
+    businessAuth = await ref!.read(businessProvider.notifier).getBusinessAuth(userMap['userModelId']);
 
+    // businessAuth가 승인이 나면 사업자 권한 제공
+    String? auth;
+    if(businessAuth?.applyState == "approve") {
+      auth = "business";
+    }
+
+    // UserModel에 데이터 주입
     UserModel loginUser = UserModel(
-      userModelId: user.uid,
-      email: user.email ?? "",
-      displayName: user.displayName ?? "",
-      phoneNumber: user.phoneNumber,
-      photoUrl: user.photoURL,
-      businessModel: businessAuth,
+      userModelId: userMap['userModelId'],
+      email: userMap['email'],
+      displayName: userMap['displayName'],
+      phoneNumber: userMap['phoneNumber'],
+      photoUrl: userCredential.user!.photoURL,
+      businessModel: businessAuth ?? BusinessModel(),
+      auth: auth,
     );
     
-    // 여기서 businessModel이 안들어가는 이유 찾기
     state = loginUser;
   }
 
