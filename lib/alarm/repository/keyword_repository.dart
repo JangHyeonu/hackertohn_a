@@ -8,10 +8,10 @@ class KeywordRepository {
   final _firestore = FirebaseFirestore.instance;
 
   // 키워드 목록 조회
-  Future<List<KeywordModel>> readList() async {
+  Future<List<KeywordModel>> readList(String userUid) async {
     List<KeywordModel> result = [];
 
-    final docRef = _firestore.collection("keyword").where("userUid");
+    final docRef = _firestore.collection("keyword").where("userUid", isEqualTo: userUid);
 
     // DB 데이터 조회
     await docRef.get().then((value) {
@@ -48,13 +48,13 @@ class KeywordRepository {
     return result;
   }
 
-  // 키워드 삭제
+  // 키워드 데이터 갱신
   Future<bool> update(KeywordModel model) async {
     bool result = false;
 
     Map<String, dynamic> dataMap = model.toMap();
 
-    await _firestore.collection("keyword").doc(model.keywordUid).set(dataMap).
+    await _firestore.collection("keyword").doc(model.keywordUid).set(dataMap);
 
     return result;
   }

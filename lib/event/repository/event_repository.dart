@@ -63,11 +63,11 @@ class EventRepository {
       // 새로 추가
       if(model.eventId == null || model.eventId == "") {
         model.register = writer;
-        _firestore.collection("event").add(dataMap);
+        await _firestore.collection("event").add(dataMap);
       }
       // 내용 변경
       else {
-        _firestore.collection("event").doc(model.eventId).set(dataMap);
+        await _firestore.collection("event").doc(model.eventId).set(dataMap);
       }
     } catch(exception) {
       debugPrint("$exception");

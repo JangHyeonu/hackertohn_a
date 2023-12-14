@@ -62,7 +62,8 @@ class EventListComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text((startDatetime != null) ? DateFormat("yyyy.MM.dd").format(startDatetime!) : "-"),
-                Text(dday(startDatetime!)),
+                // TODO :: 정리 필요 : 임시 처리함
+                Text(dday(startDatetime ?? DateTime.now()))
               ],
             )
           ],

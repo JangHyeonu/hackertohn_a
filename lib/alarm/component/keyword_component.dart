@@ -19,6 +19,7 @@ class KeywordComponentState extends ConsumerState<KeywordComponent> {
     return Container(
       color: Colors.teal,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -47,12 +48,19 @@ class KeywordComponentState extends ConsumerState<KeywordComponent> {
               )
             ],
           ),
-          const Text("설정된 키워드 목록"),
-          Stack(
-            children: [
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text("설정된 키워드 목록"),
+                Stack(
+                  children: [
 
-            ],
-          )
+                  ],
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
