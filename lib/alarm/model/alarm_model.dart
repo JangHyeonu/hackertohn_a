@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AlarmModel {
   String? alarmUid;
   String? userUid;
@@ -17,8 +19,9 @@ class AlarmModel {
     return AlarmModel(
         alarmUid : dataMap["alarmUid"],
         userUid : dataMap["userUid"],
-        // TODO :: timestamp -> Datetime
-        regDatetime : dataMap["regDatetime"],
+        regDatetime : (dataMap["regDatetime"] is DateTime) ? dataMap["regDatetime"]
+            : (dataMap["regDatetime"] is Timestamp) ? (dataMap["regDatetime"] as Timestamp).toDate()
+            : null,
         message : dataMap["message"],
     );
   }

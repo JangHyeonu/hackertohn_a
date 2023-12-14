@@ -16,11 +16,16 @@ class AlarmListComponent extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Icon(Icons.access_alarms_sharp),
-        Text(message ?? "", overflow: TextOverflow.ellipsis),
-      ],
+
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.6 / 6,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const Icon(Icons.access_alarms_sharp),
+          Text(message ?? "", overflow: TextOverflow.ellipsis),
+        ],
+      ),
     );
   }
 

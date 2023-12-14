@@ -18,7 +18,7 @@ class AlarmListScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => AlarmListScreenState(pageNo);
+  ConsumerState<ConsumerStatefulWidget> createState() { return AlarmListScreenState(pageNo); }
 }
 
 class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
@@ -33,10 +33,8 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
     // TODO: implement initState
     super.initState();
 
+    // DB 데이터 조회 : 알람 목록
     ref.read(alarmListProvider.notifier).readList(1);
-
-    debugPrint("::: ${UserStateNotifier.getInstance2().state?.userModelId}");
-    debugPrint("::: ${ref.read(alarmListProvider).length}");
   }
 
   @override
@@ -47,42 +45,51 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
 
     return DefaultLayout(
         sideBarOffYn: false,
-        child: Column(
-          children: [
-            // 키워드 선택 부분
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.2,
-              color: Colors.blueGrey,
-              child: Text("키워드 파트"),
-            ),
-            // 알림 목록 부분
-            Container(
-              // child: ListView.separated(
-              //   itemCount: state.length,
-              //   itemBuilder: (context, index) {
-              //     return InkWell(
-              //       onTap: () {
-              //         // context.push("/alarm/detail/${state[index].alarmUid!}");
-              //       },
-              //       child: Ink(
-              //         decoration: BoxDecoration(
-              //             color: Colors.grey[200]
-              //         ),
-              //         child: AlarmListComponent(
-              //           alarmUid: state[index].alarmUid,
-              //           regDateTime: state[index].regDatetime,
-              //           message: state[index].message,
-              //         ),
-              //       ),
-              //     );
-              //   },
-              //   separatorBuilder: (context, index) {
-              //     return const Divider();
-              //   },
-              // ),
-            ),
-          ],
+        isResize: false,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // TODO
+              // 키워드 선택 부분
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.2,
+                color: Colors.blueGrey,
+                margin: const EdgeInsets.only(bottom: 16.0),
+                child: const Text("키워드 파트"),
+              ),
+              // 알림 목록 부분
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Container(
+                    // color: Colors.teal,
+                    child: ListView.separated(
+                      itemCount: state.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () => {},
+                          child: Ink(
+                            decoration: const BoxDecoration(
+                                color: Colors.grey
+                            ),
+                            child: AlarmListComponent(
+                              alarmUid: state[index].alarmUid,
+                              regDateTime: state[index].regDatetime,
+                              message: state[index].message,
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const Drawer();
+                      },
+                    ),
+                  )
+              ),
+            ],
+          ),
         ),
     );
   }
