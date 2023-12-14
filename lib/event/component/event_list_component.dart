@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class EventListComponent extends StatelessWidget {
@@ -44,6 +45,25 @@ class EventListComponent extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
+                const SizedBox(width: 8.0),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(8,2,8,2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white70,
+                  ),
+                  // color: Colors.white,
+                  child: Text(
+                    dday(startDatetime!),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.25
+                    ),
+                  ),
+                ),
+                Expanded(child: Container()),
+                EventListComponentCounter(startDatetime: startDatetime!),
                 //Text(distance),
               ],
             ),
@@ -56,14 +76,13 @@ class EventListComponent extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
+
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text((startDatetime != null) ? DateFormat("yyyy.MM.dd").format(startDatetime!) : "-"),
-                // TODO :: 정리 필요 : 임시 처리함
-                Text(dday(startDatetime ?? DateTime.now()))
               ],
             )
           ],
@@ -76,14 +95,74 @@ class EventListComponent extends StatelessWidget {
     DateTime startday = startDatetime;
     DateTime today = DateTime.now();
 
-    Duration duration = startday.difference(today);
+    DateFormat formatter = DateFormat("yyyy-MM-dd");
 
-    DateTime subtractDatetime = today.subtract(duration);
+    String formattedStartday = formatter.format(startday);
+    String formattedToday = formatter.format(today);
 
-    DateFormat formatter = DateFormat('yyyy-MM-dd');
-    String strToday = formatter.format(subtractDatetime);
+    String strDday;
+    if(formattedStartday == formattedToday) {
+      strDday = "D-day!";
+    } else {
+      Duration duration = startday.difference(today);
+      int dayDiff = duration.inDays;
+      strDday = "D-$dayDiff";
+    }
 
-    return strToday;
+    return strDday;
   }
 
 }
+
+class EventListComponentCounter extends StatefulWidget {
+  DateTime startDatetime;
+  DateTime nowDatetime = DateTime.now();
+  Duration? duration;
+
+  EventListComponentCounter({
+    Key? key,
+    required this.startDatetime,
+  }) : super(key: key) {
+    duration = nowDatetime.difference(startDatetime);
+  }
+
+  @override
+  State<EventListComponentCounter> createState() => _EventListComponentCounterState();
+}
+
+class _EventListComponentCounterState extends State<EventListComponentCounter> {
+  late var aa = widget.duration!.inSeconds;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        aa -= 1;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var hh = (aa / 3600).toInt();
+    var mm = ((aa % 3600) / 60).toInt();
+    var ss = (aa % 60).toInt();
+
+    return Container(
+      child: Text(
+          // aa.abs().toString(),
+        "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")}",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          letterSpacing: 2
+        ),
+      ),
+    );
+  }
+}
+
