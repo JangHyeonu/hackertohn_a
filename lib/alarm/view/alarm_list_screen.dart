@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/alarm/component/alarm_list_component.dart';
+import 'package:seeya_hackthon_a/alarm/component/keyword_component.dart';
 import 'package:seeya_hackthon_a/alarm/provider/alarm_provider.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
@@ -55,9 +56,9 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.2,
-                color: Colors.blueGrey,
                 margin: const EdgeInsets.only(bottom: 16.0),
-                child: const Text("키워드 파트"),
+                // color: Colors.blueGrey,
+                child: const KeywordComponent(),
               ),
               // 알림 목록 부분
               SizedBox(

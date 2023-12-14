@@ -2,12 +2,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KeywordModel {
+  final String? keywordUid;
   final String? keyword;
   final String? userUid;
   final DateTime? regDatetime;
   final bool? useYn;
 
-  KeywordModel({this.keyword, this.userUid, this.regDatetime, this.useYn});
+  KeywordModel({this.keywordUid, this.keyword, this.userUid, this.regDatetime, this.useYn});
 
   // KeywordModel -> Map<String, dynamic>
   Map<String, dynamic> toMap() {
@@ -19,9 +20,21 @@ class KeywordModel {
     };
   }
 
+  // KeywordModel -> Map<String, dynamic>
+  Map<String, dynamic> toMapAll() {
+    return {
+      "keywordUid" : keywordUid,
+      "keyword" : keyword,
+      "userUid" : userUid,
+      "regDatetime" : regDatetime,
+      "useYn" : useYn,
+    };
+  }
+
   // Map<String, dynamic> -> KeywordModel
   static KeywordModel of(Map<String, dynamic> dataMap) {
     return KeywordModel(
+      keywordUid: dataMap["keywordUid"],
       keyword: dataMap["keyword"],
       userUid: dataMap["userUid"],
       regDatetime: (dataMap["regDatetime"] is DateTime) ? dataMap["regDatetime"] :

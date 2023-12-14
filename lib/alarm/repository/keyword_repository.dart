@@ -13,13 +13,48 @@ class KeywordRepository {
 
     final docRef = _firestore.collection("keyword").where("userUid");
 
+    // DB 데이터 조회
     await docRef.get().then((value) {
+      // 조회 데이터가 없는 경우 
       if(value == null) {
         return;
       }
-      List<Map<String, dynamic>> dataList = value.docs.map((e) => e.data()).toList();
+      
+      // Map -> Model
+      List<Map<String, dynamic>> dataList = value.docs.map((e) {
+        e.data()["keywordUid"] = e.id;
+        return e.data();
+      }).toList();
+      
       result = KeywordModel.ofList(dataList);
     });
+
+    return result;
+  }
+
+  // 키워드 등록
+  Future<bool> create(KeywordModel model) async {
+    bool result = false;
+
+    Map<String, dynamic> dataMap = model.toMap();
+
+    await _firestore.collection("keyword").add(dataMap)
+        .then((value) {
+          if(value.id != null) {
+            result = true;
+          }
+    });
+
+    return result;
+  }
+
+  // 키워드 삭제
+  Future<bool> update(KeywordModel model) async {
+    bool result = false;
+
+    Map<String, dynamic> dataMap = model.toMap();
+
+    await _firestore.collection("keyword").doc(model.keywordUid).set(dataMap).
 
     return result;
   }
