@@ -29,16 +29,60 @@ class EventListComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 12,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(title),
-          Text((startDatetime != null) ? DateFormat("yyyy.MM.dd").format(startDatetime!) : "-"),
-          //Text(distance),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                //Text(distance),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  register != null ? register! : "-",
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text((startDatetime != null) ? DateFormat("yyyy.MM.dd").format(startDatetime!) : "-"),
+                Text(dday(startDatetime!)),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
+
+  String dday(DateTime startDatetime) {
+    DateTime startday = startDatetime;
+    DateTime today = DateTime.now();
+
+    Duration duration = startday.difference(today);
+
+    DateTime subtractDatetime = today.subtract(duration);
+
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String strToday = formatter.format(subtractDatetime);
+
+    return strToday;
+  }
+
 }

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/component/banner_component.dart';
-import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
 import 'package:seeya_hackthon_a/event/component/event_list_component.dart';
 import 'package:seeya_hackthon_a/_common/component/text_form_button_component.dart';
-import 'package:seeya_hackthon_a/_common/const/temp_const.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
@@ -44,6 +42,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
     final state = ref.watch(eventListProvider);
 
     return DefaultLayout(
+      sideBarOffYn: false,
 
       // 키보드가 올라오는 영역 중 검색어 영역만 고정하기
       isResize: false,
@@ -65,54 +64,72 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
         ),
       ),
 
-      sideBarOffYn: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: state.length + 1,
+                itemBuilder: (context, index) {
+                  if(index == 0) {
+                    // 배너
+                    return Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height / 7,
+                          child: BannerComponent(),
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    );
+                  }
 
-      child: Column(
-        children: [
-          // 메인
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                // 배너
-                Container(
-                  height: MediaQuery.of(context).size.height / 7,
-                  child: BannerComponent(),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height / 40),
-
-                // 행사 리스트
-                Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: ListView.separated(
-                    itemCount: state.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
+                  // 마지막 리스트 하나 추가하기
+                  if(index == state.length) {
+                    return Container(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          child: EventListComponent(
+                            title: "",
+                            eventId: "",
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      child: InkWell(
                         onTap: () {
                           context.push("/event/detail/${state[index].eventId!}");
                         },
                         child: Ink(
                           decoration: BoxDecoration(
-                              color: Colors.grey[200]
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                           ),
                           child: EventListComponent(
                             eventId: state[index].eventId!,
                             title: state[index].title ?? "-",
+                            register: state[index].register,
                             startDatetime: state[index].startDatetime,
                             endDatetime: state[index].endDatetime,
                           ),
                         ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                  ),
-                ),
-              ],
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

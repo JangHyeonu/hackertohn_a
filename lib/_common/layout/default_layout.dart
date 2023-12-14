@@ -35,7 +35,6 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         centerTitle: true,
       ),
       backgroundColor: widget.backgroundColor,
-
       resizeToAvoidBottomInset : widget.isResize,
       bottomSheet: widget.bottomSheetWidget,
 
