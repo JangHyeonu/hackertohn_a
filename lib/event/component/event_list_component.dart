@@ -105,7 +105,7 @@ class EventListComponent extends StatelessWidget {
       strDday = "D-day!";
     } else {
       Duration duration = startday.difference(today);
-      int dayDiff = duration.inDays;
+      int dayDiff = duration.inDays + 1;
       strDday = "D-$dayDiff";
     }
 
@@ -133,17 +133,31 @@ class EventListComponentCounter extends StatefulWidget {
 class _EventListComponentCounterState extends State<EventListComponentCounter> {
   late var aa = widget.duration!.inSeconds;
 
+  void countDown(bool? tf) {
+    Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        aa -= 1;
+      });
+    });
+
+    if(tf == false) {
+      timer.cancel();
+      return;
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    countDown(true);
+  }
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        aa -= 1;
-      });
-    });
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    countDown(false);
+    super.dispose();
   }
 
   @override
@@ -154,9 +168,8 @@ class _EventListComponentCounterState extends State<EventListComponentCounter> {
 
     return Container(
       child: Text(
-          // aa.abs().toString(),
         "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")}",
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
           letterSpacing: 2

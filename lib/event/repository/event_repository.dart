@@ -7,24 +7,69 @@ import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 class EventRepository {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  int _limit = 50;
 
-  Future<List<Map<String, dynamic>>> readList(int pageNo) async {
-    QuerySnapshot<Map<String, dynamic>> _snapshot = await _firestore.collection("event")
+  Future<List<Map<String, dynamic>>> readList(int pageNo, int limit) async {
+
+    // 첫번째 스냅샷
+    // QuerySnapshot<Map<String, dynamic>> _snapshot = await _firestore.collection("event")
+    //     .where("startDatetime", isGreaterThanOrEqualTo: DateTime.now())
+    //     .orderBy("startDatetime")
+    //     .limit(_limit)
+    //     .get();
+
+    // 첫번째 쿼리
+    Query<Map<String, dynamic>> _snapshot = _firestore.collection("event")
         .where("startDatetime", isGreaterThanOrEqualTo: DateTime.now())
         .orderBy("startDatetime")
-        .limit(10)
-        .get();
-    List<Map<String, dynamic>> result = _snapshot.docs.map((e) => e.data()).toList();
-    Map<int, QueryDocumentSnapshot<Map<String, dynamic>>> docs = _snapshot.docs.asMap();
+        .limit(_limit);
 
-    for(int i = 0; i < result.length; i++) {
-      result[i]["eventId"] = docs[i]?.id;
+    // 첫번째 쿼리 스냅샷의 마지막 요소를 lastVisible 변수에 담고, 다음 쿼리의 시작 지점으로 지정 (startAfterDocument)
+    _snapshot.get().then((value) {
+      final lastVisible = value.docs[value.size - 1];
 
-      if(result[i]["startDatetime"] != null) result[i]["startDatetime"] = (result[i]["startDatetime"] as Timestamp).toDate();
-      if(result[i]["endDatetime"] != null) result[i]["endDatetime"] = (result[i]["endDatetime"] as Timestamp).toDate();
+      final next = _firestore.collection("event")
+          .where("startDatetime", isGreaterThanOrEqualTo: DateTime.now())
+          .orderBy("startDatetime")
+          .startAfterDocument(lastVisible)
+          .limit(_limit);
+    });
+
+    List<Map<String, dynamic>> result = [];
+
+    QuerySnapshot<Map<String, dynamic>> firstSnapShot;
+    if(pageNo == 1) {
+      firstSnapShot = await _snapshot.get();
+      result = firstSnapShot.docs.map((e) => e.data()).toList();
+      Map<int, QueryDocumentSnapshot<Map<String, dynamic>>> docs = firstSnapShot.docs.asMap();
+
+      for(int i = 0; i < result.length; i++) {
+        result[i]["eventId"] = docs[i]?.id;
+
+        if(result[i]["startDatetime"] != null) result[i]["startDatetime"] = (result[i]["startDatetime"] as Timestamp).toDate();
+        if(result[i]["endDatetime"] != null) result[i]["endDatetime"] = (result[i]["endDatetime"] as Timestamp).toDate();
+      }
+
+      debugPrint("::: 메인 리스트 이벤트 조회 쿼리 실행");
     }
 
     return result;
+
+
+
+    // List<Map<String, dynamic>> result = _snapshot.docs.map((e) => e.data()).toList();
+    // Map<int, QueryDocumentSnapshot<Map<String, dynamic>>> docs = _snapshot.docs.asMap();
+    //
+    // for(int i = 0; i < result.length; i++) {
+    //   result[i]["eventId"] = docs[i]?.id;
+    //
+    //   if(result[i]["startDatetime"] != null) result[i]["startDatetime"] = (result[i]["startDatetime"] as Timestamp).toDate();
+    //   if(result[i]["endDatetime"] != null) result[i]["endDatetime"] = (result[i]["endDatetime"] as Timestamp).toDate();
+    // }
+
+    // debugPrint("::: 메인 리스트 이벤트 조회 쿼리 실행");
+
+    // return result;
   }
 
   Future<Map<String, dynamic>> read(String eventId) async {

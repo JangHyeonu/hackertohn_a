@@ -120,7 +120,8 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/user",
             // TODO :: (임시처리함) 현재 이 주소로 연결될 페이지가 없으므로 이벤트 목록 페잊레 연결해 둠
-            builder: (context, state) => EventListScreen(pageNo: 1),
+            // builder: (context, state) => EventListScreen(pageNo: 1),
+            builder: (context, state) => EventListScreen(),
             // builder: (context, state) => const MainScreen(),
             routes: [
               GoRoute(

@@ -37,18 +37,60 @@ class EventNotifier extends StateNotifier<EventModel>{
 
 class EventListNotifier extends StateNotifier<List<EventModel>> {
   // 목록 조회 데이터
-  // List<EventModel>? _eventList;
+  List<EventModel>? eventList;
 
-  EventListNotifier() : super([]);
+  final int _pageNo = 1;
+  final int _limit = 5;
+  bool _hasNextPage = true;
+  bool _isFirstLoadRunning = false;
+  bool _isLoadMoreRunning = false;
 
   final EventRepository _repository = EventRepository();
 
-  List<EventModel>? readList(int pageNo) {
-    _repository.readList(pageNo)
-        .then((result) => {
-          state = EventModel.listOf(result),
+  EventListNotifier({
+    this.eventList
+  }) : super([]);
+
+  Future<List<EventModel>?> readList() async {
+    // 조회 진행
+    _isLoadMoreRunning = true;
+
+    await _repository.readList(_pageNo, _limit)
+        .then((result) async => {
+
+          if(_pageNo == 1) {
+            _isFirstLoadRunning = true
+          } else {
+            _isFirstLoadRunning = false
+          },
+
+          if(result.isEmpty || result.length < _limit) {
+            _hasNextPage = false
+          } else {
+            _hasNextPage = true
+          },
+
+
+
+          eventList = EventModel.listOf(result),
+          print(eventList!.map((e) => e.title)),
+          state = eventList!,
+
     });
 
+    // 조회 종료
+    _isLoadMoreRunning = false;
+
     return state;
+  }
+
+  bool getIsMoreRunning() {
+    return _isLoadMoreRunning;
+  }
+  bool getIsFirstLoadRunning() {
+    return _isFirstLoadRunning;
+  }
+  bool getHasNextPage() {
+    return _hasNextPage;
   }
 }
