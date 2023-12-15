@@ -54,7 +54,7 @@ class EventListComponent extends StatelessWidget {
                   ),
                   // color: Colors.white,
                   child: Text(
-                    dday(startDatetime!),
+                    dday(startDatetime ?? DateTime.now()),
                     style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -63,8 +63,8 @@ class EventListComponent extends StatelessWidget {
                   ),
                 ),
                 Expanded(child: Container()),
-                EventListComponentCounter(startDatetime: startDatetime!),
-                //Text(distance),
+                // EventListComponentCounter(startDatetime: startDatetime ?? DateTime.now()),
+                // Text(distance),
               ],
             ),
             Row(

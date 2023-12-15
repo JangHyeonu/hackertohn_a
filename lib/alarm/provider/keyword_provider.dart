@@ -19,7 +19,7 @@ class KeywordListStateNotifier extends StateNotifier<List<KeywordModel>> {
   KeywordListStateNotifier() : super([]);
 
   // 목록 조회
-  List<KeywordModel> readList() {
+  Future<List<KeywordModel>> readList() async {
     debugPrint("KeywordListStateNotifier :: readList :: start");
 
     String? userUid = UserStateNotifier.getInstance2().state!.userModelId;
@@ -30,11 +30,33 @@ class KeywordListStateNotifier extends StateNotifier<List<KeywordModel>> {
       return [];
     }
 
-    _repository.readList(userUid).then((value) {
+    await _repository.readList(userUid).then((value) {
       state = value;
     });
 
     debugPrint("KeywordListStateNotifier :: readList :: end");
     return state;
+  }
+
+  // 키워드 한개 삭제
+  Future<bool> deleteOne(KeywordModel model) async {
+    bool result = false;
+
+    // 데이터 유효성 검사
+    if(model == null || model!.keywordUid == null) {
+      return result;
+    }
+
+    // DB에서 데이터 삭제
+    state.map((e) async {
+      if(e.keywordUid == model.userUid) {
+        await _repository.delete(model);
+      }
+    });
+    
+    // state에서 데이터 삭제
+    state.remove(model);
+
+    return result;
   }
 }

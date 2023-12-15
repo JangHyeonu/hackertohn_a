@@ -6,7 +6,7 @@ class KeywordModel {
   final String? keyword;
   final String? userUid;
   final DateTime? regDatetime;
-  final bool? useYn;
+  bool? useYn;
 
   KeywordModel({this.keywordUid, this.keyword, this.userUid, this.regDatetime, this.useYn});
 

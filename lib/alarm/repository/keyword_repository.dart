@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../model/keyword_model.dart';
 
@@ -38,12 +39,20 @@ class KeywordRepository {
 
     Map<String, dynamic> dataMap = model.toMap();
 
+    // TODO :: 이전에 등록된 적 있는 데이터인지 확인
+
+    // TODO :: 등록된 적 있는 데이터인 경우 useYn을 true로 변경
+
+    // 등록된 적이 없는 데이터인 경우 새로 등록
     await _firestore.collection("keyword").add(dataMap)
         .then((value) {
           if(value.id != null) {
             result = true;
           }
-    });
+        })
+        .catchError((error) {
+          debugPrint("Error : $error");
+        });
 
     return result;
   }
@@ -54,8 +63,23 @@ class KeywordRepository {
 
     Map<String, dynamic> dataMap = model.toMap();
 
-    await _firestore.collection("keyword").doc(model.keywordUid).set(dataMap);
+    await _firestore.collection("keyword").doc(model.keywordUid).set(dataMap)
+        .then((value) {
+          result = true;
+        })
+        .catchError((error) {
+          debugPrint("Error : $error");
+        });
 
     return result;
   }
+
+  // 키워드 삭제 :: useYn의 값을 false로 변경
+  Future<bool> delete(KeywordModel model) async {
+    
+    model.useYn = false;
+    
+    return update(model);
+  }
+
 }
