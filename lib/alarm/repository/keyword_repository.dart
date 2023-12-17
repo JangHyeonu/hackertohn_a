@@ -12,7 +12,7 @@ class KeywordRepository {
   Future<List<KeywordModel>> readList(String userUid) async {
     List<KeywordModel> result = [];
 
-    final docRef = _firestore.collection("keyword").where("userUid", isEqualTo: userUid);
+    final docRef = _firestore.collection("keyword").where("userUid", isEqualTo: userUid).where("useYn", isEqualTo: true);
 
     // DB 데이터 조회
     await docRef.get().then((value) {
@@ -23,8 +23,9 @@ class KeywordRepository {
       
       // Map -> Model
       List<Map<String, dynamic>> dataList = value.docs.map((e) {
-        e.data()["keywordUid"] = e.id;
-        return e.data();
+        Map<String, dynamic> tempMap = e.data();
+        tempMap["keywordUid"] = e.id;
+        return tempMap;
       }).toList();
       
       result = KeywordModel.ofList(dataList);
@@ -44,6 +45,7 @@ class KeywordRepository {
     // TODO :: 등록된 적 있는 데이터인 경우 useYn을 true로 변경
 
     // 등록된 적이 없는 데이터인 경우 새로 등록
+    dataMap["regDatetime"] = Timestamp.now();
     await _firestore.collection("keyword").add(dataMap)
         .then((value) {
           if(value.id != null) {
@@ -62,7 +64,8 @@ class KeywordRepository {
     bool result = false;
 
     Map<String, dynamic> dataMap = model.toMap();
-
+    dataMap["regDatetime"] = Timestamp.fromDate(model.regDatetime!);
+    debugPrint("::: $dataMap");
     await _firestore.collection("keyword").doc(model.keywordUid).set(dataMap)
         .then((value) {
           result = true;

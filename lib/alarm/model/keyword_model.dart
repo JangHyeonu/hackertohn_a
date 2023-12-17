@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class KeywordModel {
   final String? keywordUid;
@@ -37,8 +38,8 @@ class KeywordModel {
       keywordUid: dataMap["keywordUid"],
       keyword: dataMap["keyword"],
       userUid: dataMap["userUid"],
-      regDatetime: (dataMap["regDatetime"] is DateTime) ? dataMap["regDatetime"] :
-        (dataMap["regDatetime"] is Timestamp) ? dataMap["regDatetime"] :
+      regDatetime: (dataMap["regDatetime"].runtimeType == DateTime) ? dataMap["regDatetime"] :
+        (dataMap["regDatetime"].runtimeType == Timestamp) ? (dataMap["regDatetime"] as Timestamp).toDate() :
         null,
       useYn: dataMap["useYn"],
     );
