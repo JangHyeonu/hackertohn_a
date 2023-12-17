@@ -67,13 +67,23 @@ class EventListComponent extends StatelessWidget {
                 // Text(distance),
               ],
             ),
+            const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  register != null ? register! : "-",
-                  style: const TextStyle(
-                    fontSize: 12,
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white70,
+                  ),
+                  padding: EdgeInsets.fromLTRB(6,3,6,3),
+                  child: Text(
+                    register != null ? register! : "-",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54
+                    ),
                   ),
                 ),
 
@@ -131,19 +141,21 @@ class EventListComponentCounter extends StatefulWidget {
 }
 
 class _EventListComponentCounterState extends State<EventListComponentCounter> {
-  late var aa = widget.duration!.inSeconds;
+  late var bb = widget.duration!.abs().inSeconds;
+  late Timer timer;
 
   void countDown(bool? tf) {
-    Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        aa -= 1;
-      });
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if(mounted) {
+        setState(() {
+          bb -= 1;
+        });
+      }
     });
+  }
 
-    if(tf == false) {
-      timer.cancel();
-      return;
-    }
+  void closeCountDown() {
+    timer.cancel();
   }
 
   @override
@@ -156,26 +168,38 @@ class _EventListComponentCounterState extends State<EventListComponentCounter> {
   @override
   void dispose() {
     // TODO: implement dispose
-    countDown(false);
+    closeCountDown();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var hh = (aa / 3600).toInt();
-    var mm = ((aa % 3600) / 60).toInt();
-    var ss = (aa % 60).toInt();
+    var hh = bb ~/ 3600;
+    var mm = (bb % 3600) ~/ 60;
+    var ss = (bb % 60).toInt();
 
-    return Container(
-      child: Text(
-        "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")}",
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-          letterSpacing: 2
+    return
+      widget.duration!.abs().inDays < 2 ?
+      Container(
+        child: Text(
+          "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")}",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: 2
+          ),
         ),
-      ),
-    );
+      ) :
+      Container(
+        child: const Text(
+          "진행 예정",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              letterSpacing: 2
+          ),
+        ),
+      );
   }
 }
 

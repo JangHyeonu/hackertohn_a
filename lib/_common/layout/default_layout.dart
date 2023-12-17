@@ -83,7 +83,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           backgroundImage: AssetImage("assets/image/temp_user.png"),
         ),
         accountName: Text("guest"),
-        accountEmail: Text("guest@google.com"),
+        accountEmail: Text("guest@email.com"),
       );
     } else {
       return UserAccountsDrawerHeader(
@@ -93,7 +93,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         accountName: Text(state!.displayName!),
         accountEmail: Text(state!.email!),
         otherAccountsPictures: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.add_alert), color: Colors.white)
+          IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active), color: Colors.white)
         ],
       );
     }
@@ -130,7 +130,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: const Icon(Icons.person),
+                      leading: const Icon(Icons.playlist_add),
                       title: const Text('행사 등록'),
                       onTap: () {
                         context.go("/event/edit");
@@ -148,7 +148,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
     return Column(
       children: [
         ListTile(
-          leading: const Icon(Icons.home),
+          leading: const Icon(Icons.home_outlined),
           title: const Text('홈 화면'),
           onTap: () {
             while(context.canPop()) {

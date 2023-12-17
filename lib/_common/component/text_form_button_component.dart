@@ -5,12 +5,14 @@ class TextFormButtonComponent extends StatelessWidget {
   final Function() buttonClickEvent;
   final double textFormWidth;
   final InputDecoration? inputDecoration;
+  final FocusNode? focusNode;
 
   const TextFormButtonComponent({
     required this.buttonText,
     required this.buttonClickEvent,
     required this.textFormWidth,
     this.inputDecoration,
+    this.focusNode,
     super.key
   });
 
@@ -22,10 +24,11 @@ class TextFormButtonComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
+            width: textFormWidth,
             child: TextFormField(
+              focusNode: focusNode,
               decoration: inputDecoration,
             ),
-            width: textFormWidth,
           ),
           ElevatedButton(
             onPressed: buttonClickEvent,

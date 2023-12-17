@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:seeya_hackthon_a/_common/google_maps/custom_google_maps.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
+import 'package:seeya_hackthon_a/event/component/detail_icon_text_component.dart';
+import 'package:seeya_hackthon_a/event/component/event_list_component.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
 class EventDetailScreen extends ConsumerStatefulWidget {
@@ -44,78 +47,157 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
       sideBarOffYn: false,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                child: EventListComponent(
+                  eventId: eventId,
+                  title: state.title!,
+                  register: state.register,
+                  startDatetime: state.startDatetime,
+                  endDatetime: state.endDatetime,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                height: MediaQuery.of(context).size.height / 1.35,
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: double.infinity,
-                      child: Text(
-                        state.register ?? "-",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                      child: DetailIconTextComponent(
+                        icon: Icons.event,
+                        title: "행사 시작 : ",
+                        content: DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(state.startDatetime!),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                      child: DetailIconTextComponent(
+                        icon: Icons.event_available,
+                        title: "행사 종료 : ",
+                        content: DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(state.endDatetime!),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                DetailIconTextComponent(
+                                  icon: Icons.location_on_sharp,
+                                  title: "행사 장소",
+                                ),
+                                Expanded(child: Container()),
+                                Container(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Row(
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () => openMapDialog(state.location),
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(10, 30),
+                                          // surfaceTintColor: Colors.grey[300],
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4.0),
+                                          ),
+                                          backgroundColor: Colors.white70,
+                                          foregroundColor: Colors.black
+                                        ),
+                                        child: const Row(
+                                          children: [
+                                            Icon(Icons.map),
+                                            Text(" Map"),
+                                          ],
+                                        )
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                              child: Text(
+                                state.location ?? "",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  overflow: TextOverflow.visible,
+                                )
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 2.0),
-                    Container(
-                      width: double.infinity,
-                      // alignment: Alignment.centerRight,
-                      child: Text("${state.regDatetime ?? "2023-01-01"}")
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      children: [
-                        Text("행사시간 : "),
-                        Text("${(state.startDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.startDatetime!) + " ~ " : "-"}"),
-                        Text((state.endDatetime != null) ? DateFormat("yyyy.MM.dd").format(state.endDatetime!) : "-"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.0,),
-              Container(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      state.title ?? "-",
-                      style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    SizedBox(height: 8.0,),
-                    Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(16.0),
-                      height: MediaQuery.of(context).size.height / 3,
-                      child: Text(state.content ?? ""),
-                    ),
-                    SizedBox(height: 32.0,),
-                    // 지도 및 주소, 일시 정보
-                    Container(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("행사장소 : ${state.location ?? "-"}"),
-                          SizedBox(height: 8.0,),
-                          Container(
-                            height: 300,
-                            child: CustomGoogleMaps()
-                          ),
-                        ],
-                      ),
-                    ),
 
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DetailIconTextComponent(
+                              icon: Icons.my_library_books,
+                              content: "행사 내용",
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                              height: MediaQuery.of(context).size.height / 3,
+                              child: Text(
+                                state.content ?? "",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  overflow: TextOverflow.visible,
+                                )),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width / 4,
+                          height: MediaQuery.of(context).size.height / 8.8,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width / 4,
+                          height: MediaQuery.of(context).size.height / 8.8,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width / 4,
+                          height: MediaQuery.of(context).size.height / 8.8,
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -124,6 +206,65 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           ),
         ),
       )
+    );
+  }
+
+  Future openMapDialog(String? location) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, //바깥 영역 터치시 닫을지 여부 결정
+      builder: ((context) {
+        return AlertDialog(
+          content: Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Column(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  child: Column(
+                    children: [
+                      DetailIconTextComponent(
+                        icon: Icons.location_on_sharp,
+                        title: "행사 장소",
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                        child: Text(
+                          location ?? "",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            overflow: TextOverflow.visible,
+                          )
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  height: 300,
+                  child: const CustomGoogleMaps(),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Container(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); //창 닫기
+                },
+                child: Text("닫기"),
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class BannerComponent extends StatefulWidget {
@@ -11,8 +13,31 @@ class BannerComponent extends StatefulWidget {
 }
 
 class _BannerComponentState extends State<BannerComponent> {
+  Timer? timer;
   final PageController _pageController = PageController();
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      int nextPage = _currentPage + 1;
+      if(nextPage > 4) {
+        nextPage = 0;
+      }
+
+      _pageController.animateToPage(nextPage, duration: const Duration(milliseconds: 400), curve: Curves.linear);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _pageController.dispose();
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +51,23 @@ class _BannerComponentState extends State<BannerComponent> {
             });
           },
           children: [
-            buildBanner('1번 배너'),
-            buildBanner('2번 배너'),
-            buildBanner('3번 배너'),
-            buildBanner('4번 배너'),
-            buildBanner('5번 배너'),
+            buildBanner('assets/image/ban1.png'),
+            buildBanner('assets/image/ban2.png'),
+            buildBanner('assets/image/ban3.png'),
+            buildBanner('assets/image/ban4.png'),
+            buildBanner('assets/image/ban5.png'),
           ],
         ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 8.0),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for(int i = 0; i < 5; i++)
                   Container(
-                    margin: EdgeInsets.all(4.0),
+                    margin: const EdgeInsets.all(4.0),
                     width: 12.0,
                     height: 12.0,
                     decoration: BoxDecoration(
@@ -64,9 +89,9 @@ class _BannerComponentState extends State<BannerComponent> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0), // 원하는 둥근 정도를 설정합니다.
-        color: Colors.blueGrey,
+        color: Colors.black54,
       ),
-      child: Center(child: Text(text)),
+      child: Image.asset(text, fit: BoxFit.fitWidth),
     );
   }
 }
