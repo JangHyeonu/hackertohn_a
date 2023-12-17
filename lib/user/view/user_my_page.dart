@@ -32,8 +32,9 @@ class UserMyPage extends ConsumerWidget {
                     accountName: Text(state!.displayName!),
                     accountEmail: Text(state!.email!),
                     otherAccountsPictures: [
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.person), color: Colors.white),
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.business), color: Colors.white)
+                      state.businessModel?.applyState == "approve" ?
+                        IconButton(onPressed: (){}, icon: const Icon(Icons.business), color: Colors.white)
+                          : IconButton(onPressed: (){}, icon: const Icon(Icons.person), color: Colors.white),
                     ],
                   ),
                 ],
@@ -77,6 +78,15 @@ class UserMyPage extends ConsumerWidget {
 
                   ListTile(
                     onTap: () {
+                      if(state.businessModel?.applyState == "approve") {
+                        Fluttertoast.showToast(
+                            msg: "이미 인증된 계정입니다.\n(사업자 추가 등록은 추후 구현)",
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.white
+                        );
+                        return;
+                      }
+
                       if(businessState.applyState == "apply") {
                         Fluttertoast.showToast(
                             msg: "신청서가 접수되어 인증이 진행 중입니다.",

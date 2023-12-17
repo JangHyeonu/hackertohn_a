@@ -45,6 +45,14 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     state?.joinType = joinType;
   }
 
+  BusinessModel? getBusinessModelByNumber(String? businessNumber) {
+    userRepository?.getBusinessModel(businessNumber: businessNumber, uId: state?.userModelId);
+
+    if(state?.businessModel?.businessNumber == businessNumber) {
+      return state?.businessModel;
+    }
+  }
+
   // 유저의 비즈니스 계정 인증 신청에 따른 상태값 변경
   void setState(String userState) {
     UserModel updatedUser = state!.copyWith(

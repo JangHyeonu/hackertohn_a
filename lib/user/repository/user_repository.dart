@@ -98,6 +98,12 @@ class UserRepository {
     }
   }
 
+  Future<Map<String, dynamic>?> getBusinessModel({required String? businessNumber, required String? uId}) async {
+    _firestore.collection("user")
+      .where("businessNumber", isEqualTo:businessNumber)
+      .get();
+  }
+
   // todo: 계정의 auth 업데이트 (firebaseAuth에서 사용한 것 여기서 구현)
   // Future<void> updateAuth(String? uid, String auth) async {
   //   await _firestore.collection("user").doc(uid).update(

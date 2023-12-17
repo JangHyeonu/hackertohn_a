@@ -3,6 +3,8 @@ class BusinessModel {
   String? userModelId;
   String? email;
 
+  // todo: businessModielId 추가하기
+
   // 사업자 등록번호
   String? businessNumber;
   // 사업자 상호명

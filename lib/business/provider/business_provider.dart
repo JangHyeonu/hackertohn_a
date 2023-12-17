@@ -103,6 +103,15 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     return state;
   }
 
+  Future<BusinessModel?> getBusinessByBusinessNumber(String? businessNumber) async {
+    BusinessModel? businessModel = await getBusinessAuth(userState?.userModelId);
+
+    if(businessModel?.businessNumber == businessNumber) {
+      state = businessModel!;
+    }
+    return state;
+  }
+
   // void setUpdateAuth(String? uid, String auth) {
   //   businessRepository.updateBusinessAuth(uid, auth);
   // }

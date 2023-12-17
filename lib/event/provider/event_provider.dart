@@ -1,5 +1,6 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:seeya_hackthon_a/event/model/event_model.dart';
 import 'package:seeya_hackthon_a/event/repository/event_repository.dart';
 
@@ -18,8 +19,20 @@ class EventNotifier extends StateNotifier<EventModel>{
   final EventRepository _repository = EventRepository();
 
   // 이벤트 등록
-  void regist() {
-    _repository.regist(state);
+  Future<bool?> regist() async {
+    bool? isRegisted = await _repository.regist(state);
+
+    if(isRegisted) {
+      Fluttertoast.showToast(
+        msg: "행사가 등록 되었습니다.",
+      );
+      return true;
+    } else {
+      Fluttertoast.showToast(
+        msg: "행사 등록에 실패했습니다.\n입력값을 확인해주세요.",
+      );
+      return false;
+    }
   }
 
   // 상세 조회
