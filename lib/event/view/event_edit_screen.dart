@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
@@ -69,6 +70,26 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                     ),
                     // TODO :: 주소 입력 API
                     TextFormField(
+                      onTap: () async {
+                        KopoModel? model = await Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => RemediKopo(),
+                          ),
+                        );
+
+                        if (model != null) {
+                          // 우편 주소
+                          final postcode = model.zonecode ?? '';
+
+                          // 주소
+                          final address = model.address ?? '';
+                          state.location = address;
+
+                          // 세부 주소
+                          final buildingName = model.buildingName ?? '';
+                        }
+                      },
                       onChanged: (value) {
                         state.location = value;
                       },

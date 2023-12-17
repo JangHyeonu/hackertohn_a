@@ -72,6 +72,8 @@ dependencies:
   firebase_core: ^2.24.2
   # 구글 지도
   google_maps_flutter: ^2.5.0
+  # 주소 검색 API
+  remedi_kopo: ^0.0.2
 
 dev_dependencies:
   flutter_test:
