@@ -67,6 +67,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         label: Text("행사 내용"),
                       ),
                     ),
+                    // TODO :: 주소 입력 API
                     TextFormField(
                       onChanged: (value) {
                         state.location = value;
@@ -124,18 +125,20 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           context: context,
                           initialTime: TimeOfDay.now(),
                         );
-                        state.startDatetime = DateTime(
-                          state.startDatetime!.year,
-                          state.startDatetime!.month,
-                          state.startDatetime!.day,
-                          selectedTime!.hour,
-                          selectedTime!.minute,
-                        );
+                        setState(() {
+                          state.startDatetime = DateTime(
+                            state.startDatetime!.year,
+                            state.startDatetime!.month,
+                            state.startDatetime!.day,
+                            selectedTime!.hour,
+                            selectedTime!.minute,
+                          );
 
-                        // 행사 종료일이 없거나 행사 시작일 보다 빠른 경우 행사 시작일과 시기를 맞춤
-                        if(state.endDatetime == null || state.endDatetime!.isBefore(state.startDatetime!)) {
-                          state.endDatetime = state.startDatetime!;
-                        }
+                          // 행사 종료일이 없거나 행사 시작일 보다 빠른 경우 행사 시작일과 시기를 맞춤
+                          if(state.endDatetime == null || state.endDatetime!.isBefore(state.startDatetime!)) {
+                            state.endDatetime = state.startDatetime!;
+                          }
+                        });
                       },
                       controller: TextEditingController(
                           text: (state.startDatetime != null) ? DateFormat("HH:mm").format(state!.startDatetime!) : "",
@@ -162,6 +165,11 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           } else {
                             state.endDatetime = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day, state.endDatetime!.hour, state.endDatetime!.minute);
                           }
+
+                          // 행사 시작 정보가 없거나 행사 종료일 보다 빠른 경우 행사 종료 시기와 맞춤
+                          if(state.startDatetime == null || state.endDatetime!.isBefore(state.startDatetime!)) {
+                            state.startDatetime = state.endDatetime!;
+                          }
                         });
                       },
                       controller: TextEditingController(
@@ -185,13 +193,20 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           context: context,
                           initialTime: TimeOfDay.now(),
                         );
-                        state.endDatetime = DateTime(
-                          state.endDatetime!.year,
-                          state.endDatetime!.month,
-                          state.endDatetime!.day,
-                          selectedTime!.hour,
-                          selectedTime!.minute,
-                        );
+                        setState(() {
+                          state.endDatetime = DateTime(
+                            state.endDatetime!.year,
+                            state.endDatetime!.month,
+                            state.endDatetime!.day,
+                            selectedTime!.hour,
+                            selectedTime!.minute,
+                          );
+
+                          // 행사 시작 정보가 없거나 행사 종료일 보다 빠른 경우 행사 종료 시기와 맞춤
+                          if(state.startDatetime == null || state.endDatetime!.isBefore(state.startDatetime!)) {
+                            state.startDatetime = state.endDatetime!;
+                          }
+                        });
                       },
                       controller: TextEditingController(
                         text: (state.endDatetime != null) ? DateFormat("HH:mm").format(state!.endDatetime!) : "",
@@ -211,6 +226,18 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                       decoration: const InputDecoration(
                         icon: Icon(Icons.text_snippet),
                         label: Text("주의 사항"),
+                      ),
+                    ),
+                    TextFormField(
+                      onChanged: (value) {
+                        state.caution = value;
+                      },
+                      controller: TextEditingController(
+                          text: state.caution
+                      ),
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.text_snippet),
+                        label: Text("키워드"),
                       ),
                     ),
                   ],
