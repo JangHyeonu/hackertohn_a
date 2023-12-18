@@ -3,7 +3,11 @@ class EventModel {
   String? eventId;
   String? title;
   String? content;
+  String? postcode;
   String? location;
+  String? locationDetail;
+  double? latitude;
+  double? longitude;
   DateTime? startDatetime;
   DateTime? endDatetime;
   String? caution;
@@ -15,7 +19,11 @@ class EventModel {
     this.eventId,
     this.title,
     this.content,
+    this.postcode,
     this.location,
+    this.locationDetail,
+    this.latitude,
+    this.longitude,
     this.startDatetime,
     this.endDatetime,
     this.caution,
@@ -26,24 +34,16 @@ class EventModel {
   // ignore: non_constant_identifier_names
   EventModel.Empty();
 
+  //  Model -> Map
   Map<String, dynamic> toMap() {
     return {
       "title" : title,
       "content" : content,
+      "postcode" : postcode,
       "location" : location,
-      "startDatetime" : startDatetime,
-      "endDatetime" : endDatetime,
-      "caution" : caution,
-      "register" : register,
-      "regDatetime" : regDatetime
-    };
-  }
-  Map<String, dynamic> toMapAllData() {
-    return {
-      "eventId" : eventId,
-      "title" : title,
-      "content" : content,
-      "location" : location,
+      "locationDetail" : locationDetail,
+      "latitude" : latitude,
+      "longitude" : longitude,
       "startDatetime" : startDatetime,
       "endDatetime" : endDatetime,
       "caution" : caution,
@@ -52,12 +52,25 @@ class EventModel {
     };
   }
 
+  //  Model -> Map :: All Data
+  Map<String, dynamic> toMapAllData() {
+    Map<String, dynamic> result = toMap();
+    result["eventId"] = eventId;
+
+    return result;
+  }
+
+  // Map -> Model
   static EventModel of(Map<String, dynamic> map) {
     return EventModel(
       eventId: map["eventId"],
       title: map["title"],
       content: map["content"],
+      postcode: map["postcode"],
       location: map["location"],
+      locationDetail: map["locationDetail"],
+      latitude: map["latitude"],
+      longitude: map["longitude"],
       startDatetime: map["startDatetime"],
       endDatetime: map["endDatetime"],
       caution: map["caution"],
@@ -66,6 +79,7 @@ class EventModel {
     );
   }
 
+  // List<Map> -> List<Model>
   static List<EventModel> listOf(List<Map<String, dynamic>> list) {
     return list.map((e) => (e != null) ? of(e) : EventModel()).toList();
   }

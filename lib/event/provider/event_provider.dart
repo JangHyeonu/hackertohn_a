@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:seeya_hackthon_a/event/model/event_model.dart';
@@ -36,7 +37,7 @@ class EventNotifier extends StateNotifier<EventModel>{
   }
 
   // 상세 조회
-  EventModel read(String eventId) {
+  Future<EventModel> read(String eventId) async {
 
     _repository.read(eventId)
         .then((result) => {
@@ -46,6 +47,11 @@ class EventNotifier extends StateNotifier<EventModel>{
     return state;
   }
 
+  // 데이터 초기화
+  Future<EventModel> init() async {
+    state = EventModel();
+    return state;
+  }
 }
 
 class EventListNotifier extends StateNotifier<List<EventModel>> {

@@ -72,8 +72,10 @@ dependencies:
   firebase_core: ^2.24.2
   # 구글 지도
   google_maps_flutter: ^2.5.0
-  # 주소 검색 API
+  # 한국 주소 검색 API
   remedi_kopo: ^0.0.2
+  # 주소 <=> 위도, 경도 변환 API
+  geocoding: ^2.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,9 @@
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:seeya_hackthon_a/event/model/event_model.dart';
+import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 class EventRepository {
@@ -15,15 +16,16 @@ class EventRepository {
     Query<Map<String, dynamic>> eventListQuery;
 
     if(lastVisibleInReadList == null) {
-      eventListQuery = _firestore
-          .collection("event")
-          .where("endDatetime", isGreaterThanOrEqualTo: DateTime.now())
-          .orderBy("startDatetime")
+      eventListQuery = _firestore.collection("event")
+          .where("endDatetime", isGreaterThan: DateTime.now())
+          .where("startDatetime", isNotEqualTo: null)
+          .orderBy("endDatetime")
           .limit(limit);
     } else {
       eventListQuery = _firestore.collection("event")
-          .where("endDatetime", isGreaterThanOrEqualTo: DateTime.now())
-          .orderBy("startDatetime")
+          .where("endDatetime", isGreaterThan: DateTime.now())
+          .where("startDatetime", isNotEqualTo: null)
+          .orderBy("endDatetime")
           .startAfterDocument(lastVisibleInReadList!)
           .limit(limit);
     }
@@ -73,9 +75,9 @@ class EventRepository {
   }
 
   Future<bool> regist(EventModel model) async {
-    String? writer = UserStateNotifier.getInstance2().state?.userModelId ?? "";
+    UserModel userModel = UserStateNotifier.getInstance2().state!;
 
-    if(writer == "" || model.startDatetime == null || model.endDatetime == null) {
+    if(userModel.userModelId == "" || model.startDatetime == null || model.endDatetime == null) {
       return false;
     }
 
@@ -87,7 +89,13 @@ class EventRepository {
     try {
       // 새로 추가
       if(model.eventId == null || model.eventId == "") {
-        model.register = writer;
+        // 사명 유효성 검사
+        if(userModel.businessModel!.businessName == null || userModel.businessModel!.businessName == "") {
+          Fluttertoast.showToast(msg: "기업 정보가 유효하지 않습니다. 확인해주세요.");
+          throw Exception();
+        }
+        dataMap["register"] = userModel.userModelId;
+        dataMap["businessName"] = userModel.businessModel!.businessName!;
         await _firestore.collection("event").add(dataMap);
       }
       // 내용 변경
@@ -96,7 +104,12 @@ class EventRepository {
       }
     } catch(exception) {
       debugPrint("$exception");
+      return false;
     }
+
+    // TODO :: 이후 스케줄러 생성시 일정 시간마다 DB 데이터 기준으로 알림 발송되도록 처리
+    // 알림 발송 처리
+
 
     return true;
   }

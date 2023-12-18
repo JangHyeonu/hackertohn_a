@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
@@ -20,28 +21,34 @@ class EventEditScreen extends ConsumerStatefulWidget {
   EventEditScreen({this.eventId, this.businessModel, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => EventEditScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => EventEditScreenState(eventId);
 }
 
 class EventEditScreenState extends ConsumerState<EventEditScreen> {
+  final String? eventId;
 
-  EventEditScreenState();
+  EventEditScreenState(this.eventId);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // 등록 : 초기화
+    if(eventId == null || eventId == "") {
+      ref.read(eventProvider.notifier).init();
+    }
+
+    // 수정 대상의 데이터가 현재 모델 데이터와 다른 경우 DB에서 데이터 조회
+    if(eventId != ref.read(eventProvider).eventId) {
+      ref.read(eventProvider.notifier).read(eventId!);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(eventProvider);
     final businessModel = ref.watch(businessProvider);
-
-    if(widget.eventId != state.eventId) { // state 데이터의 구분값이 조회하려는 값과 같지 않으면 새로 조회
-      // DB에서 데이터 조회
-      ref.read(eventProvider.notifier).read(widget.eventId ?? "");
-    }
 
     debugPrint("event edit build");
 
@@ -113,19 +120,34 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                               builder: (context) => RemediKopo(),
                             ),
                           );
-
                           if (model != null) {
-                            // 우편 주소
-                            final postcode = model.zonecode ?? '';
+                            setState(() async {
+                              // 우편 주소
+                              // final postcode = model.zonecode ?? '';
+                              state.postcode = model.zonecode ?? '';
 
-                            // 주소
-                            final address = model.address ?? '';
-                            state.location = address;
+                              // 주소
+                              // final address = model.address ?? '';
+                              state.location = model.roadAddress ?? '';
 
-                            // 세부 주소
-                            final buildingName = model.buildingName ?? '';
+                              // 세부 주소
+                              // final buildingName = model.buildingName ?? '';
+                              state.locationDetail = model.buildingName ?? '';
+
+                              // 주소 -> 위도, 경도 변환
+                              List<Location> locations = await locationFromAddress(model.address ?? "");
+                              // for (var location in locations) {
+                              //   print(location.latitude);
+                              //   print(location.longitude);
+                              // }
+                              state.latitude = locations[0].latitude;
+                              state.longitude = locations[0].longitude;
+
+                              FocusScope.of(context).nextFocus();
+                            });
                           }
                         },
+                        readOnly: true,
                         onChanged: (value) {
                           state.location = value;
                         },
@@ -135,6 +157,18 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         decoration: const InputDecoration(
                           icon: Icon(Icons.text_fields),
                           label: Text("행사 장소"),
+                        ),
+                      ),
+                      TextFormField(
+                        onChanged: (value) {
+                          state.locationDetail = value;
+                        },
+                        controller: TextEditingController(
+                            text: state.locationDetail
+                        ),
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.text_fields),
+                          label: Text("행사 세부 장소"),
                         ),
                       ),
                       Row(
@@ -344,13 +378,35 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
               ButtonBar(
                 children: [
                   OutlinedButton(
-                      onPressed: () => {
+                      onPressed: () {
+                        // 유효성 검사
+                        if(state.title == null || state.title == "title") {
+                          Fluttertoast.showToast(msg: "행사 제목이 유효하지 않습니다.");
+                          debugPrint("행사 제목이 유효하지 않습니다.");
+                          return;
+                        }
+                        
+                        if(state.location == null || state.location == "") {
+                          Fluttertoast.showToast(msg: "행사 장소가 유효하지 않습니다.");
+                          debugPrint("행사 장소가 유효하지 않습니다.");
+                          return;
+                        }
+                        
+                        if(state.startDatetime == null || state.endDatetime == null) {
+                          Fluttertoast.showToast(msg: "행사 기간이 유효하지 않습니다.");
+                          debugPrint("행사 기간이 유효하지 않습니다.");
+                          return;
+                        }
+
+                        // 행사 정보 등록
                         ref.read(eventProvider.notifier).regist().then((value) => {
                           if(value!) {
+                            Fluttertoast.showToast(msg: "등록되었습니다."),
                             context.go("/"),
                           }
-                        }),
-                        ref.read(eventProvider).eventId = "registered-event",
+                        });
+                        
+                        ref.read(eventProvider).eventId = "registered-event";
                       },
                       child: const Text("등록하기")
                   )
