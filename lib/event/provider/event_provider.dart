@@ -72,7 +72,11 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
   }) : super([]);
 
   Future<List<EventModel>?> init() async {
+    eventList?.clear();
+    List<EventModel>? eventList2 = await readList();
+
     state = [];
+
     return state;
   }
 

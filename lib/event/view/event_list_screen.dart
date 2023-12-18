@@ -106,8 +106,8 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
 
       child: RefreshIndicator(
         onRefresh: () async {
+          // await ref.read(eventListProvider.notifier).init().then((value) async => await ref.read(eventListProvider.notifier).readList());
           await ref.read(eventListProvider.notifier).init();
-          await ref.read(eventListProvider.notifier).readList();
         },
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
