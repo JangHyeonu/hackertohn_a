@@ -17,12 +17,12 @@ class EventRepository {
     if(lastVisibleInReadList == null) {
       eventListQuery = _firestore
           .collection("event")
-          .where("startDatetime", isGreaterThanOrEqualTo: DateTime.now())
+          .where("endDatetime", isGreaterThanOrEqualTo: DateTime.now())
           .orderBy("startDatetime")
           .limit(limit);
     } else {
       eventListQuery = _firestore.collection("event")
-          .where("startDatetime", isGreaterThanOrEqualTo: DateTime.now())
+          .where("endDatetime", isGreaterThanOrEqualTo: DateTime.now())
           .orderBy("startDatetime")
           .startAfterDocument(lastVisibleInReadList!)
           .limit(limit);

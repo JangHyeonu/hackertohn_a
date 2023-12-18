@@ -8,10 +8,7 @@ import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
 class EventListScreen extends ConsumerStatefulWidget {
-
-  const EventListScreen({
-    super.key
-  });
+  const EventListScreen({super.key});
 
   @override
   ConsumerState<EventListScreen> createState() => EventListScreenState();
@@ -25,17 +22,18 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
   String? _searchText;
 
   void searchKeyboardFn() {
-    if(_focusNode.hasFocus == false) {
+    if (_focusNode.hasFocus == false) {
       setState(() {
         bottomSize = MediaQuery.of(context).viewInsets.bottom;
       });
-    } else {
-    }
+    } else {}
   }
 
   void fn() async {
-    if(_controller.position.extentAfter < 0.1 && ref.read(eventListProvider.notifier).getHasNextPage()) {
-      await Future.delayed(const Duration(milliseconds: 1000), () => ref.read(eventListProvider.notifier).readList());
+    if (_controller.position.extentAfter < 0.1 &&
+        ref.read(eventListProvider.notifier).getHasNextPage()) {
+      await Future.delayed(const Duration(milliseconds: 1000),
+          () => ref.read(eventListProvider.notifier).readList());
     }
   }
 
@@ -74,14 +72,18 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
       isResize: false,
       bottomSheetWidget: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: TextFormButtonComponent(
             focusNode: _focusNode,
             textFormWidth: MediaQuery.of(context).size.width / 1.4,
             buttonText: "검색",
             buttonClickEvent: () => {
-              ref.read(eventListProvider.notifier).readListBySearch(searchText: _searchText).then((value) {
-                if(value!.isNotEmpty) {
+              ref
+                  .read(eventListProvider.notifier)
+                  .readListBySearch(searchText: _searchText)
+                  .then((value) {
+                if (value!.isNotEmpty) {
                   FocusScope.of(context).unfocus();
                 }
               }),
@@ -102,90 +104,104 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
         ),
       ),
 
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: Column(
-          children: [
-
-            Expanded(
-              child: ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                controller: _controller,
-                itemCount: state.length + 1,
-                itemBuilder: (context, index) {
-
-                  if(!ref.read(eventListProvider.notifier).getIsFilterSearch()) {
-                    // 마지막 리스트 하나 추가하기
-                    if(index == state.length) {
-                      return Container(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                            ),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height / 7,
-                              child: Center(
-                                child: ref.read(eventListProvider.notifier).getHasNextPage() ?
-                                const CircularProgressIndicator() :
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 50),
-                                  child: Text("마지막 행사입니다.", style: TextStyle(fontWeight: FontWeight.w300)),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await ref.read(eventListProvider.notifier).init();
+          await ref.read(eventListProvider.notifier).readList();
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _controller,
+                  itemCount: state.length + 1,
+                  itemBuilder: (context, index) {
+                    if (!ref
+                        .read(eventListProvider.notifier)
+                        .getIsFilterSearch()) {
+                      // 마지막 리스트 하나 추가하기
+                      if (index == state.length) {
+                        return Container(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8.0)),
+                              ),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height / 7,
+                                child: Center(
+                                  child: ref
+                                          .read(eventListProvider.notifier)
+                                          .getHasNextPage()
+                                      ? const CircularProgressIndicator()
+                                      : const Padding(
+                                          padding: EdgeInsets.only(bottom: 50),
+                                          child: Text("마지막 행사입니다.",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300)),
+                                        ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      }
+                    } else {
+                      if (index == state.length) {
+                        return Container();
+                      }
                     }
-                  } else {
-                    if(index == state.length) {
-                      return Container();
-                    }
-                  }
 
-                  return Column(
-                    children: [
-                      index == 0 ?
-                      Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height / 7,
-                            child: const BannerComponent(),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
-                      ): Container(),
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                        child: InkWell(
-                          onTap: () {
-                            context.push("/event/detail/${state[index].eventId!}");
-                          },
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                            ),
-                            child: EventListComponent(
-                              eventId: state[index].eventId ?? "",
-                              title: state[index].title ?? "-",
-                              register: state[index].register,
-                              startDatetime: state[index].startDatetime,
-                              endDatetime: state[index].endDatetime,
+                    return Column(
+                      children: [
+                        index == 0
+                            ? Column(
+                                children: [
+                                  Container(
+                                    height:
+                                        MediaQuery.of(context).size.height / 7,
+                                    child: const BannerComponent(),
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              )
+                            : Container(),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                          child: InkWell(
+                            onTap: () {
+                              context
+                                  .push("/event/detail/${state[index].eventId!}");
+                            },
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8.0)),
+                              ),
+                              child: EventListComponent(
+                                eventId: state[index].eventId ?? "",
+                                title: state[index].title ?? "-",
+                                register: state[index].register,
+                                startDatetime: state[index].startDatetime,
+                                endDatetime: state[index].endDatetime,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -65,6 +65,11 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
     this.eventList
   }) : super([]);
 
+  Future<List<EventModel>?> init() async {
+    state = [];
+    return state;
+  }
+
   Future<List<EventModel>?> readList({String? searchText}) async {
     // 조회 진행
     _isLoadMoreRunning = true;
