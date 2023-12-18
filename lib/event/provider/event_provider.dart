@@ -57,6 +57,7 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
   bool _hasNextPage = true;
   bool _isFirstLoadRunning = true;
   bool _isLoadMoreRunning = false;
+  bool _isFilterSearch = false;
 
   final EventRepository _repository = EventRepository();
 
@@ -64,11 +65,11 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
     this.eventList
   }) : super([]);
 
-  Future<List<EventModel>?> readList() async {
+  Future<List<EventModel>?> readList({String? searchText}) async {
     // 조회 진행
     _isLoadMoreRunning = true;
 
-    await _repository.readList(_limit)
+    await _repository.readList(_limit, searchText: searchText)
         .then((result) async => {
 
           if(result.isEmpty || result.length < _limit) {
@@ -83,7 +84,42 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
         // 조회 종료
         _isFirstLoadRunning = false,
         _isLoadMoreRunning = false,
+        _isFilterSearch = false,
     });
+
+    return state;
+  }
+
+  Future<List<EventModel>?> readListBySearch({String? searchText}) async {
+    if(searchText == null) {
+      return state;
+    }
+
+    // 조회 진행
+    _isLoadMoreRunning = true;
+
+    List<EventModel> filterList1 = eventList!.where((element) => element.title != null).toList();
+    List<EventModel> filterList2;
+
+    filterList2 = filterList1.where((element) {
+      return element.title!.contains(searchText);
+    }).toList();
+
+    // 조회 종료
+    _isLoadMoreRunning = false;
+
+    if(searchText == "") {
+      _isFilterSearch = false;
+    } else {
+      _isFilterSearch = true;
+    }
+
+    if(filterList2.isNotEmpty) {
+      state = filterList2;
+    } else {
+      Fluttertoast.showToast(msg: "$searchText 조회 결과가 없습니다.");
+      return Future.error("error");
+    }
 
     return state;
   }
@@ -96,5 +132,8 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
   }
   bool getHasNextPage() {
     return _hasNextPage;
+  }
+  bool getIsFilterSearch() {
+    return _isFilterSearch;
   }
 }

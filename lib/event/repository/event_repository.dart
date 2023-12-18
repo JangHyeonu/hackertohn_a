@@ -10,7 +10,7 @@ class EventRepository {
 
   QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleInReadList;
 
-  Future<List<Map<String, dynamic>>> readList(int limit) async {
+  Future<List<Map<String, dynamic>>> readList(int limit, {String? searchText}) async {
     List<Map<String, dynamic>> readListResult = [];
     Query<Map<String, dynamic>> eventListQuery;
 
@@ -46,6 +46,8 @@ class EventRepository {
     debugPrint("::: 메인 리스트 이벤트 조회 쿼리 실행");
     return readListResult;
   }
+
+
 
 
 
