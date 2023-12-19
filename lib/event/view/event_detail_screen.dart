@@ -7,6 +7,7 @@ import 'package:seeya_hackthon_a/_common/google_maps/custom_google_maps.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/component/detail_icon_text_component.dart';
 import 'package:seeya_hackthon_a/event/component/event_list_component.dart';
+import 'package:seeya_hackthon_a/event/model/event_model.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
 class EventDetailScreen extends ConsumerStatefulWidget {
@@ -112,7 +113,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                                   child: Row(
                                     children: [
                                       ElevatedButton(
-                                        onPressed: () => openMapDialog(state.location),
+                                        onPressed: () => openMapDialog(state),
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: const Size(10, 30),
                                           // surfaceTintColor: Colors.grey[300],
@@ -138,8 +139,8 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                               alignment: Alignment.topLeft,
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                               child: Text(
-                                state.location ?? "",
-                                style: const TextStyle(
+                                  "${state.location}\n${state.locationDetail}" ?? "",
+                                  style: const TextStyle(
                                   fontSize: 14,
                                   overflow: TextOverflow.visible,
                                 )
@@ -209,7 +210,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     );
   }
 
-  Future openMapDialog(String? location) {
+  Future openMapDialog(EventModel state) {
     return showDialog(
       context: context,
       barrierDismissible: false, //바깥 영역 터치시 닫을지 여부 결정
@@ -234,7 +235,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                         alignment: Alignment.topLeft,
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                         child: Text(
-                          location ?? "",
+                          "${state.location}\n${state.locationDetail}" ?? "",
                           style: const TextStyle(
                             fontSize: 14,
                             overflow: TextOverflow.visible,
@@ -248,7 +249,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 Container(
                   width: 300,
                   height: 300,
-                  child: const CustomGoogleMaps(),
+                  child: CustomGoogleMaps(eventState: state),
                 ),
               ],
             ),

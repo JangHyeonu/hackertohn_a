@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
+import 'package:seeya_hackthon_a/event/model/event_model.dart';
 
 class CustomGoogleMaps extends StatefulWidget {
+  final EventModel? eventState;
 
-  const CustomGoogleMaps({super.key});
+  const CustomGoogleMaps({this.eventState, super.key});
 
   @override
   State<CustomGoogleMaps> createState() => _CustomGoogleMapsState();
@@ -14,11 +16,21 @@ class CustomGoogleMaps extends StatefulWidget {
 
 class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
   GoogleMapController? _controller;
+  late String eventId;
+  late double latitudeState;
+  late double longitudeState;
 
-  double latitude = 37.32512;
-  double longitude = 127.9887;
 
   bool isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    latitudeState = widget.eventState?.latitude ?? 37.32512;
+    longitudeState = widget.eventState?.longitude ?? 127.9887;
+    eventId = widget.eventState?.eventId ?? "1";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +39,10 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
         GoogleMap(
           mapType: MapType.normal,
           initialCameraPosition: CameraPosition(
-              target: LatLng(latitude, longitude),
+              target: LatLng(latitudeState, longitudeState),
               zoom: 17
           ),
-          markers: <Marker>{Marker(markerId: MarkerId("1"), position: LatLng(latitude, longitude))},
+          markers: <Marker>{Marker(markerId: MarkerId(eventId), position: LatLng(latitudeState, longitudeState))},
           onMapCreated: (controller) {
             _controller = controller;
             setState(() {
@@ -55,14 +67,14 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
 
                 Position position = await CustomGeolocator.getLocation();
                 setState(() {
-                  latitude = position.latitude;
-                  longitude = position.longitude;
+                  latitudeState = position.latitude;
+                  longitudeState = position.longitude;
                 });
 
                 await _controller?.animateCamera(
                   CameraUpdate.newCameraPosition(
                     CameraPosition(
-                      target: LatLng(latitude, longitude),
+                      target: LatLng(latitudeState, longitudeState),
                       zoom: 17,
                       bearing: 0
                     ),
