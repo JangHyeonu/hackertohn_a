@@ -12,7 +12,9 @@ class KeywordRepository {
   Future<List<KeywordModel>> readList(String userUid) async {
     List<KeywordModel> result = [];
 
-    final docRef = _firestore.collection("keyword").where("userUid", isEqualTo: userUid).where("useYn", isEqualTo: true);
+    final docRef = _firestore.collection("keyword")
+        .where("userUid", isEqualTo: userUid)
+        .where("useYn", isEqualTo: true);
 
     // DB 데이터 조회
     await docRef.get().then((value) {
@@ -39,7 +41,8 @@ class KeywordRepository {
     List<KeywordModel> result = [];
 
     final docRef = _firestore.collection("keyword")
-        .where("keyword", whereIn: keywordList);
+        .where("keyword", whereIn: keywordList)
+        .where("useYn", isEqualTo: true);
 
     await docRef.get().then((value) {
       result = value.docs.map((e) => KeywordModel.of(e.data())).toList();

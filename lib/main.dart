@@ -32,8 +32,10 @@ void main() async {
   // 핸드폰 연결 시 화면 자동꺼짐 방지
   Wakelock.enable();
 
-  //
+  // geolocator 권한 요청
   CustomGeolocator.requestGeolocatorPermission();
+
+  // TODO :: 알림 권한 요청
 
   runApp(
     // 전역 상태관리를 위해 전체를 ProviderScope로 감싸줌

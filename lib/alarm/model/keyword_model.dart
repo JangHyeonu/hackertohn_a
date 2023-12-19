@@ -7,7 +7,7 @@ class KeywordModel {
   final String? keyword;
   final String? userUid;
   final DateTime? regDatetime;
-  bool? useYn;
+  bool? useYn =  true;
 
   KeywordModel({this.keywordUid, this.keyword, this.userUid, this.regDatetime, this.useYn});
 
@@ -23,13 +23,9 @@ class KeywordModel {
 
   // KeywordModel -> Map<String, dynamic>
   Map<String, dynamic> toMapAll() {
-    return {
-      "keywordUid" : keywordUid,
-      "keyword" : keyword,
-      "userUid" : userUid,
-      "regDatetime" : regDatetime,
-      "useYn" : useYn,
-    };
+    Map<String, dynamic> result = toMap();
+    result["keywordUid"] = keywordUid;
+    return result;
   }
 
   // Map<String, dynamic> -> KeywordModel
