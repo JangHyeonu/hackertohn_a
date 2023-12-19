@@ -20,6 +20,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
   late double bottomSize;
 
   String? _searchText;
+  TextEditingController searchTextEditingController = TextEditingController();
 
   void searchKeyboardFn() {
     if (_focusNode.hasFocus == false) {
@@ -93,6 +94,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                 _searchText = p0;
               });
             },
+            textEditingController: searchTextEditingController,
             inputDecoration: const InputDecoration(
               fillColor: Colors.white,
               filled: true,
@@ -105,9 +107,17 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
       ),
 
       child: RefreshIndicator(
+        // 새로고침
         onRefresh: () async {
-          // await ref.read(eventListProvider.notifier).init().then((value) async => await ref.read(eventListProvider.notifier).readList());
+          // 검색어 제거
+          setState(() {
+            _searchText = null;
+            searchTextEditingController.text = "";
+          });
+
+          // 이전 데이터 제거
           await ref.read(eventListProvider.notifier).init();
+          // 새로운 데이터 조회
           await ref.read(eventListProvider.notifier).readList();
         },
         child: Padding(
@@ -189,7 +199,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",
                                 title: state[index].title ?? "-",
-                                register: state[index].register,
+                                businessName: state[index].businessName,
                                 startDatetime: state[index].startDatetime,
                                 endDatetime: state[index].endDatetime,
                               ),

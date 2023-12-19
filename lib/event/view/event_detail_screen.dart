@@ -59,7 +59,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 child: EventListComponent(
                   eventId: eventId,
                   title: state.title!,
-                  register: state.register,
+                  businessName: state.businessName,
                   startDatetime: state.startDatetime,
                   endDatetime: state.endDatetime,
                 ),

@@ -14,24 +14,33 @@ class EventRepository {
   // 행사 목록 조회
   // TODO :: 정렬 기준 변경 -> 'startDatetime'
   Future<List<Map<String, dynamic>>> readList(int limit, {String? searchText}) async {
+    debugPrint("::: 메인 리스트 이벤트 조회 쿼리 실행");
     List<Map<String, dynamic>> readListResult = [];
     Query<Map<String, dynamic>> eventListQuery;
 
-    if(lastVisibleInReadList == null) {
-      eventListQuery = _firestore.collection("event")
-          .where("endDatetime", isGreaterThan: DateTime.now())
-          // .where("startDatetime", isNotEqualTo: null)
-          .orderBy("endDatetime")
-          .limit(limit);
-    } else {
-      eventListQuery = _firestore.collection("event")
-          .where("endDatetime", isGreaterThan: DateTime.now())
-          // .where("startDatetime", isNotEqualTo: null)
-          .orderBy("endDatetime")
-          .startAfterDocument(lastVisibleInReadList!)
-          .limit(limit);
+    eventListQuery = _firestore.collection("event")
+        .where("endDatetime", isGreaterThan: DateTime.now());
+        // .orderBy("endDatetime");
+
+    if(searchText != null) {
+      eventListQuery = eventListQuery.where(
+          Filter.or(
+              Filter("title", whereIn: [searchText]),
+              Filter("businessName", whereIn: [searchText])
+          )
+      );
     }
 
+    // 다음 페이지 내용 조회일 경우
+    if(lastVisibleInReadList != null) {
+      eventListQuery = eventListQuery.startAfterDocument(lastVisibleInReadList!);
+    }
+
+    // 개수 제한 추가
+    eventListQuery = eventListQuery
+        .limit(limit);
+
+    // 조회 실행
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await eventListQuery.get();
     if(querySnapshot.size > 0) {
       lastVisibleInReadList = querySnapshot.docs[querySnapshot.size - 1];
@@ -47,7 +56,7 @@ class EventRepository {
       if(readListResult[i]["endDatetime"] != null) readListResult[i]["endDatetime"] = (readListResult[i]["endDatetime"] as Timestamp).toDate();
     }
 
-    debugPrint("::: 메인 리스트 이벤트 조회 쿼리 실행");
+    debugPrint("::: 메인 리스트 이벤트 조회 쿼리 종료");
     return readListResult;
   }
 

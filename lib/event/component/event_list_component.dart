@@ -12,7 +12,7 @@ class EventListComponent extends StatelessWidget {
   DateTime? endDatetime;
   String? caution;
 
-  String? register;
+  String? businessName;
   DateTime? regDatetime;
 
   EventListComponent({
@@ -23,7 +23,7 @@ class EventListComponent extends StatelessWidget {
     this.startDatetime,
     this.endDatetime,
     this.caution,
-    this.register,
+    this.businessName,
     this.regDatetime,
     super.key
   });
@@ -78,7 +78,7 @@ class EventListComponent extends StatelessWidget {
                   ),
                   padding: EdgeInsets.fromLTRB(6,3,6,3),
                   child: Text(
-                    register != null ? register! : "-",
+                    businessName != null ? businessName! : "-",
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,

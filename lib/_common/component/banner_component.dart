@@ -17,13 +17,19 @@ class _BannerComponentState extends State<BannerComponent> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
+  List<String> bannerList = [
+    "assets/image/banner_001.png",
+    "assets/image/banner_002.png",
+    "assets/image/banner_003.png",
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       int nextPage = _currentPage + 1;
-      if(nextPage > 4) {
+      if(nextPage > bannerList.length-1) {
         nextPage = 0;
       }
 
@@ -50,13 +56,8 @@ class _BannerComponentState extends State<BannerComponent> {
               _currentPage = value;
             });
           },
-          children: [
-            buildBanner('assets/image/ban1.png'),
-            buildBanner('assets/image/ban2.png'),
-            buildBanner('assets/image/ban3.png'),
-            buildBanner('assets/image/ban4.png'),
-            buildBanner('assets/image/ban5.png'),
-          ],
+          children:
+            bannerList.map((e) => buildBanner(e)).toList(),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -65,7 +66,7 @@ class _BannerComponentState extends State<BannerComponent> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for(int i = 0; i < 5; i++)
+                for(int i = 0; i < bannerList.length; i++)
                   Container(
                     margin: const EdgeInsets.all(4.0),
                     width: 12.0,

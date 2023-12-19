@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class EventModel {
 
   String? eventId;
@@ -15,6 +17,8 @@ class EventModel {
   String? register;
   DateTime? regDatetime;
 
+  String? businessName;
+
   EventModel({
     this.eventId,
     this.title,
@@ -29,6 +33,7 @@ class EventModel {
     this.caution,
     this.register,
     this.regDatetime,
+    this.businessName,
   });
 
   // ignore: non_constant_identifier_names
@@ -48,7 +53,8 @@ class EventModel {
       "endDatetime" : endDatetime,
       "caution" : caution,
       "register" : register,
-      "regDatetime" : regDatetime
+      "regDatetime" : regDatetime,
+      "businessName" : businessName,
     };
   }
 
@@ -71,11 +77,18 @@ class EventModel {
       locationDetail: map["locationDetail"],
       latitude: map["latitude"],
       longitude: map["longitude"],
-      startDatetime: map["startDatetime"],
-      endDatetime: map["endDatetime"],
+      startDatetime: (map["startDatetime"].runtimeType == DateTime) ? map["startDatetime"]
+          : (map["startDatetime"].runtimeType == Timestamp) ? (map["startDatetime"] as Timestamp).toDate()
+          : null,
+      endDatetime: (map["endDatetime"].runtimeType == DateTime) ? map["endDatetime"]
+          : (map["endDatetime"].runtimeType == Timestamp) ? (map["endDatetime"] as Timestamp).toDate()
+          : null,
       caution: map["caution"],
       register: map["register"],
-      regDatetime: map["regDate"],
+      regDatetime: (map["regDatetime"].runtimeType == DateTime) ? map["regDatetime"]
+          : (map["regDatetime"].runtimeType == Timestamp) ? (map["regDatetime"] as Timestamp).toDate()
+          : null,
+      businessName: map["businessName"],
     );
   }
 
