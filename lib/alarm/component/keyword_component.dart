@@ -54,76 +54,89 @@ class KeywordComponentState extends ConsumerState<KeywordComponent> {
               // 키워드입력, 등록
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.60,
-                      margin: const EdgeInsets.only(left: 20, right: 10),
-                      child: TextFormField(
-                        controller: TextEditingController(
-                          text: _inputKeywordText
-                        ),
-                        onChanged: (value) {
-                          // TODO :: 입력 받은 값으로 기존 키워드 검색 후 키워드 목록 선택지 출력 => 선택한 키워드로 값 대체
-                          _inputKeywordText = value;
-                        },
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.text_fields),
-                          label: Text("키워드 입력")
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        margin: const EdgeInsets.only(left: 20, right: 10),
+                        child: TextFormField(
+                          controller: TextEditingController(
+                            text: _inputKeywordText
+                          ),
+                          onChanged: (value) {
+                            // TODO :: 입력 받은 값으로 기존 키워드 검색 후 키워드 목록 선택지 출력 => 선택한 키워드로 값 대체
+                            _inputKeywordText = value;
+                          },
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(Icons.text_fields),
+                            label: Text("키워드 입력"),
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white24
-                        ),
-                        onPressed: () async {
-                          _inputKeywordText = _inputKeywordText.trim();
+                      Expanded(child: Container()),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0x30f9e2c5),
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
+                            ),
+                            onPressed: () async {
+                              _inputKeywordText = _inputKeywordText.trim();
 
-                          // 오류 출력시 메세지
-                          String? toastMsg;
+                              // 오류 출력시 메세지
+                              String? toastMsg;
 
-                          // TODO :: 정규식 검사로 변경
-                          // 입력 내용 유효성 검사
-                          if(_inputKeywordText == "") {
-                            toastMsg = "유효하지 않은 입력입니다.";
-                          } else {
-                            // TODO :: DB 데이터 중복 검사
-                            // 중복 검사 :: DB 접근 횟수를 줄이기 위해 프론트에서 임시로 처리함
-                            for(KeywordModel model in keywordListState) {
-                              if(model.keyword == _inputKeywordText) {
-                                toastMsg = "이미 등록된 키워드입니다.";
+                              // TODO :: 정규식 검사로 변경
+                              // 입력 내용 유효성 검사
+                              if(_inputKeywordText == "") {
+                                toastMsg = "유효하지 않은 입력입니다.";
+                              } else {
+                                // TODO :: DB 데이터 중복 검사
+                                // 중복 검사 :: DB 접근 횟수를 줄이기 위해 프론트에서 임시로 처리함
+                                for(KeywordModel model in keywordListState) {
+                                  if(model.keyword == _inputKeywordText) {
+                                    toastMsg = "이미 등록된 키워드입니다.";
+                                  }
+                                }
                               }
-                            }
-                          }
 
-                          // 오류 처리
-                          if(toastMsg != null) {
-                            // 오류 메세지 출력(토스트)
-                            Fluttertoast.showToast(msg: toastMsg);
-                            // 입력 내용 초기화
-                            _inputKeywordText = "";
-                            // 새로고침 :: inputFormField의 값을 초기화하기 위해
-                            setState(() {
-                              _reflash = true;
-                            });
-                            return;
-                          }
+                              // 오류 처리
+                              if(toastMsg != null) {
+                                // 오류 메세지 출력(토스트)
+                                Fluttertoast.showToast(msg: toastMsg);
+                                // 입력 내용 초기화
+                                _inputKeywordText = "";
+                                // 새로고침 :: inputFormField의 값을 초기화하기 위해
+                                setState(() {
+                                  _reflash = true;
+                                });
+                                return;
+                              }
 
-                          // keyword textFormField의 내용을 키워드로 DB에 저장
-                          _keywordRepository.create(KeywordModel(keyword: _inputKeywordText, userUid: ref.read(userProvider)!.userModelId, useYn: true));
-                          // 입력 내용 초기화
-                          _inputKeywordText = "";
-                          // 키워드 목록 다시 조회
-                          ref.read(keywordListProvider.notifier).readList();
-                        },
-                        child: const Text("등록"),
-                      ),
-                    )
-                  ],
+                              // keyword textFormField의 내용을 키워드로 DB에 저장
+                              _keywordRepository.create(KeywordModel(keyword: _inputKeywordText, userUid: ref.read(userProvider)!.userModelId, useYn: true));
+                              // 입력 내용 초기화
+                              _inputKeywordText = "";
+                              // 키워드 목록 다시 조회
+                              ref.read(keywordListProvider.notifier).readList();
+                            },
+                            child: const Text("등록", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
 
