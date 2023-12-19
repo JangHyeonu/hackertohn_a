@@ -72,8 +72,8 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
   }) : super([]);
 
   Future<List<EventModel>?> init() async {
+    await _repository.init();
     eventList?.clear();
-    List<EventModel>? eventList2 = await readList();
 
     state = [];
 

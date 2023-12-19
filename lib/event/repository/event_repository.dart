@@ -11,6 +11,8 @@ class EventRepository {
 
   QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleInReadList;
 
+  // 행사 목록 조회
+  // TODO :: 정렬 기준 변경 -> 'startDatetime'
   Future<List<Map<String, dynamic>>> readList(int limit, {String? searchText}) async {
     List<Map<String, dynamic>> readListResult = [];
     Query<Map<String, dynamic>> eventListQuery;
@@ -18,13 +20,13 @@ class EventRepository {
     if(lastVisibleInReadList == null) {
       eventListQuery = _firestore.collection("event")
           .where("endDatetime", isGreaterThan: DateTime.now())
-          .where("startDatetime", isNotEqualTo: null)
+          // .where("startDatetime", isNotEqualTo: null)
           .orderBy("endDatetime")
           .limit(limit);
     } else {
       eventListQuery = _firestore.collection("event")
           .where("endDatetime", isGreaterThan: DateTime.now())
-          .where("startDatetime", isNotEqualTo: null)
+          // .where("startDatetime", isNotEqualTo: null)
           .orderBy("endDatetime")
           .startAfterDocument(lastVisibleInReadList!)
           .limit(limit);
@@ -49,11 +51,7 @@ class EventRepository {
     return readListResult;
   }
 
-
-
-
-
-
+  // 행사 상세 조회
   Future<Map<String, dynamic>> read(String eventId) async {
     Map<String, dynamic> result = {};
     if(eventId == null || eventId == "") {
@@ -74,6 +72,7 @@ class EventRepository {
     return result;
   }
 
+  // 행사 등록 / 수정
   Future<bool> regist(EventModel model) async {
     UserModel userModel = UserStateNotifier.getInstance2().state!;
 
@@ -112,5 +111,10 @@ class EventRepository {
 
 
     return true;
+  }
+
+  // 행사 조회 기록 초기화
+  Future<void> init() async {
+    lastVisibleInReadList = null;
   }
 }
