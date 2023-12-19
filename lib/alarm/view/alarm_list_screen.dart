@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/alarm/component/alarm_list_component.dart';
 import 'package:seeya_hackthon_a/alarm/component/keyword_component.dart';
+import 'package:seeya_hackthon_a/alarm/model/alarm_model.dart';
 import 'package:seeya_hackthon_a/alarm/provider/alarm_provider.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
@@ -49,15 +51,12 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
         isResize: false,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: Wrap(
             children: [
               // TODO
               // 키워드 선택 부분
               Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.2,
                 margin: const EdgeInsets.only(bottom: 16.0),
-                // color: Colors.blueGrey,
                 child: const KeywordComponent(),
               ),
               // 알림 목록 부분
@@ -65,22 +64,32 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.6,
                   child: Container(
-                    // color: Colors.teal,
                     child: ListView.separated(
                       itemCount: state.length,
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () => {},
-                          child: Ink(
-                            decoration: const BoxDecoration(
-                                color: Colors.grey
-                            ),
-                            child: AlarmListComponent(
+                        return Slidable(
+                          key: Key(state[index].alarmUid!),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                // An action can be bigger than the others.
+                                flex: 2,
+                                onPressed: (context) {
+                                  ref.read(alarmListProvider.notifier).removeAlarmById(state[index].alarmUid!);
+                                },
+                                backgroundColor: Theme.of(context).colorScheme.error,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete_forever_rounded,
+                                label: '알람 삭제',
+                              ),
+                            ],
+                          ),
+                          child: AlarmListComponent(
                               alarmUid: state[index].alarmUid,
                               regDateTime: state[index].regDatetime,
                               message: state[index].message,
                             ),
-                          ),
                         );
                       },
                       separatorBuilder: (context, index) {

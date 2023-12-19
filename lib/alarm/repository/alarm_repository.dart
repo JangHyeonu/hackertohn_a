@@ -56,4 +56,15 @@ class AlarmRepository {
     result = true;
     return result;
   }
+
+  // 알림 제거
+  Future<bool> delete({String? alarmId}) async {
+    bool result = false;
+
+    final docRef = _firestore.collection("alarm").doc(alarmId).get();
+
+
+    return true;
+  }
+
 }

@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       // 테마 설정
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffF8EDEB)),
         useMaterial3: true,
       ),
 

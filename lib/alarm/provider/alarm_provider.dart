@@ -22,4 +22,10 @@ class AlarmListNotifier extends StateNotifier<List<AlarmModel>> {
     _repository.readList(pageNo)
       .then((value) => {state = value});
   }
+
+  Future<bool> removeAlarmById(String uId) {
+    return _repository.delete(alarmId: uId);
+  }
+
+
 }

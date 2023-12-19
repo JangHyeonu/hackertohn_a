@@ -18,11 +18,23 @@ class AlarmListComponent extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        color: const Color(0xfff8eeeb),
+      ),
       height: MediaQuery.of(context).size.height * 0.6 / 6,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Icon(Icons.access_alarms_sharp),
+          Container(
+            width: MediaQuery.of(context).size.width / 5,
+            height: MediaQuery.of(context).size.height / 20,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white38,
+            ),
+            child: const Icon(Icons.access_alarms_sharp),
+          ),
           Text(message ?? "", overflow: TextOverflow.ellipsis),
         ],
       ),
