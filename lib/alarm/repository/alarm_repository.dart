@@ -47,17 +47,11 @@ class AlarmRepository {
     return (resultList != null) ? AlarmModel.listOf(resultList) : [];
   }
 
-
   // 알림 발송
-  Future<bool> register({required String message, required List<String> keywords}) async {
+  Future<bool> register(AlarmModel alarmModel) async {
     bool result = false;
 
-    // 해당하는 키워드 목록 조회
-    List<Map<String, dynamic>> keywordMap;
-    final docRefKeyword = _firestore.collection("keyword").where("keyword", whereIn: keywords);
-    await docRefKeyword.get().then((value) {
-      keywordMap = value.docs.map((e) => e.data()).toList();
-    });
+    _firestore.collection("alarm").add(alarmModel.toMap());
 
     result = true;
     return result;

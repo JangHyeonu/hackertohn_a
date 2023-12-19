@@ -115,10 +115,6 @@ class EventRepository {
       return false;
     }
 
-    // TODO :: 이후 스케줄러 생성시 일정 시간마다 DB 데이터 기준으로 알림 발송되도록 처리
-    // 알림 발송 처리
-
-
     return true;
   }
 

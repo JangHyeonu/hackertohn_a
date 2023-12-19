@@ -7,12 +7,7 @@ class AlarmModel {
   DateTime? regDatetime;
   String? message;
 
-  AlarmModel({String? alarmUid, String? userUid, DateTime? regDatetime, String? message}) {
-    this.alarmUid = alarmUid;
-    this.userUid = userUid;
-    this.regDatetime = regDatetime;
-    this.message = message;
-  }
+  AlarmModel({this.alarmUid, this.userUid, this.regDatetime, this.message});
 
   // Map -> AlarmModel 변환
   static AlarmModel of(Map<String, dynamic> dataMap) {
@@ -32,13 +27,18 @@ class AlarmModel {
   }
 
   // AlarmModel -> Map 변환
-  Map<String, dynamic> toMap(AlarmModel model) {
+  Map<String, dynamic> toMap() {
     return {
-      "alarmUid" : model.alarmUid,
-      "userUid" : model.userUid,
-      "regDatetime" : model.regDatetime,
-      "message" : model.message,
+      "userUid" : userUid,
+      "regDatetime" : regDatetime,
+      "message" : message,
     };
+  }
+
+  Map<String, dynamic> toMapAll() {
+    Map<String, dynamic> result = toMap();
+    result["alarmUid"] = alarmUid;
+    return result;
   }
 
 }

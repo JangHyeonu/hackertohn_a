@@ -8,7 +8,7 @@ import '../model/keyword_model.dart';
 class KeywordRepository {
   final _firestore = FirebaseFirestore.instance;
 
-  // 키워드 목록 조회
+  // 키워드 목록 조회(유저 기준)
   Future<List<KeywordModel>> readList(String userUid) async {
     List<KeywordModel> result = [];
 
@@ -29,6 +29,20 @@ class KeywordRepository {
       }).toList();
       
       result = KeywordModel.ofList(dataList);
+    });
+
+    return result;
+  }
+
+  // 키워드 목록 조회(키워드 기준)
+  Future<List<KeywordModel>> readListByKeywordList(List<String> keywordList) async {
+    List<KeywordModel> result = [];
+
+    final docRef = _firestore.collection("keyword")
+        .where("keyword", whereIn: keywordList);
+
+    await docRef.get().then((value) {
+      result = value.docs.map((e) => KeywordModel.of(e.data())).toList();
     });
 
     return result;

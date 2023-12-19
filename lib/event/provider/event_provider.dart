@@ -2,8 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:seeya_hackthon_a/alarm/model/keyword_model.dart';
+import 'package:seeya_hackthon_a/alarm/repository/alarm_repository.dart';
+import 'package:seeya_hackthon_a/alarm/repository/keyword_repository.dart';
 import 'package:seeya_hackthon_a/event/model/event_model.dart';
 import 'package:seeya_hackthon_a/event/repository/event_repository.dart';
+
+import '../../alarm/model/alarm_model.dart';
 
 final eventProvider = StateNotifierProvider<EventNotifier, EventModel>((ref) => EventNotifier());
 
@@ -18,22 +23,37 @@ class EventNotifier extends StateNotifier<EventModel>{
   EventNotifier() : super(EventModel());
 
   final EventRepository _repository = EventRepository();
+  final AlarmRepository _alarmRepository = AlarmRepository();
+  final KeywordRepository _keywordRepository = KeywordRepository();
 
   // 이벤트 등록
   Future<bool?> regist() async {
     bool? isRegisted = await _repository.regist(state);
 
-    if(isRegisted) {
-      Fluttertoast.showToast(
-        msg: "행사가 등록 되었습니다.",
-      );
-      return true;
-    } else {
+    // DB 등록 실패
+    if(!isRegisted) {
       Fluttertoast.showToast(
         msg: "행사 등록에 실패했습니다.\n입력값을 확인해주세요.",
       );
       return false;
     }
+
+    // 알림 발송
+    // 키워드 맵 조회
+    List<KeywordModel> keywordList = await _keywordRepository.readListByKeywordList(state.keywords!.split(","));
+
+    // 유저 목록 정리
+    Set<String> userUidSet = keywordList.map((e) => e.userUid).nonNulls.toSet();
+
+    if(userUidSet.isNotEmpty) {
+      String message = "'${state.title}'(행사)가 '${state.startDatetime}'에 시작 됩니다.";
+      for(String userUid in userUidSet) {
+        // 해당 유저들에게 알림 발송
+        _alarmRepository.register(AlarmModel(alarmUid: null, userUid: userUid, message: message, regDatetime: DateTime.now()));
+      }
+    }
+
+    return true;
   }
 
   // 상세 조회

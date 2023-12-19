@@ -1,5 +1,5 @@
 
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -116,9 +116,10 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         onTap: () async {
                           KopoModel? model = await Navigator.push(
                             context,
-                            CupertinoPageRoute(
-                              builder: (context) => RemediKopo(),
-                            ),
+                            MaterialPageRoute(builder: (context) => RemediKopo()),
+                            // CupertinoPageRoute(
+                            //   builder: (context) => RemediKopo(),
+                            // ),
                           );
                           if (model != null) {
                             setState(() async {
@@ -352,9 +353,9 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         onChanged: (value) {
                           state.caution = value;
                         },
-                        // controller: TextEditingController(
-                        //     text: state.caution
-                        // ),
+                        controller: TextEditingController(
+                            text: state.caution
+                        ),
                         decoration: const InputDecoration(
                           icon: Icon(Icons.feedback_outlined),
                           label: Text("주의 사항"),
@@ -362,10 +363,10 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                       ),
                       TextFormField(
                         onChanged: (value) {
-                          state.caution = value;
+                          state.keywords = value;
                         },
                         controller: TextEditingController(
-                            text: state.caution
+                            text: state.keywords
                         ),
                         decoration: const InputDecoration(
                           icon: Icon(Icons.text_snippet),

@@ -13,6 +13,7 @@ class EventModel {
   DateTime? startDatetime;
   DateTime? endDatetime;
   String? caution;
+  String? keywords;
 
   String? register;
   DateTime? regDatetime;
@@ -31,6 +32,7 @@ class EventModel {
     this.startDatetime,
     this.endDatetime,
     this.caution,
+    this.keywords,
     this.register,
     this.regDatetime,
     this.businessName,
@@ -52,6 +54,7 @@ class EventModel {
       "startDatetime" : startDatetime,
       "endDatetime" : endDatetime,
       "caution" : caution,
+      "keywords" : keywords,
       "register" : register,
       "regDatetime" : regDatetime,
       "businessName" : businessName,
@@ -84,6 +87,7 @@ class EventModel {
           : (map["endDatetime"].runtimeType == Timestamp) ? (map["endDatetime"] as Timestamp).toDate()
           : null,
       caution: map["caution"],
+      keywords : map["keywords"],
       register: map["register"],
       regDatetime: (map["regDatetime"].runtimeType == DateTime) ? map["regDatetime"]
           : (map["regDatetime"].runtimeType == Timestamp) ? (map["regDatetime"] as Timestamp).toDate()
