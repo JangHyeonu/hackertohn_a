@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
@@ -19,6 +21,9 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
 
   final List<Marker> _markers = [];
 
+  List<LatLng> polylineCoordinates = [];
+  Set<Polyline> _polylines = {};
+
   late String eventId;
   late String eventName;
   late double eventLatitudeState;
@@ -26,6 +31,8 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
 
   double? myLatitudeState;
   double? myLongitudeState;
+
+  PolylinePoints polylinePoints = PolylinePoints();
 
   bool isLoading = false;
   bool isActivatedGps = false;
@@ -50,6 +57,8 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
       infoWindow: InfoWindow(title: eventName),
     ));
 
+    _controller?.showMarkerInfoWindow(MarkerId("IZaTpGCqLacbj0mFvN3N"));
+
     // setState(() {
     //   CustomGeolocator.getLocationUpdates();
     // });
@@ -57,8 +66,6 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Stack(
       children: [
         GoogleMap(
@@ -68,6 +75,7 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
             zoom: 18
           ),
           markers: Set.from(_markers),
+          polylines: _polylines,
           onMapCreated: (controller) {
             setState(() {
               _controller = controller;
@@ -78,68 +86,94 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
         isLoading ? const Center(child: CircularProgressIndicator()) : Container(),
         Positioned(
           right: 0,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: !isActivatedGps ? Colors.white : Colors.grey
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.gps_fixed),
-              onPressed: () async {
-                Position position = await CustomGeolocator.getLocation().catchError(() {
-                  return null;
-                });
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: isActivatedGps ?
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(" 내 위치 ON ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ) :
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(" 내 위치 OFF ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.gps_fixed),
+                  onPressed: () async {
+                    Position position = await CustomGeolocator.getLocation().catchError(() {
+                      return null;
+                    });
 
-                if(position.latitude == null || position.longitude == null) {
-                  return;
-                }
+                    if(position.latitude == null || position.longitude == null) {
+                      return;
+                    }
 
-                setState(() {
-                  isLoading = true;
-                  isActivatedGps = !isActivatedGps;
-                  myLatitudeState = position.latitude;
-                  myLongitudeState = position.longitude;
+                    setState(() {
+                      isLoading = true;
+                      isActivatedGps = !isActivatedGps;
+                      myLatitudeState = position.latitude;
+                      myLongitudeState = position.longitude;
 
-                  if(_markers.length < 2) {
-                    _markers.add(Marker(
-                      markerId: const MarkerId("myEventId"),
-                      position: LatLng(
-                          myLatitudeState!, myLongitudeState!
-                      ),
-                      infoWindow: const InfoWindow(title: "내 위치")
-                    ));
-                  }
-                });
+                      if(_markers.length < 2) {
+                        _markers.add(Marker(
+                          markerId: const MarkerId("myEventId"),
+                          position: LatLng(
+                            myLatitudeState!, myLongitudeState!
+                          ),
+                          infoWindow: const InfoWindow(title: "내 위치"),
+                        ));
+                      }
+                    });
 
-                // GPS 버튼 클릭 & 활성화 여부에 따라 처리
-                if(isActivatedGps) {
-                  await _controller?.animateCamera(
-                    CameraUpdate.newCameraPosition(
-                      CameraPosition(
-                        target: LatLng(myLatitudeState!, myLongitudeState!),
-                        zoom: 17,
-                        bearing: 0
-                      ),
-                    ),
-                  );
-                } else {
-                  await _controller?.animateCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(
-                          target: LatLng(eventLatitudeState!, eventLongitudeState!),
-                          zoom: 18,
-                          bearing: 0
+                    double calLatitude = (eventLatitudeState - myLatitudeState!).abs();
+                    double calLongitudes = (eventLongitudeState - myLongitudeState!).abs();
+
+                    // GPS 버튼 클릭 & 활성화 여부에 따라 처리
+                    if(isActivatedGps) {
+                      await _controller?.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                            target: LatLng(myLatitudeState!, myLongitudeState!),
+                            zoom: 13,
+                            bearing: 0,
+                          ),
                         ),
-                      )
-                  );
-                }
+                      );
+
+                    } else {
+                      await _controller?.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                            target: LatLng(eventLatitudeState!, eventLongitudeState!),
+                            zoom: 18,
+                            bearing: 0
+                          ),
+                        )
+                      );
+                    }
 
 
-                setState(() {
-                  isLoading = false;
-                });
-              },
-            ),
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                ),
+              ),
+            ],
           )
         ),
       ],

@@ -80,6 +80,7 @@ dependencies:
   geocoding: ^2.1.1
   # 리스트 슬라이더
   flutter_slidable: ^3.0.1
+  flutter_polyline_points: ^2.0.0
 
 dev_dependencies:
   flutter_test:
