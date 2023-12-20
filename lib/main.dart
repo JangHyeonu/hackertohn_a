@@ -1,4 +1,5 @@
 
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -33,7 +34,7 @@ void main() async {
   Wakelock.enable();
 
   // geolocator 권한 요청
-  CustomGeolocator.requestGeolocatorPermission();
+  await CustomGeolocator.requestGeolocatorPermission();
 
   // TODO :: 알림 권한 요청
 
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return MaterialApp.router(
       // 테마 설정
       theme: ThemeData(

@@ -11,8 +11,6 @@ class CustomGeolocator {
       permission = await Geolocator.requestPermission();
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
-        // 위치 권한이 거부되었습니다. 처리할 로직을 추가하세요.
-
 
         return false;
       }
@@ -29,7 +27,7 @@ class CustomGeolocator {
       permission = await Geolocator.requestPermission();
     }
 
-    if (permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
       Fluttertoast.showToast(
         msg: "위치정보 권한이 필요합니다.\n앱 설정에서 권한을 승인해주세요.",
         gravity: ToastGravity.CENTER,
@@ -44,6 +42,15 @@ class CustomGeolocator {
     );
 
     return position;
+  }
+
+  static void getLocationUpdates() {
+    final geolocator = GeolocatorPlatform.instance;
+
+    geolocator.getPositionStream().listen((Position position) {
+      // 위치가 변경될 때마다 호출되는 함수
+      print('위치 변경: ${position.latitude}, ${position.longitude}');
+    });
   }
 
 

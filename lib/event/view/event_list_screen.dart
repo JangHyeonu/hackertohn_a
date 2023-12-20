@@ -194,7 +194,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
                                 borderRadius:
-                                    const BorderRadius.all(Radius.circular(8.0)),
+                                  const BorderRadius.all(Radius.circular(8.0)),
                               ),
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",

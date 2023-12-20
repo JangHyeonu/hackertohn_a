@@ -31,6 +31,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLoading = true;
     // final data = TempConst.tempListData.firstWhere((element) => element["id"] == id);
     final state = ref.watch(eventProvider);
 
@@ -47,11 +48,11 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     return DefaultLayout(
       sideBarOffYn: false,
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -64,123 +65,126 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                   endDatetime: state.endDatetime,
                 ),
               ),
-              const SizedBox(height: 16.0),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                padding: const EdgeInsets.all(16.0),
-                height: MediaQuery.of(context).size.height / 1.35,
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
-                      child: DetailIconTextComponent(
-                        icon: Icons.event,
-                        title: "행사 시작 : ",
-                        content: DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(state.startDatetime!),
-                      ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                    child: DetailIconTextComponent(
+                      icon: Icons.event,
+                      title: "행사 시작 : ",
+                      content: DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(state.startDatetime!),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
-                      child: DetailIconTextComponent(
-                        icon: Icons.event_available,
-                        title: "행사 종료 : ",
-                        content: DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(state.endDatetime!),
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                    child: DetailIconTextComponent(
+                      icon: Icons.event_available,
+                      title: "행사 종료 : ",
+                      content: DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(state.endDatetime!),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                DetailIconTextComponent(
-                                  icon: Icons.location_on_sharp,
-                                  title: "행사 장소",
-                                ),
-                                Expanded(child: Container()),
-                                Container(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: Row(
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () => openMapDialog(state),
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(10, 30),
-                                          // surfaceTintColor: Colors.grey[300],
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4.0),
-                                          ),
-                                          backgroundColor: Colors.white70,
-                                          foregroundColor: Colors.black
-                                        ),
-                                        child: const Row(
-                                          children: [
-                                            Icon(Icons.map),
-                                            Text(" Map"),
-                                          ],
-                                        )
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                              child: Text(
-                                  "${state.location}\n${state.locationDetail}" ?? "",
-                                  style: const TextStyle(
-                                  fontSize: 14,
-                                  overflow: TextOverflow.visible,
-                                )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,4),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              DetailIconTextComponent(
+                                icon: Icons.location_on_sharp,
+                                title: "행사 장소",
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,4),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            DetailIconTextComponent(
-                              icon: Icons.my_library_books,
-                              content: "행사 내용",
-                            ),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                              height: MediaQuery.of(context).size.height / 3,
-                              child: Text(
-                                state.content ?? "",
+                              Expanded(child: Container()),
+                              Container(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: Row(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await openMapDialog(state);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize: const Size(10, 30),
+                                        // surfaceTintColor: Colors.grey[300],
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(4.0),
+                                        ),
+                                        backgroundColor: Colors.white70,
+                                        foregroundColor: Colors.black
+                                      ),
+                                      child: const Row(
+                                        children: [
+                                          Icon(Icons.map),
+                                          Text(" Map"),
+                                        ],
+                                      )
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                            child: Text(
+                                "${state.location}\n${state.locationDetail}" ?? "",
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  overflow: TextOverflow.visible,
-                                )),
-                            )
-                          ],
-                        ),
+                                fontSize: 14,
+                                overflow: TextOverflow.visible,
+                              )
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,16),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DetailIconTextComponent(
+                            icon: Icons.my_library_books,
+                            content: "행사 내용",
+                          ),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                            height: MediaQuery.of(context).size.height / 3,
+                            child: Text(
+                              state.content ?? "",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                overflow: TextOverflow.visible,
+                              )),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
                           color: Colors.white,
@@ -198,27 +202,26 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                           height: MediaQuery.of(context).size.height / 8.8,
                         )
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-
-            ],
-          ),
+            ),
+          ],
         ),
       )
     );
   }
 
   Future openMapDialog(EventModel state) {
+
     return showDialog(
       context: context,
       barrierDismissible: false, //바깥 영역 터치시 닫을지 여부 결정
       builder: ((context) {
-        return AlertDialog(
-          content: Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Column(
+        return FittedBox(
+          child: AlertDialog(
+            content: Column(
               children: [
                 Container(
                   decoration: const BoxDecoration(
@@ -247,25 +250,46 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  width: 300,
-                  height: 300,
-                  child: CustomGoogleMaps(eventState: state),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white38
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: const Text("지도 표출 영역", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),),
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.fromLTRB(8,0,8,8),
+                        child: CustomGoogleMaps(eventState: state),
+                      ),
+                    ],
+                  ),
                 ),
+
               ],
             ),
-          ),
-          actions: <Widget>[
-            Container(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); //창 닫기
-                },
-                child: Text("닫기"),
+            actions: <Widget>[
+              Container(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); //창 닫기
+                  },
+                  child: Text("닫기"),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       }),
     );
   }
+
 }
+
+

@@ -194,7 +194,7 @@ class KeywordItem extends StatelessWidget {
   final KeywordModel keywordModel;
   final Function? onDeletedCallback;
 
-  KeywordItem({required this.keywordModel, this.onDeletedCallback});
+  const KeywordItem({super.key, required this.keywordModel, this.onDeletedCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +217,7 @@ class KeywordItem extends StatelessWidget {
                   contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
                   content: Row(
                     children: [
-                      Text(keywordModel.keyword ?? "", style: const TextStyle(fontWeight: FontWeight.bold),),
+                      Text(keywordModel.keyword ?? "", style: const TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline)),
                       const Text(" 키워드를 삭제 하시겠습니까?"),
                     ],
                   ),
@@ -246,7 +246,7 @@ class KeywordItem extends StatelessWidget {
           );
         },
         child: Text(keywordModel.keyword ?? "",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 10,
           ),
         ),
