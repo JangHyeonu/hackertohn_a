@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seeya_hackthon_a/_common/firebse_messaging/custom_firebase_messaging.dart';
 import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
 import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
 import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
@@ -37,34 +38,8 @@ void main() async {
   // geolocator 권한 요청
   await CustomGeolocator.requestGeolocatorPermission();
 
-  // TODO :: 알림 권한 요청
-  // 테스트용 토큰
-  // String? _fcmToken = await FirebaseMessaging.instance.getToken();
-  // debugPrint("~~~~~~ :${_fcmToken}");
-  NotificationSettings permission = await FirebaseMessaging.instance.requestPermission();
-  // 백그라운드 동작
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
-    if (message != null) {
-      if (message.notification != null) {
-        debugPrint(message.notification!.title);
-        debugPrint(message.notification!.body);
-        debugPrint(message.data["click_action"]);
-      }
-    }
-  });
-
-  // 앱 종료시 동작
-  FirebaseMessaging.instance
-      .getInitialMessage()
-      .then((RemoteMessage? message) {
-    if (message != null) {
-      if (message.notification != null) {
-        debugPrint(message.notification!.title);
-        debugPrint(message.notification!.body);
-        debugPrint(message.data["click_action"]);
-      }
-    }
-  });
+  // 알림 권한 요청
+  CustomFirebaseMessaging.init();
 
   runApp(
     // 전역 상태관리를 위해 전체를 ProviderScope로 감싸줌
@@ -82,7 +57,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
 
     return MaterialApp.router(
       // 테마 설정

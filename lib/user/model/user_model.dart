@@ -15,6 +15,9 @@ class UserModel {
   // 사용 권한
   late final String? auth;   // user, business
 
+  // firebase messaging token
+  late final String? messagingToken;
+
   UserModel({
     this.userModelId,
     this.email,
@@ -23,6 +26,7 @@ class UserModel {
     this.photoUrl,
     this.businessModel,
     auth,
+    this.messagingToken,
   }) {
     this.auth = (auth == null || auth == "") ? "guest" : auth;
   }
@@ -30,6 +34,7 @@ class UserModel {
   UserModel copyWith({
     String? userModelId, String? email,
     String? displayName, String? phoneNumber, String? photoUrl, String? state, BusinessModel? businessModel,
+    String? auth, String? messagingToken,
   }) {
     return UserModel(
       userModelId: userModelId ?? this.userModelId,
@@ -38,13 +43,19 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
       businessModel: businessModel ?? this.businessModel,
+      auth: auth ?? this.auth,
+      messagingToken : messagingToken ?? this.messagingToken,
       // state: state ?? this.state,
     );
   }
 
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(userModelId: json['userModelId'], email: json['email'], displayName: json['displayName'], phoneNumber: json['phoneNumber'], photoUrl: json['photoUrl']);
+    return UserModel(
+      userModelId: json['userModelId'], email: json['email'], displayName: json['displayName'],
+      phoneNumber: json['phoneNumber'], photoUrl: json['photoUrl'],
+      auth: json['auth'], messagingToken: json['messagingToken'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +67,7 @@ class UserModel {
       "photoUrl" : photoUrl,
       // "state" : state,
       "auth" : auth,
+      "messagingToken" : messagingToken,
     };
   }
 

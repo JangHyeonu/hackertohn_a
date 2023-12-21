@@ -402,7 +402,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         // 행사 정보 등록
                         ref.read(eventProvider.notifier).regist().then((value) => {
                           if(value!) {
-                            Fluttertoast.showToast(msg: "등록되었습니다."),
+                            // Fluttertoast.showToast(msg: "등록되었습니다."),
                             context.go("/"),
                           }
                         });

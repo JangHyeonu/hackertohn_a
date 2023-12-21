@@ -1,7 +1,9 @@
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:seeya_hackthon_a/_common/firebse_messaging/custom_firebase_messaging.dart';
 import 'package:seeya_hackthon_a/alarm/model/keyword_model.dart';
 import 'package:seeya_hackthon_a/alarm/repository/alarm_repository.dart';
 import 'package:seeya_hackthon_a/alarm/repository/keyword_repository.dart';
@@ -44,14 +46,19 @@ class EventNotifier extends StateNotifier<EventModel>{
 
     // 유저 목록 정리
     Set<String> userUidSet = keywordList.map((e) => e.userUid).nonNulls.toSet();
+    Set<String> messagingTokenSet = keywordList.map((e) => e.messagingToken).nonNulls.toSet();
+
+    String message = "'${state.title}'(행사)가 '${state.startDatetime}'에 시작 됩니다.";
 
     if(userUidSet.isNotEmpty) {
-      String message = "'${state.title}'(행사)가 '${state.startDatetime}'에 시작 됩니다.";
       for(String userUid in userUidSet) {
         // 해당 유저들에게 알림 발송
         _alarmRepository.register(AlarmModel(alarmUid: null, userUid: userUid, message: message, regDatetime: DateTime.now()));
+        // PUSH 알림
       }
     }
+
+    CustomFirebaseMessaging.instance.sendMessage(message: message, toTokens: messagingTokenSet.toList());
 
     return true;
   }

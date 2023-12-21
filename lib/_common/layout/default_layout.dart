@@ -7,6 +7,8 @@ import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
+import '../firebse_messaging/custom_firebase_messaging.dart';
+
 // 상단의 앱바를 포함한 기본 레이아웃
 class DefaultLayout extends ConsumerStatefulWidget {
   final bool sideBarOffYn;
@@ -24,6 +26,11 @@ class DefaultLayout extends ConsumerStatefulWidget {
 }
 
 class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
+  final List<String> pushUsers = [
+    "cZ7zd_RtQLWRwiNRYy2Z6T:APA91bEDoBM--f1ZungZW5-obB2iM6QQQZRaCH2I4VCNk4RhfHqbfy45qtj97nH1q8QMp3d6o4ZZl7xmkwe0XNwnfowJxVQ8IO11ocGZaIXlNUyRXQ9B8EhTQQCQQcfrKqtgnN9l3WO3",
+
+  ];
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(userProvider);
@@ -162,6 +169,13 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           leading: const Icon(Icons.settings),
           title: const Text('설정'),
           onTap: () => {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text('푸시알림 발송'),
+          onTap: () => {
+            CustomFirebaseMessaging.instance.sendMessage(message: "푸시 알림 테스트", toTokens: pushUsers),
+          },
         ),
       ],
     );

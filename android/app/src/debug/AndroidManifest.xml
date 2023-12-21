@@ -12,4 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- 알림 권한 -->
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <!-- http 권한 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

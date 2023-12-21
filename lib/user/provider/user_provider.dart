@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:seeya_hackthon_a/_common/firebse_messaging/custom_firebase_messaging.dart';
 import 'package:seeya_hackthon_a/_common/user/user_function.dart';
 import 'package:seeya_hackthon_a/business/model/business_model.dart';
 import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
@@ -98,6 +99,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
       photoUrl: userCredential.user!.photoURL,
       businessModel: businessAuth ?? BusinessModel(),
       auth: auth,
+      messagingToken: CustomFirebaseMessaging.myToken ?? userMap['messagingToken'],
     );
     
     state = loginUser;

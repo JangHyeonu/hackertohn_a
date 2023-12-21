@@ -6,16 +6,18 @@ class KeywordModel {
   final String? keywordUid;
   final String? keyword;
   final String? userUid;
+  final String? messagingToken;
   final DateTime? regDatetime;
   bool? useYn =  true;
 
-  KeywordModel({this.keywordUid, this.keyword, this.userUid, this.regDatetime, this.useYn});
+  KeywordModel({this.keywordUid, this.keyword, this.userUid, this.messagingToken, this.regDatetime, this.useYn});
 
   // KeywordModel -> Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return {
       "keyword" : keyword,
       "userUid" : userUid,
+      "messagingToken" : messagingToken,
       "regDatetime" : regDatetime,
       "useYn" : useYn,
     };
@@ -34,6 +36,7 @@ class KeywordModel {
       keywordUid: dataMap["keywordUid"],
       keyword: dataMap["keyword"],
       userUid: dataMap["userUid"],
+      messagingToken : dataMap["messagingToken"],
       regDatetime: (dataMap["regDatetime"].runtimeType == DateTime) ? dataMap["regDatetime"] :
         (dataMap["regDatetime"].runtimeType == Timestamp) ? (dataMap["regDatetime"] as Timestamp).toDate() :
         null,
