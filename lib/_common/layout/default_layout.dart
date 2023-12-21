@@ -26,10 +26,6 @@ class DefaultLayout extends ConsumerStatefulWidget {
 }
 
 class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
-  final List<String> pushUsers = [
-    "cZ7zd_RtQLWRwiNRYy2Z6T:APA91bEDoBM--f1ZungZW5-obB2iM6QQQZRaCH2I4VCNk4RhfHqbfy45qtj97nH1q8QMp3d6o4ZZl7xmkwe0XNwnfowJxVQ8IO11ocGZaIXlNUyRXQ9B8EhTQQCQQcfrKqtgnN9l3WO3",
-
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +134,13 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
                   children: [
                     ListTile(
                       leading: const Icon(Icons.playlist_add),
+                      title: const Text('등록 행사 목록'),
+                      onTap: () {
+                        context.go("/event/regEventList");
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.playlist_add),
                       title: const Text('행사 등록'),
                       onTap: () {
                         context.go("/event/edit");
@@ -169,13 +172,6 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           leading: const Icon(Icons.settings),
           title: const Text('설정'),
           onTap: () => {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('푸시알림 발송'),
-          onTap: () => {
-            CustomFirebaseMessaging.instance.sendMessage(message: "푸시 알림 테스트", toTokens: pushUsers),
-          },
         ),
       ],
     );
