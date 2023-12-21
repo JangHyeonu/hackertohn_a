@@ -7,15 +7,14 @@ import 'package:seeya_hackthon_a/_common/component/text_form_button_component.da
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
-// TODO :: 필터링 조건 추가 : 내 행사 목록 조회
-class EventListScreen extends ConsumerStatefulWidget {
-  const EventListScreen({super.key});
+class EventMyListScreen extends ConsumerStatefulWidget {
+  const EventMyListScreen({super.key});
 
   @override
-  ConsumerState<EventListScreen> createState() => EventListScreenState();
+  ConsumerState<EventMyListScreen> createState() => EventListScreenState();
 }
 
-class EventListScreenState extends ConsumerState<EventListScreen> {
+class EventListScreenState extends ConsumerState<EventMyListScreen> {
   late ScrollController _controller;
   final FocusNode _focusNode = FocusNode();
   late double bottomSize;

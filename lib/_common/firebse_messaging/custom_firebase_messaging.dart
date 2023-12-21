@@ -6,74 +6,60 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+// Firebase Messaging
 class CustomFirebaseMessaging {
 
-  final String _serverKey = "AAAA9oRxNlk:APA91bH07a3gcw3w7l7H8DoQI3LB3RZjBYQJgSQQscGryIQ1rT2pxT0VLIcIB6ND4lgW6oCkee3N3yujEI5fgFOamgpnIV5FGKsTPXRm3p-pgFC-kOloOhj2_QUuwIpwVWMyhLHjfb7u";
+  // 싱글턴
   static final CustomFirebaseMessaging instance = CustomFirebaseMessaging();
-  static String? myToken = "";
+  
+  // TODO :: 푸시 알림 발송 서버로 구현
+  // 알림 발송용 서비스 인증키 (2024년 6월 까지만 이 방식을 지원)
+  static const String _serverKey = "AAAA9oRxNlk:APA91bH07a3gcw3w7l7H8DoQI3LB3RZjBYQJgSQQscGryIQ1rT2pxT0VLIcIB6ND4lgW6oCkee3N3yujEI5fgFOamgpnIV5FGKsTPXRm3p-pgFC-kOloOhj2_QUuwIpwVWMyhLHjfb7u";
 
-  // 초기 설정
-  static Future<bool> init() async {
+  // 기기변 메세지 수신 토큰
+  static late final String? _myToken;
+  String? getToken() { return _myToken; }
+
+  // 푸시 알림 권한 요청 및 초기 설정
+  static Future<bool> requestPermissionAndInit() async {
     bool result = false;
 
     // 권한 요청
     NotificationSettings permission = await FirebaseMessaging.instance.requestPermission();
 
-    // 알림 거부됨
+    // 알림이 거부된 경우
     if(permission.alert == AppleNotificationSetting.disabled) {
+      Fluttertoast.showToast(msg: "알림이 거부되었습니다.");
       debugPrint("알림이 거부되었습니다.");
       return result;
     }
 
-    // 토큰 발급
-    String? _fcmToken = await FirebaseMessaging.instance.getToken();
-    myToken = _fcmToken;
-    debugPrint("Firebase Messaging token : $_fcmToken");
-
-    //
-    // FirebaseMessaging.instance.subscribeToTopic("event_set");
+    // 기기 토큰 가져오기
+    _myToken = await FirebaseMessaging.instance.getToken();
+    // debugPrint("Firebase Messaging token : $_myToken");\
 
     // 켜짐(앱 상태)시 동작
     FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
-      if (message != null) {
-        if (message.notification != null) {
-          debugPrint(message.notification!.title);
-          debugPrint(message.notification!.body);
-          debugPrint(message.data["click_action"]);
-        }
-        Fluttertoast.showToast(msg: message.notification!.body ?? "");
-      }
+      debugPrintMessage(message);
+      // 알림 내용 토스트로 출력 :: 앱이 켜져있는 상태면 자동으로 알림이 알림바에 출력되지 않음
+      Fluttertoast.showToast(msg: message?.notification?.body ?? "");
     });
 
     // 백그라운드(앱 상태)시 동작
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
-      if (message != null) {
-        if (message.notification != null) {
-          debugPrint(message.notification!.title);
-          debugPrint(message.notification!.body);
-          debugPrint(message.data["click_action"]);
-        }
-      }
+      debugPrintMessage(message);
     });
 
     // 종료(앱 상태)시 동작
-    FirebaseMessaging.instance.getInitialMessage()
-        .then((RemoteMessage? message) {
-          if (message != null) {
-            if (message.notification != null) {
-              debugPrint(message.notification!.title);
-              debugPrint(message.notification!.body);
-              debugPrint(message.data["click_action"]);
-            }
-          }
-        }
-    );
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+      debugPrintMessage(message);
+    });
 
     return !result;
   }
 
   // PUSH 알림 발송
-  void sendMessage({required String message, required List<String> toTokens}) async {
+  void sendMessage({String? title, required String message, required List<String> targetTokenList}) async {
 
     http.Response response;
 
@@ -85,7 +71,7 @@ class CustomFirebaseMessaging {
             'Authorization': 'key=$_serverKey'
           },
           body: jsonEncode({
-            'notification': {'title': "로컬캐치", 'body': message, 'sound': 'false'},
+            'notification': {'title': title ?? "로컬캐치", 'body': message, 'sound': 'false'},
             'ttl': '60s',
             "content_available": true,
             'data': {
@@ -95,19 +81,24 @@ class CustomFirebaseMessaging {
               "action": '테스트',
             },
             // 상대방 토큰 값, to -> 단일, registration_ids -> 여러명
-            // 'to': myToken
-            'registration_ids' : toTokens,
-            // 'registration_ids': tokenList
+            // 'to': String token
+            // 'registration_ids': List<String> tokenList
+            'registration_ids' : targetTokenList,
           }));
-      debugPrint("~~ send message ~~");
-      debugPrint("response : ${response.body}");
-      debugPrint("message: $message");
-      debugPrint("to list: $toTokens");
-      debugPrint("~~ send message ~~");
-
     } catch (e) {
       debugPrint('error $e');
     }
     
+  }
+
+  // 디버깅용 메세지 내용 출력
+  static void debugPrintMessage(RemoteMessage? message) {
+    if (message != null) {
+      if (message.notification != null) {
+        debugPrint(message.notification!.title);
+        debugPrint(message.notification!.body);
+        debugPrint(message.data["click_action"]);
+      }
+    }
   }
 }

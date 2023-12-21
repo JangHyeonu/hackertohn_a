@@ -6,84 +6,102 @@ import 'package:seeya_hackthon_a/event/model/event_model.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
+// DB 연결 :: 행사 관련
 class EventRepository {
+  
+  // Firebase DB : Firestore
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  // 마지막 조회 데이터 : 연속된 데이터를 나눠서 조회할 경우 이 데이터 기준으로 조회 해오기 위함
+  QueryDocumentSnapshot<Map<String, dynamic>>? lastSnapshot;
 
-  QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleInReadList;
+  // readList 실행시 기본 limit 값
+  final int readListDefaultLimit = 5;
 
   // 행사 목록 조회
-  // TODO :: 정렬 기준 변경 -> 'startDatetime'
-  Future<List<Map<String, dynamic>>> readList(int limit, {String? searchText}) async {
-    debugPrint("::: 메인 리스트 이벤트 조회 쿼리 실행");
-    List<Map<String, dynamic>> readListResult = [];
-    Query<Map<String, dynamic>> eventListQuery;
+  // TODO :: 정렬 기준 변경 -> 'startDatetime'  :: Firestore로는 구현이 힘들것 같음
+  Future<List<EventModel>> readList({String? searchText, int? limit, bool? isRefresh}) async {
+    // 의도치 않게 여러번 호출되는 경우가 있어 이를 파악하기 위해 남겨둠
+    debugPrint("::: EventRepository :: readList :::");
 
-    eventListQuery = _firestore.collection("event")
-        .where("endDatetime", isGreaterThan: DateTime.now());
-        // .orderBy("endDatetime");
+    // 결과
+    List<Map<String, dynamic>> resultMap = [];
 
+    // 요청 쿼리
+    Query<Map<String, dynamic>> query = _firestore.collection("event");
+
+    // 기본 조건 : 종료일이 지나지 않은 행사
+    query = query
+        .where("endDatetime", isGreaterThan: DateTime.now())
+        .orderBy("endDatetime");
+
+    // 검색어 조건 :: 현재 제목만 검색되는 것으로 보임
     if(searchText != null) {
-      eventListQuery = eventListQuery.where(
+      query = query.where(
           Filter.or(
+              // 제목 일치
               Filter("title", whereIn: [searchText]),
+              // 기업명 일치
               Filter("businessName", whereIn: [searchText])
           )
       );
     }
 
     // 다음 페이지 내용 조회일 경우
-    if(lastVisibleInReadList != null) {
-      eventListQuery = eventListQuery.startAfterDocument(lastVisibleInReadList!);
+    if(isRefresh != true && lastSnapshot != null) {
+      query = query.startAfterDocument(lastSnapshot!);
     }
 
     // 개수 제한 추가
-    eventListQuery = eventListQuery
-        .limit(limit);
+    query = query.limit(limit ?? readListDefaultLimit);
 
     // 조회 실행
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await eventListQuery.get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await query.get();
+
+    // 조회 결과가 있는 경우 후처리
     if(querySnapshot.size > 0) {
-      lastVisibleInReadList = querySnapshot.docs[querySnapshot.size - 1];
+      // 마지막 데이터 저장
+      lastSnapshot = querySnapshot.docs[querySnapshot.size - 1];
+
+      // 조회 결과 List<Map<String, dynamic>> 타입으로 변환
+      resultMap = querySnapshot.docs.map((e) {
+        Map<String, dynamic> data = e.data();
+        // 데이터 key Map에 추가
+        data["eventId"] = e.id;
+        return data;
+      }).toList();
+
     }
 
-    readListResult = querySnapshot.docs.map((e) => e.data()).toList();
-    Map<int, QueryDocumentSnapshot<Map<String, dynamic>>> docs = querySnapshot.docs.asMap();
-
-    for(int i = 0; i < readListResult.length; i++) {
-      readListResult[i]["eventId"] = docs[i]?.id;
-
-      if(readListResult[i]["startDatetime"] != null) readListResult[i]["startDatetime"] = (readListResult[i]["startDatetime"] as Timestamp).toDate();
-      if(readListResult[i]["endDatetime"] != null) readListResult[i]["endDatetime"] = (readListResult[i]["endDatetime"] as Timestamp).toDate();
-    }
-
-    debugPrint("::: 메인 리스트 이벤트 조회 쿼리 종료");
-    return readListResult;
+    return EventModel.listOf(resultMap);
   }
 
   // 행사 상세 조회
-  Future<Map<String, dynamic>> read(String eventId) async {
-    Map<String, dynamic> result = {};
+  Future<EventModel> read(String eventId) async {
+    // 결과
+    Map<String, dynamic> resultMap = {};
+
+    // 조회할 대상이 없는 경우 빈 데이터 반환
     if(eventId == null || eventId == "") {
-      return result;
+      return EventModel.of(resultMap);
     }
 
+    // 조회 쿼리
     final docRef = _firestore.collection("event").doc(eventId);
-    await docRef.get().then((doc) => {
-      if(doc.data() != null) {
-        result = doc.data() as Map<String, dynamic>,
-      },
-      result["eventId"] = doc.id,
 
-      if(result["startDatetime"] != null) result["startDatetime"] = (result["startDatetime"] as Timestamp).toDate(),
-      if(result["endDatetime"] != null) result["endDatetime"] = (result["endDatetime"] as Timestamp).toDate(),
+    // 쿼리 실행
+    await docRef.get().then((doc) => {
+      resultMap = doc.data() ?? {},
+      resultMap["eventId"] = doc.id,
     });
 
-    return result;
+    return EventModel.of(resultMap);
   }
 
   // 행사 등록 / 수정
   Future<bool> regist(EventModel model) async {
     UserModel userModel = UserStateNotifier.getInstance2().state!;
+    // UserModel userModel = (userProvider.notifier as UserStateNotifier).state!;
 
     if(userModel.userModelId == "" || model.startDatetime == null || model.endDatetime == null) {
       return false;
@@ -120,6 +138,6 @@ class EventRepository {
 
   // 행사 조회 기록 초기화
   Future<void> init() async {
-    lastVisibleInReadList = null;
+    lastSnapshot = null;
   }
 }

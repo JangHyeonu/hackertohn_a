@@ -99,7 +99,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
       photoUrl: userCredential.user!.photoURL,
       businessModel: businessAuth ?? BusinessModel(),
       auth: auth,
-      messagingToken: CustomFirebaseMessaging.myToken ?? userMap['messagingToken'],
+      messagingToken: CustomFirebaseMessaging.instance.getToken() ?? userMap['messagingToken'],
     );
     
     state = loginUser;

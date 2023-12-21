@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
 class CustomGeolocator {
+
   // 위치정보 권한 확인 -> 권한 거절 상태 시 재요청 -> 그래도 거절하면 로직 처리
   static Future<bool> requestGeolocatorPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -52,7 +53,5 @@ class CustomGeolocator {
       print('위치 변경: ${position.latitude}, ${position.longitude}');
     });
   }
-
-
 
 }

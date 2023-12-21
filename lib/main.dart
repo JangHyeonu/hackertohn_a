@@ -1,7 +1,6 @@
 
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:seeya_hackthon_a/_common/firebse_messaging/custom_firebase_messaging.dart';
 import 'package:seeya_hackthon_a/_common/geolocator/custom_geolocator.dart';
 import 'package:seeya_hackthon_a/_common/view/join_screen.dart';
-import 'package:seeya_hackthon_a/_common/view/main_screen.dart';
 import 'package:seeya_hackthon_a/alarm/view/alarm_list_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_auth_screen.dart';
 import 'package:seeya_hackthon_a/business/view/business_join_screen.dart';
@@ -23,6 +21,7 @@ import 'package:seeya_hackthon_a/user/view/user_my_page.dart';
 import 'package:wakelock/wakelock.dart';
 
 void main() async {
+
   // .env 파일 초기화
   await dotenv.load(fileName: "config.env");
 
@@ -38,8 +37,8 @@ void main() async {
   // geolocator 권한 요청
   await CustomGeolocator.requestGeolocatorPermission();
 
-  // 알림 권한 요청
-  CustomFirebaseMessaging.init();
+  // firebase messaging 권한 요청 및 초기 설정
+  await CustomFirebaseMessaging.requestPermissionAndInit();
 
   runApp(
     // 전역 상태관리를 위해 전체를 ProviderScope로 감싸줌
@@ -97,10 +96,14 @@ class MyApp extends StatelessWidget {
           // Event 관련 route
           GoRoute(
             path: "/event",
-            builder: (context, state) => EventListScreen(),
+            builder: (context, state) => const EventListScreen(),
             routes: [
               GoRoute(
                 path: "list",
+                builder: (context, state) => const EventListScreen(),
+              ),
+              GoRoute(
+                path: "myList",
                 builder: (context, state) => EventListScreen(),
               ),
               GoRoute(
@@ -126,7 +129,7 @@ class MyApp extends StatelessWidget {
           // Login 유저 관련 route
           GoRoute(
             path: "/user",
-            // TODO :: (임시처리함) 현재 이 주소로 연결될 페이지가 없으므로 이벤트 목록 페잊레 연결해 둠
+            // TODO :: (임시처리함) 현재 이 주소로 연결될 페이지가 없으므로 이벤트 목록 페이지에 연결해 둠
             // builder: (context, state) => EventListScreen(pageNo: 1),
             builder: (context, state) => EventListScreen(),
             // builder: (context, state) => const MainScreen(),

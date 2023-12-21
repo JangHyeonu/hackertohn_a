@@ -58,7 +58,7 @@ class EventNotifier extends StateNotifier<EventModel>{
       }
     }
 
-    CustomFirebaseMessaging.instance.sendMessage(message: message, toTokens: messagingTokenSet.toList());
+    CustomFirebaseMessaging.instance.sendMessage(message: message, targetTokenList: messagingTokenSet.toList());
 
     return true;
   }
@@ -68,7 +68,7 @@ class EventNotifier extends StateNotifier<EventModel>{
 
     _repository.read(eventId)
         .then((result) => {
-          state = EventModel.of(result),
+          state = result,
         });
 
     return state;
@@ -111,7 +111,7 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
     // 조회 진행
     _isLoadMoreRunning = true;
 
-    await _repository.readList(_limit, searchText: searchText)
+    await _repository.readList(searchText: searchText, limit: 5)
         .then((result) async => {
 
           if(result.isEmpty || result.length < _limit) {
@@ -120,7 +120,7 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
             _hasNextPage = true
           },
 
-          eventList = [...state, ...EventModel.listOf(result)],
+          eventList = [...state, ...result],
           state = eventList!,
 
         // 조회 종료

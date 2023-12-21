@@ -1,23 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:seeya_hackthon_a/_common/utils/my_util.dart';
 
 class EventModel {
 
+  // 데이터 구분값
   String? eventId;
+  // 제목
   String? title;
+  // 내용
   String? content;
+  // 우편주소
   String? postcode;
+  // 주소
   String? location;
+  // 상세 주소
   String? locationDetail;
+  // 위도
   double? latitude;
+  // 경도
   double? longitude;
+  // 시작 시기
   DateTime? startDatetime;
+  // 종료 시기
   DateTime? endDatetime;
+  // 주의 사항
   String? caution;
+  // 키워드 목록
   String? keywords;
-
+  // 등록자 구분 uid
   String? register;
+  // 등록 시기
   DateTime? regDatetime;
-
+  // 등록 기업명
   String? businessName;
 
   EventModel({
@@ -65,7 +79,6 @@ class EventModel {
   Map<String, dynamic> toMapAllData() {
     Map<String, dynamic> result = toMap();
     result["eventId"] = eventId;
-
     return result;
   }
 
@@ -80,18 +93,12 @@ class EventModel {
       locationDetail: map["locationDetail"],
       latitude: map["latitude"],
       longitude: map["longitude"],
-      startDatetime: (map["startDatetime"].runtimeType == DateTime) ? map["startDatetime"]
-          : (map["startDatetime"].runtimeType == Timestamp) ? (map["startDatetime"] as Timestamp).toDate()
-          : null,
-      endDatetime: (map["endDatetime"].runtimeType == DateTime) ? map["endDatetime"]
-          : (map["endDatetime"].runtimeType == Timestamp) ? (map["endDatetime"] as Timestamp).toDate()
-          : null,
+      startDatetime: MyUtil.toDatetime(map["startDatetime"]),
+      endDatetime: MyUtil.toDatetime(map["endDatetime"]),
       caution: map["caution"],
       keywords : map["keywords"],
       register: map["register"],
-      regDatetime: (map["regDatetime"].runtimeType == DateTime) ? map["regDatetime"]
-          : (map["regDatetime"].runtimeType == Timestamp) ? (map["regDatetime"] as Timestamp).toDate()
-          : null,
+      regDatetime: MyUtil.toDatetime(map["regDatetime"]),
       businessName: map["businessName"],
     );
   }
