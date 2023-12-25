@@ -7,6 +7,8 @@ import 'package:seeya_hackthon_a/_common/component/text_form_button_component.da
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
 
+import '../../_common/message/common_message.dart';
+
 class EventMyListScreen extends ConsumerStatefulWidget {
   const EventMyListScreen({super.key});
 
@@ -58,7 +60,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("event list page build");
+    debugPrint(CommonMessage.DEBUG_SCREEN_BUILD(screenName: runtimeType.toString()));
 
     // 키보드 감지
     searchKeyboardFn();
@@ -82,7 +84,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
             buttonClickEvent: () => {
               ref
                   .read(eventListProvider.notifier)
-                  .readListBySearch(searchText: _searchText)
+                  .readList(searchText: _searchText, needInit: true)
                   .then((value) {
                 if (value!.isNotEmpty) {
                   FocusScope.of(context).unfocus();

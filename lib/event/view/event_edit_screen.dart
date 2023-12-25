@@ -7,6 +7,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
+import 'package:seeya_hackthon_a/_common/message/common_message.dart';
 import 'package:seeya_hackthon_a/business/model/business_model.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
@@ -50,7 +51,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
     final state = ref.watch(eventProvider);
     final businessModel = ref.watch(businessProvider);
 
-    debugPrint("event edit build");
+    debugPrint(CommonMessage.DEBUG_SCREEN_BUILD(screenName: runtimeType.toString()));
 
     return DefaultLayout (
         sideBarOffYn: false,
@@ -380,19 +381,19 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                 children: [
                   OutlinedButton(
                       onPressed: () {
-                        // 유효성 검사
+                        // 사용자 입력 값 유효성 검사 : 행사 제목
                         if(state.title == null || state.title == "title") {
                           Fluttertoast.showToast(msg: "행사 제목이 유효하지 않습니다.");
                           debugPrint("행사 제목이 유효하지 않습니다.");
                           return;
                         }
-                        
+                        // 사용자 입력 값 유효성 검사 : 행사 장소
                         if(state.location == null || state.location == "") {
                           Fluttertoast.showToast(msg: "행사 장소가 유효하지 않습니다.");
                           debugPrint("행사 장소가 유효하지 않습니다.");
                           return;
                         }
-                        
+                        // 사용자 입력 값 유효성 검사 : 행사 기간
                         if(state.startDatetime == null || state.endDatetime == null) {
                           Fluttertoast.showToast(msg: "행사 기간이 유효하지 않습니다.");
                           debugPrint("행사 기간이 유효하지 않습니다.");
@@ -400,14 +401,21 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                         }
 
                         // 행사 정보 등록
-                        ref.read(eventProvider.notifier).regist().then((value) => {
+                        ref.read(eventProvider.notifier).register().then((value) {
                           if(value!) {
-                            // Fluttertoast.showToast(msg: "등록되었습니다."),
-                            context.go("/"),
+                            // 토스트 메세지 출력 : 행사 정보 등록 성공 메세지
+                            Fluttertoast.showToast(msg: "행사 정보가 등록되었습니다.");
+                            // 이벤트 상세 조회 대상 지우기
+                            ref.read(eventProvider).eventId = "registered-event";
+                            // 메인 화면으로 이동
+                            context.go("/");
+                          } else {
+                            // 토스트 메세지 출력 : 행사 정보 등록 실패 메세지
+                            Fluttertoast.showToast(msg: "행사 정보 등록에 실패했습니다.");
                           }
                         });
-                        
-                        ref.read(eventProvider).eventId = "registered-event";
+
+                        // ref.read(eventProvider).eventId = "registered-event";
                       },
                       child: const Text("등록하기")
                   )

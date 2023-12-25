@@ -22,7 +22,7 @@ class EventRepository {
   // TODO :: 정렬 기준 변경 -> 'startDatetime'  :: Firestore로는 구현이 힘들것 같음
   Future<List<EventModel>> readList({String? searchText, int? limit, bool? isRefresh}) async {
     // 의도치 않게 여러번 호출되는 경우가 있어 이를 파악하기 위해 남겨둠
-    debugPrint("::: EventRepository :: readList :::");
+    debugPrint("::: EventRepository :: readList ::: $searchText");
 
     // 결과
     List<Map<String, dynamic>> resultMap = [];
@@ -73,6 +73,8 @@ class EventRepository {
 
     }
 
+    debugPrint("selected count : ${querySnapshot.size}");
+
     return EventModel.listOf(resultMap);
   }
 
@@ -99,7 +101,7 @@ class EventRepository {
   }
 
   // 행사 등록 / 수정
-  Future<bool> regist(EventModel model) async {
+  Future<bool> register(EventModel model) async {
     UserModel userModel = UserStateNotifier.getInstance2().state!;
     // UserModel userModel = (userProvider.notifier as UserStateNotifier).state!;
 
