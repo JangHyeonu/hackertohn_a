@@ -202,7 +202,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",
                                 title: state[index].title ?? "-",
-                                businessName: state[index].businessTitle,
+                                businessTitle: state[index].businessTitle,
                                 startDatetime: state[index].startDatetime,
                                 endDatetime: state[index].endDatetime,
                               ),

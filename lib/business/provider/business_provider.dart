@@ -73,9 +73,9 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     bool isInsert = await businessRepository.applyBusinessAuth(state);
 
     // DB 저장 시 user의 상태 변경 -> state값은 user에 있는지? user 안의 business에 있는지?
-    // if(isInsert) {
-    //   ref.read(userProvider.notifier).setState("apply");
-    // }
+    if(isInsert) {
+      ref.read(userProvider.notifier).setState("apply");
+    }
 
     // 위젯 트리에 state(인스턴스)가 있을 경우에만 상태값 변경
     if(mounted) {

@@ -29,13 +29,17 @@ class BusinessRepository {
     }
 
     // joinType 오류로 데이터 직접 기입
-    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${model.userUid!}";
+    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${model?.userUid}";
 
     // DB에서 계정정보 조회
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore.collection("user").doc(uId).get();
 
+    if(documentSnapshot == null) {
+      return isInsert;
+    }
+
     // 계정정보 존재 & businessAuth 인증 칼럼 없을 때 DB 삽입
-    if(documentSnapshot != null && !(documentSnapshot.data()!.containsKey("businessAuth"))) {
+    if(documentSnapshot != null && documentSnapshot.data() != null && !(documentSnapshot.data()!.containsKey("businessAuth"))) {
 
       Map<String, dynamic> businessAuthMap = businessModel.update("apply").toJson();
 
