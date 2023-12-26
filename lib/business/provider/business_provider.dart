@@ -115,7 +115,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
   Future<bool> modifyBusinessAuth(String uid) async {
     BusinessModel? businessModel = await getBusinessAuth(uid);
 
-    if(businessModel == null) {
+    if(businessModel == null || businessModel.applyState == null) {
       return false;
     }
 

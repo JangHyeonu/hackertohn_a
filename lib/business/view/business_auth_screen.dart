@@ -36,9 +36,6 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 onChanged: (value) {
                   state.businessNumber = value;
                 },
-                controller: TextEditingController(
-                  text: state.businessNumber
-                ),
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.onetwothree),
@@ -51,9 +48,6 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 onChanged: (value) {
                   state.businessTitle = value;
                 },
-                controller: TextEditingController(
-                  text: state.businessTitle
-                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("상호명"),
@@ -65,9 +59,6 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 onChanged: (value) {
                   state.businessAddress = value;
                 },
-                controller: TextEditingController(
-                  text: state.businessAddress
-                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("주소"),
@@ -79,9 +70,6 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 onChanged: (value) {
                   state.businessCategory = value;
                 },
-                controller: TextEditingController(
-                  text: state.businessCategory
-                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: Text("업종"),
@@ -93,9 +81,6 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                 onChanged: (value) {
                   state.businessName = value;
                 },
-                controller: TextEditingController(
-                  text: state.businessName
-                ),
                 decoration: const InputDecoration(
                   icon: Icon(Icons.abc),
                   label: const Text("대표자명"),
@@ -136,8 +121,8 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                   ),
                   const SizedBox(width: 8.0),
                   ElevatedButton(
-                    onPressed: () {
-                      ref.read(businessProvider.notifier).applyBusinessAuth(state, context).then(
+                    onPressed: () async {
+                      await ref.read(businessProvider.notifier).applyBusinessAuth(state, context).then(
                         (value) {
                           if(context.canPop()) {
                             context.pop();
@@ -147,8 +132,7 @@ class _BusinessAuthScreenState extends ConsumerState<BusinessAuthScreen> {
                             Fluttertoast.showToast(
                               msg: "신청서가 접수되었습니다.\n인증까지 약 2~3일이 소요될 수 있습니다.",
                               gravity: ToastGravity.CENTER,
-                              backgroundColor: Colors.white,
-                              toastLength: Toast.LENGTH_LONG
+                              toastLength: Toast.LENGTH_LONG,
                             );
                           }
                         }
