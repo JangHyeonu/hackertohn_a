@@ -9,23 +9,18 @@ import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/repository/user_repository.dart';
 
-/// 전역 상태 관리
-/// StateNotifierProvider는 제네릭 안의 첫번째, 두번째 요소를 활용하여 상태를 관리함
-/// 두번째 요소가 상태를 관리할 객체이고
-/// 첫번째 요소는 그 객체의 필드, 메소드 등을 담은 클래스? 의 개념임
-/// userProvider 변수를 호출하여 전역에서 UserModel 객체를 활용할 수 있고 상태를 감지함
+/// 로그인 유저 정보 전역 관리용 Provider
 final userProvider = StateNotifierProvider<UserStateNotifier, UserModel?>((ref) {
-  final userRepository = ref.watch(userRepositoryProvider);
-
   return UserStateNotifier(UserModel(userUid: "", email: "", displayName: "", phoneNumber: "", photoUrl: ""));
 });
 
+/// 로그인 유저 정보 전역 관리용 Notifier
 class UserStateNotifier extends StateNotifier<UserModel?> {
   final UserRepository? userRepository = UserRepository();
 
+  // 싱글턴
   static UserStateNotifier? _instance;
   static UserStateNotifier getInstance() {
-    _instance ??= UserStateNotifier();
     return _instance!;
   }
 
@@ -33,34 +28,16 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     _instance = this;
   }
 
-  void setJoinType(JOIN_TYPE joinType) {
-    state?.joinType = joinType;
-  }
-
-  BusinessModel? getBusinessModelByNumber(String? businessNumber) {
-    userRepository?.getBusinessModel(businessNumber: businessNumber, uId: state?.userUid);
-
-    if(state?.businessModel?.businessNumber == businessNumber) {
-      return state?.businessModel;
-    }
-  }
-
   // 유저의 비즈니스 계정 인증 신청에 따른 상태값 변경
   void setState(String userState) {
     UserModel updatedUser = state!.copyWith(
       state: userState
     );
-
     state = updatedUser;
   }
 
   // 로그인 처리
-  void login ({
-    required UserCredential userCredential
-  }) async {
-    if(userCredential == null) {
-      return;
-    }
+  void login ({ required UserCredential userCredential }) async {
 
     // 파이어베이스 인증 후 user 데이터 조회
     Map<String, dynamic>? userMap = await userRepository!.fireBaseAuth(credential: userCredential);
@@ -73,12 +50,11 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     BusinessModel? businessAuth;
 
     // 해당 user의 businessAuth 데이터 조회
-    businessAuth = await ref!.read(businessProvider.notifier).getBusinessAuth(userMap['userUid']);
+    businessAuth = state?.businessModel ?? BusinessModel();
 
     // businessAuth가 승인이 나면 사업자 권한 제공
-    String? auth;
-    if(businessAuth?.applyState == "approve") {
-      auth = "business";
+    if(state?.businessModel?.applyState == "approve") {
+      state?.auth = "business";
     }
 
     // UserModel에 데이터 주입

@@ -6,6 +6,7 @@ import 'package:seeya_hackthon_a/business/repository/business_repository.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
+// 사용자 기업 정보 관리 Provider
 final businessProvider = StateNotifierProvider<BusinessStateNotifier, BusinessModel>((ref) {
   // 사용자의 정보를 담은 userProvider를 이용하여 UserModel 인스턴스의 상태를 관리
   final userState = ref.watch(userProvider);
@@ -20,6 +21,7 @@ final businessProvider = StateNotifierProvider<BusinessStateNotifier, BusinessMo
 
 });
 
+// 사용자 기업 정보 관리 Notifier
 class BusinessStateNotifier extends StateNotifier<BusinessModel> {
   final UserModel? userState;
   final BusinessRepository businessRepository;
