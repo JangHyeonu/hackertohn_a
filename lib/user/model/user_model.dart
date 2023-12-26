@@ -32,6 +32,10 @@ class UserModel {
     this.auth = (auth == null || auth == "") ? "guest" : auth;
   }
 
+  UserModel.empty() {
+    UserModel(userUid: "", email: "", displayName: "", phoneNumber: "", photoUrl: "");
+  }
+
   UserModel copyWith({
     String? userUid, String? email,
     String? displayName, String? phoneNumber, String? photoUrl, String? state, BusinessModel? businessModel,

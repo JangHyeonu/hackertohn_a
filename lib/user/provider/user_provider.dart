@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:seeya_hackthon_a/_common/firebse_messaging/custom_firebase_messaging.dart';
@@ -16,30 +17,20 @@ import 'package:seeya_hackthon_a/user/repository/user_repository.dart';
 final userProvider = StateNotifierProvider<UserStateNotifier, UserModel?>((ref) {
   final userRepository = ref.watch(userRepositoryProvider);
 
-  return UserStateNotifier(ref: ref, userRepository: userRepository);
+  return UserStateNotifier(UserModel(userUid: "", email: "", displayName: "", phoneNumber: "", photoUrl: ""));
 });
 
 class UserStateNotifier extends StateNotifier<UserModel?> {
-  Ref? ref;
-  UserRepository? userRepository;
+  final UserRepository? userRepository = UserRepository();
 
   static UserStateNotifier? _instance;
-
-  static UserStateNotifier getInstance2() {
+  static UserStateNotifier getInstance() {
     _instance ??= UserStateNotifier();
     return _instance!;
   }
 
-  UserStateNotifier getInstance() {
-    _instance ??= UserStateNotifier(ref: ref, userRepository: userRepository);
-    return _instance!;
-  }
-
-  UserStateNotifier({
-    this.ref,
-    this.userRepository,
-  }) : super(UserModel(userUid: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
-    _instance ??= this;
+  UserStateNotifier(super._state) {
+    _instance = this;
   }
 
   void setJoinType(JOIN_TYPE joinType) {
