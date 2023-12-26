@@ -40,8 +40,9 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
     }
 
     // 수정 대상의 데이터가 현재 모델 데이터와 다른 경우 DB에서 데이터 조회
-    if (eventId != ref.read(eventProvider).eventId) {
-      ref.read(eventProvider.notifier).read(eventId!);
+    if (eventId != null || eventId != ref.read(eventProvider).eventId) {
+      debugPrint("eventId : $eventId");
+      ref.read(eventProvider.notifier).read(eventId ?? "");
     }
   }
 

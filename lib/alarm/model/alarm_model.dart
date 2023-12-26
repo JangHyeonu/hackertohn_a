@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:seeya_hackthon_a/_common/utils/my_util.dart';
 
 class AlarmModel {
   String? alarmUid;
@@ -14,9 +15,7 @@ class AlarmModel {
     return AlarmModel(
         alarmUid : dataMap["alarmUid"],
         userUid : dataMap["userUid"],
-        regDatetime : (dataMap["regDatetime"] is DateTime) ? dataMap["regDatetime"]
-            : (dataMap["regDatetime"] is Timestamp) ? (dataMap["regDatetime"] as Timestamp).toDate()
-            : null,
+        regDatetime : MyUtil.toDatetime(dataMap["regDatetime"]),
         message : dataMap["message"],
     );
   }
@@ -35,6 +34,7 @@ class AlarmModel {
     };
   }
 
+  // AlarmModel -> Map 변환 : Uid 정보 포함
   Map<String, dynamic> toMapAll() {
     Map<String, dynamic> result = toMap();
     result["alarmUid"] = alarmUid;

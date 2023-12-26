@@ -8,11 +8,11 @@ import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/repository/user_repository.dart';
 
-// 전역 상태 관리
-// StateNotifierProvider는 제네릭 안의 첫번째, 두번째 요소를 활용하여 상태를 관리함
-// 두번째 요소가 상태를 관리할 객체이고
-// 첫번째 요소는 그 객체의 필드, 메소드 등을 담은 클래스? 의 개념임
-// userProvider 변수를 호출하여 전역에서 UserModel 객체를 활용할 수 있고 상태를 감지함
+/// 전역 상태 관리
+/// StateNotifierProvider는 제네릭 안의 첫번째, 두번째 요소를 활용하여 상태를 관리함
+/// 두번째 요소가 상태를 관리할 객체이고
+/// 첫번째 요소는 그 객체의 필드, 메소드 등을 담은 클래스? 의 개념임
+/// userProvider 변수를 호출하여 전역에서 UserModel 객체를 활용할 수 있고 상태를 감지함
 final userProvider = StateNotifierProvider<UserStateNotifier, UserModel?>((ref) {
   final userRepository = ref.watch(userRepositoryProvider);
 
