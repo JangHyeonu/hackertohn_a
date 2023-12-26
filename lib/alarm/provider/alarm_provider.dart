@@ -25,13 +25,11 @@ class AlarmListNotifier extends StateNotifier<List<AlarmModel>> {
   }
 
   Future<void> removeAlarmById(String uId) async {
-
-    List<AlarmModel> alarmModel = state.where((element) => element.alarmUid != uId).toList();
-
-    if(alarmModel.isEmpty) {
+    if(state.isEmpty) {
       return;
     }
 
+    List<AlarmModel> alarmModel = state.where((element) => element.alarmUid != uId).toList();
     bool isDelete = await _repository.delete(alarmId: uId);
 
     if(isDelete) {
