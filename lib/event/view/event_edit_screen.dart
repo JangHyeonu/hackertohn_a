@@ -56,6 +56,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
 
     return DefaultLayout(
         sideBarOffYn: false,
+        isResize: true,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -462,7 +463,6 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                             onChanged: (value) {
                               state.caution = value;
                             },
-                            controller: TextEditingController(text: state.caution),
                             decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.feedback_outlined),
                               border: OutlineInputBorder(
@@ -479,7 +479,6 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           onChanged: (value) {
                             state.keywords = value;
                           },
-                          controller: TextEditingController(text: state.keywords),
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.text_snippet),
                             border: OutlineInputBorder(
@@ -544,9 +543,9 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                   ),
                 ],
               ),
-
             ],
           ),
-        ));
+        )
+    );
   }
 }
