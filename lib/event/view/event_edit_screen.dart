@@ -65,27 +65,30 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
+                        Padding(
+                          padding: const EdgeInsets.only(right: 24.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
                                 barrierDismissible: false,
                                 context: context,
                                 builder: (context) {
                                   return const BusinessSelectPopupScreen();
                                 });
-                          },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Icon(Icons.fact_check_outlined),
-                                SizedBox(width: 8.0),
-                                Text("사업자 선택"),
-                              ],
+                            },
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.fact_check_outlined),
+                                  SizedBox(width: 8.0),
+                                  Text("사업자 선택"),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        Expanded(child: Container()),
                         Container(
                           height: MediaQuery.of(context).size.height / 20,
                           width: MediaQuery.of(context).size.width / 2,

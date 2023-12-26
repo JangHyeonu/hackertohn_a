@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,7 @@ class EventListComponent extends StatelessWidget {
   DateTime? startDatetime;
   DateTime? endDatetime;
   String? caution;
+  String? keyword;
 
   String? businessTitle;
   DateTime? regDatetime;
@@ -25,42 +27,47 @@ class EventListComponent extends StatelessWidget {
     this.caution,
     this.businessTitle,
     this.regDatetime,
+    this.keyword,
     super.key
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Container(
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(8,2,8,2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white70,
-                  ),
-                  // color: Colors.white,
-                  child: Text(
-                    dday(startDatetime ?? DateTime.now(), endDatetime!),
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.25
+                Row(
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8.0),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(8,2,8,2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.white70,
+                      ),
+                      // color: Colors.white,
+                      child: Text(
+                        dday(startDatetime ?? DateTime.now(), endDatetime!),
+                        style: const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.25
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(child: Container()),
                 EventListComponentCounter(startDatetime: startDatetime!, endDatetime: endDatetime ?? DateTime.now()),
@@ -68,30 +75,37 @@ class EventListComponent extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white70,
-                  ),
-                  padding: EdgeInsets.fromLTRB(6,3,6,3),
-                  child: Text(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
                     businessTitle != null ? businessTitle! : "-",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black54
+                      letterSpacing: 1.5,
+                      color: Colors.grey[600],
                     ),
                   ),
-                ),
-
-              ],
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.blueGrey,
+                    )
+                  ),
+                  padding: const EdgeInsets.fromLTRB(6.0,1.5,6.0,1.5),
+                  child: Text(splitKeyword(keyword), style: const TextStyle(color: Colors.blueGrey, fontSize: 10, fontWeight: FontWeight.w500)),
+                ),
+                Expanded(child: Container()),
                 Text((startDatetime != null) ? "${DateFormat("yyyy.MM.dd").format(startDatetime!)} ~ " : "-"),
                 Text((endDatetime != null) ? DateFormat("yyyy.MM.dd").format(endDatetime!) : "-"),
               ],
@@ -100,6 +114,18 @@ class EventListComponent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String splitKeyword(String? keyword) {
+    if(keyword == null) {
+      return "";
+    }
+
+    String returnStr = "";
+    List<String> keywordList = keyword.split(",");
+    returnStr = keywordList[0];
+
+    return "# $returnStr";
   }
 
   String dday(DateTime startDatetime, DateTime endDatetime) {

@@ -205,6 +205,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                                 businessTitle: state[index].businessTitle,
                                 startDatetime: state[index].startDatetime,
                                 endDatetime: state[index].endDatetime,
+                                keyword: state[index].keywords,
                               ),
                             ),
                           ),

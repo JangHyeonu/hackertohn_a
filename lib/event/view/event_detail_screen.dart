@@ -63,6 +63,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                   businessTitle: state.businessTitle,
                   startDatetime: state.startDatetime,
                   endDatetime: state.endDatetime,
+                  keyword: state.keywords,
                 ),
               ),
             ),
