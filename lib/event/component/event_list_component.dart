@@ -76,7 +76,7 @@ class EventListComponent extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Padding(
-              padding: const EdgeInsets.only(bottom: 6.0),
+              padding: const EdgeInsets.only(bottom: 12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
