@@ -35,7 +35,10 @@ class AlarmListComponent extends StatelessWidget {
             ),
             child: const Icon(Icons.access_alarms_sharp),
           ),
-          Text(message ?? "", overflow: TextOverflow.ellipsis),
+          Container(
+            width: MediaQuery.of(context).size.width / 1.5,
+            child: Text(message ?? "", maxLines: 5),
+          ),
         ],
       ),
     );

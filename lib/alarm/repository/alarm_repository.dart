@@ -40,7 +40,11 @@ class AlarmRepository {
 
     await docRef.get().then((queryResult) => {
       if(queryResult != null) {
-        resultList = queryResult.docs.map((e) => e.data()).toList(),
+        resultList = queryResult.docs.map((e) {
+          Map<String, dynamic> data = e.data();
+          data["alarmUid"] = e.id;
+          return data;
+        }).toList(),
       },
     });
 
@@ -61,10 +65,11 @@ class AlarmRepository {
   Future<bool> delete({String? alarmId}) async {
     bool result = false;
 
-    final docRef = _firestore.collection("alarm").doc(alarmId).get();
+    final docRef = _firestore.collection("alarm").doc(alarmId).delete().then((value) {
+      result = true;
+    }, onError: () => result = false);
 
-
-    return true;
+    return result;
   }
 
 }

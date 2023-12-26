@@ -8,9 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/alarm/component/alarm_list_component.dart';
 import 'package:seeya_hackthon_a/alarm/component/keyword_component.dart';
-import 'package:seeya_hackthon_a/alarm/model/alarm_model.dart';
 import 'package:seeya_hackthon_a/alarm/provider/alarm_provider.dart';
-import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 class AlarmListScreen extends ConsumerStatefulWidget {
   int? pageNo;
@@ -63,39 +61,37 @@ class AlarmListScreenState extends ConsumerState<AlarmListScreen> {
               SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.6,
-                  child: Container(
-                    child: ListView.separated(
-                      itemCount: state.length,
-                      itemBuilder: (context, index) {
-                        return Slidable(
-                          key: Key(state[index].alarmUid!),
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                // An action can be bigger than the others.
-                                flex: 2,
-                                onPressed: (context) {
-                                  ref.read(alarmListProvider.notifier).removeAlarmById(state[index].alarmUid!);
-                                },
-                                backgroundColor: Theme.of(context).colorScheme.error,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete_forever_rounded,
-                                label: '알람 삭제',
-                              ),
-                            ],
-                          ),
-                          child: AlarmListComponent(
-                              alarmUid: state[index].alarmUid,
-                              regDateTime: state[index].regDatetime,
-                              message: state[index].message,
+                  child: ListView.builder(
+                    itemCount: state.length,
+                    itemBuilder: (context, index) {
+                      return Slidable(
+                        key: Key(state[index].alarmUid!),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              // An action can be bigger than the others.
+                              flex: 2,
+                              onPressed: (context) {
+                                ref.read(alarmListProvider.notifier).removeAlarmById(state[index].alarmUid!);
+                              },
+                              backgroundColor: Theme.of(context).colorScheme.error,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete_forever_rounded,
+                              label: '알람 삭제',
                             ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Drawer();
-                      },
-                    ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: AlarmListComponent(
+                            alarmUid: state[index].alarmUid,
+                            regDateTime: state[index].regDatetime,
+                            message: state[index].message,
+                          ),
+                        ),
+                      );
+                    },
                   )
               ),
             ],

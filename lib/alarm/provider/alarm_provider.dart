@@ -28,14 +28,23 @@ class AlarmListNotifier extends StateNotifier<List<AlarmModel>> {
 
     List<AlarmModel> alarmModel = state.where((element) => element.alarmUid != uId).toList();
 
-    if(alarmModel.isNotEmpty) {
+    if(alarmModel.isEmpty) {
       return;
     }
 
-    state = alarmModel;
+    bool isDelete = await _repository.delete(alarmId: uId);
+
+    if(isDelete) {
+      Fluttertoast.showToast(
+          msg: "알람이 삭제 되었습니다."
+      );
+
+      state = alarmModel;
+      return;
+    }
 
     Fluttertoast.showToast(
-      msg: "알람이 삭제 되었습니다."
+        msg: "오류가 발생하였습니다.\n다시 시도해주세요."
     );
 
     return;
