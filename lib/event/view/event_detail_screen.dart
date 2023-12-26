@@ -190,16 +190,19 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width / 4,
                           height: MediaQuery.of(context).size.height / 8.8,
+                          child: Image.asset("assets/image/noimage.gif", fit: BoxFit.fitHeight),
                         ),
                         Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width / 4,
                           height: MediaQuery.of(context).size.height / 8.8,
+                          child: Image.asset("assets/image/noimage.gif", fit: BoxFit.fitHeight),
                         ),
                         Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width / 4,
                           height: MediaQuery.of(context).size.height / 8.8,
+                          child: Image.asset("assets/image/noimage.gif", fit: BoxFit.fitHeight),
                         )
                       ],
                     ),
