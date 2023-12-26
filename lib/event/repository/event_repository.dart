@@ -115,12 +115,12 @@ class EventRepository {
       // 새로 추가
       if(model.eventId == null || model.eventId == "") {
         // 사명 유효성 검사
-        if(userModel.businessModel!.businessName == null || userModel.businessModel!.businessName == "") {
+        if(userModel.businessModel!.businessTitle == null || userModel.businessModel!.businessTitle == "") {
           Fluttertoast.showToast(msg: "기업 정보가 유효하지 않습니다. 확인해주세요.");
           throw Exception();
         }
         dataMap["register"] = userModel.userUid;
-        dataMap["businessName"] = userModel.businessModel!.businessName!;
+        dataMap["businessTitle"] = userModel.businessModel!.businessTitle!;
         await _firestore.collection("event").add(dataMap);
       }
       // 내용 변경
