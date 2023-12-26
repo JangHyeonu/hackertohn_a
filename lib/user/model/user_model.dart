@@ -4,7 +4,8 @@ import 'package:seeya_hackthon_a/business/model/business_model.dart';
 
 @JsonSerializable()
 class UserModel {
-  final String? userModelId;
+  // 유저 데이터 구분값
+  final String? userUid;
   final String? email;
   final String? displayName;
   final String? phoneNumber;
@@ -19,7 +20,7 @@ class UserModel {
   late final String? messagingToken;
 
   UserModel({
-    this.userModelId,
+    this.userUid,
     this.email,
     this.displayName,
     this.phoneNumber,
@@ -32,12 +33,12 @@ class UserModel {
   }
 
   UserModel copyWith({
-    String? userModelId, String? email,
+    String? userUid, String? email,
     String? displayName, String? phoneNumber, String? photoUrl, String? state, BusinessModel? businessModel,
     String? auth, String? messagingToken,
   }) {
     return UserModel(
-      userModelId: userModelId ?? this.userModelId,
+      userUid: userUid ?? this.userUid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -52,7 +53,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      userModelId: json['userModelId'], email: json['email'], displayName: json['displayName'],
+      userUid: json['userUid'], email: json['email'], displayName: json['displayName'],
       phoneNumber: json['phoneNumber'], photoUrl: json['photoUrl'],
       auth: json['auth'], messagingToken: json['messagingToken'],
     );
@@ -60,7 +61,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "userModelId" : userModelId,
+      "userUid" : userUid,
       "email" : email,
       "displayName" : displayName,
       "phoneNumber" : phoneNumber,

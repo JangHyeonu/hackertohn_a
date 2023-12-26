@@ -25,7 +25,7 @@ class UserRepository {
 
     Map<String, dynamic>? userData;
 
-    // DB에서 유저 정보 조회
+    // DB에서 유저 정보 조회 : 구글 로그인
     await _firestore.collection("user").doc("google_oauth_${credential.user!.uid}").get()
         .then((result) async => {
       userData = result.data(),
@@ -60,7 +60,7 @@ class UserRepository {
 
       if(uid != null) {
         userMap = {
-          "userModelId": credential.user?.uid,
+          "userUid": credential.user?.uid,
           "id": null,
           "password": null,
           "email": credential.user?.email,
@@ -75,7 +75,7 @@ class UserRepository {
 
       } else {
         userMap = {
-          "userModelId": credential.user?.uid,
+          "userUid": credential.user?.uid,
           "id": null,
           "password": null,
           "email": credential.user?.email,

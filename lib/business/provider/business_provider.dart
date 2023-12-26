@@ -36,7 +36,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
   ) {
     // 상태관리 인스턴스 호출 시 상태관리 대상 BusinessModel 인스턴스 초기화 (유저의 ID, Email 정보 주입)
     if(userState != null) {
-      state.userModelId = userState?.userModelId;
+      state.userUid = userState?.userUid;
       state.email = userState?.email;
     }
   }
@@ -104,7 +104,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
   }
 
   Future<BusinessModel?> getBusinessByBusinessNumber(String? businessNumber) async {
-    BusinessModel? businessModel = await getBusinessAuth(userState?.userModelId);
+    BusinessModel? businessModel = await getBusinessAuth(userState?.userUid);
 
     if(businessModel?.businessNumber == businessNumber) {
       state = businessModel!;

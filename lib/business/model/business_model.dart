@@ -1,6 +1,6 @@
 class BusinessModel {
   // 유저 정보
-  String? userModelId;
+  String? userUid;
   String? email;
 
   // todo: businessModielId 추가하기
@@ -22,7 +22,7 @@ class BusinessModel {
   String? applyState;  // apply, approve, reject
 
   BusinessModel({
-    this.userModelId,
+    this.userUid,
     this.email,
     this.businessNumber,
     this.businessTitle,
@@ -34,11 +34,11 @@ class BusinessModel {
   });
 
   BusinessModel copyWith({
-    String? userModelId, String? email,
+    String? userUid, String? email,
     String? businessNumber, String? businessTitle, String? businessAddress, String? businessCategory, String? businessName, String? businessImagePath, String? applyState,
   }) {
     return BusinessModel(
-      userModelId: userModelId ?? this.userModelId,
+      userUid: userUid ?? this.userUid,
       email: email ?? this.email,
       businessNumber: businessNumber ?? this.businessNumber,
       businessTitle: businessTitle ?? this.businessTitle,
@@ -52,7 +52,7 @@ class BusinessModel {
 
   factory BusinessModel.fromJson(Map<String, dynamic>? json) {
     return BusinessModel(
-      userModelId: json?['userModelId'],
+      userUid: json?['userUid'],
       email: json?['email'],
       businessNumber: json?['businessNumber'],
       businessTitle: json?['businessTitle'],
@@ -67,7 +67,7 @@ class BusinessModel {
 
   Map<String, dynamic> toJson() {
     return {
-      // "userModelId" : userModelId,
+      // "userUid" : userUid,
       // "email" : email,
       "businessNumber" : businessNumber,
       "businessTitle" : businessTitle,

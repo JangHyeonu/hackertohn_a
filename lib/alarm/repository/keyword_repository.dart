@@ -52,7 +52,7 @@ class KeywordRepository {
   }
 
   // 키워드 등록
-  Future<bool> create(KeywordModel model) async {
+  Future<bool> register(KeywordModel model) async {
     bool result = false;
 
     Map<String, dynamic> dataMap = model.toMap();

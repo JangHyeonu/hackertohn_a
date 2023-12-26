@@ -38,7 +38,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
   UserStateNotifier({
     this.ref,
     this.userRepository,
-  }) : super(UserModel(userModelId: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
+  }) : super(UserModel(userUid: "", email: "", displayName: "", phoneNumber: "", photoUrl: "")){
     _instance ??= this;
   }
 
@@ -47,7 +47,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
   }
 
   BusinessModel? getBusinessModelByNumber(String? businessNumber) {
-    userRepository?.getBusinessModel(businessNumber: businessNumber, uId: state?.userModelId);
+    userRepository?.getBusinessModel(businessNumber: businessNumber, uId: state?.userUid);
 
     if(state?.businessModel?.businessNumber == businessNumber) {
       return state?.businessModel;
@@ -82,7 +82,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     BusinessModel? businessAuth;
 
     // 해당 user의 businessAuth 데이터 조회
-    businessAuth = await ref!.read(businessProvider.notifier).getBusinessAuth(userMap['userModelId']);
+    businessAuth = await ref!.read(businessProvider.notifier).getBusinessAuth(userMap['userUid']);
 
     // businessAuth가 승인이 나면 사업자 권한 제공
     String? auth;
@@ -92,7 +92,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
 
     // UserModel에 데이터 주입
     UserModel loginUser = UserModel(
-      userModelId: userMap['userModelId'],
+      userUid: userMap['userUid'],
       email: userMap['email'],
       displayName: userMap['displayName'],
       phoneNumber: userMap['phoneNumber'],

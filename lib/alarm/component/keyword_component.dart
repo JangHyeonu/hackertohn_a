@@ -125,7 +125,7 @@ class KeywordComponentState extends ConsumerState<KeywordComponent> {
                               }
 
                               // keyword textFormField의 내용을 키워드로 DB에 저장
-                              _keywordRepository.create(KeywordModel(keyword: _inputKeywordText, userUid: ref.read(userProvider)!.userModelId,
+                              _keywordRepository.register(KeywordModel(keyword: _inputKeywordText, userUid: ref.read(userProvider)!.userUid,
                                   messagingToken: ref.read(userProvider)!.messagingToken, useYn: true));
                               // 입력 내용 초기화
                               _inputKeywordText = "";

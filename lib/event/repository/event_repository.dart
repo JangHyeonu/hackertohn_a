@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:seeya_hackthon_a/_common/message/common_message.dart';
 import 'package:seeya_hackthon_a/event/model/event_model.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
@@ -20,9 +21,9 @@ class EventRepository {
 
   // 행사 목록 조회
   // TODO :: 정렬 기준 변경 -> 'startDatetime'  :: Firestore로는 구현이 힘들것 같음
-  Future<List<EventModel>> readList({String? searchText, int? limit, bool? isRefresh}) async {
-    // 의도치 않게 여러번 호출되는 경우가 있어 이를 파악하기 위해 남겨둠
-    debugPrint("::: EventRepository :: readList ::: $searchText");
+  Future<List<EventModel>> readList({String? searchText, int? limit, bool? needInit}) async {
+    // 디버깅용 출력
+    debugPrint(CommonMessage.DEBUG_REPOSITORY_READ_LIST(searchText: searchText, limitCount: limit, needInit: needInit ?? false));
 
     // 결과
     List<Map<String, dynamic>> resultMap = [];
@@ -42,13 +43,13 @@ class EventRepository {
               // 제목 일치
               Filter("title", whereIn: [searchText]),
               // 기업명 일치
-              Filter("businessName", whereIn: [searchText])
+              Filter("businessName", whereIn: [searchText]),
           )
       );
     }
 
     // 다음 페이지 내용 조회일 경우
-    if(isRefresh != true && lastSnapshot != null) {
+    if(needInit != true && lastSnapshot != null) {
       query = query.startAfterDocument(lastSnapshot!);
     }
 
@@ -70,10 +71,7 @@ class EventRepository {
         data["eventId"] = e.id;
         return data;
       }).toList();
-
     }
-
-    debugPrint("selected count : ${querySnapshot.size}");
 
     return EventModel.listOf(resultMap);
   }
@@ -103,9 +101,8 @@ class EventRepository {
   // 행사 등록 / 수정
   Future<bool> register(EventModel model) async {
     UserModel userModel = UserStateNotifier.getInstance2().state!;
-    // UserModel userModel = (userProvider.notifier as UserStateNotifier).state!;
 
-    if(userModel.userModelId == "" || model.startDatetime == null || model.endDatetime == null) {
+    if(userModel.userUid == "" || model.startDatetime == null || model.endDatetime == null) {
       return false;
     }
 
@@ -122,7 +119,7 @@ class EventRepository {
           Fluttertoast.showToast(msg: "기업 정보가 유효하지 않습니다. 확인해주세요.");
           throw Exception();
         }
-        dataMap["register"] = userModel.userModelId;
+        dataMap["register"] = userModel.userUid;
         dataMap["businessName"] = userModel.businessModel!.businessName!;
         await _firestore.collection("event").add(dataMap);
       }

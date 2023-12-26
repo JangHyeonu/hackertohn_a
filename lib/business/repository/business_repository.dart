@@ -29,7 +29,7 @@ class BusinessRepository {
     }
 
     // joinType 오류로 데이터 직접 기입
-    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${model.userModelId!}";
+    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${model.userUid!}";
 
     // DB에서 계정정보 조회
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore.collection("user").doc(uId).get();

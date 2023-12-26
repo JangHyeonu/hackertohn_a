@@ -1,6 +1,8 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 import '../model/alarm_model.dart';
@@ -34,7 +36,7 @@ class AlarmRepository {
     }
 
     final docRef = _firestore.collection("alarm")
-        .where("userUid", isEqualTo:UserStateNotifier.getInstance2().state!.userModelId!)
+        .where("userUid", isEqualTo:(userProvider.notifier as UserStateNotifier).state!.userUid!)
         .orderBy("regDatetime", descending: true)
         .limit(10);
 

@@ -130,7 +130,7 @@ class EventListNotifier extends StateNotifier<List<EventModel>> {
     // _isLoadMoreRunning = true;
     _isLoadingNow = true;
 
-    await _repository.readList(searchText: searchText, limit: 5)
+    await _repository.readList(searchText: searchText, limit: 5, needInit: needInit)
         .then((result) async => {
 
           if(result.isEmpty || result.length < _limit) {
