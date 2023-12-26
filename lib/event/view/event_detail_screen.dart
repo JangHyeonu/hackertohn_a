@@ -56,6 +56,14 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 5.0,
+                        spreadRadius: 0.0,
+                        offset: const Offset(0,7),
+                      )
+                    ]
                 ),
                 child: EventListComponent(
                   eventId: eventId,

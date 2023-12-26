@@ -187,7 +187,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                               )
                             : Container(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
                           child: InkWell(
                             onTap: () {
                               context
@@ -198,6 +198,14 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                                 color: Colors.grey[200],
                                 borderRadius:
                                   const BorderRadius.all(Radius.circular(8.0)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 0.0,
+                                      offset: const Offset(0,7),
+                                    )
+                                  ]
                               ),
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",
