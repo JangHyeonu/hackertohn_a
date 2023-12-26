@@ -32,7 +32,7 @@ class EventModel {
   // 등록 시기
   DateTime? regDatetime;
   // 등록 기업명
-  String? businessName;
+  String? businessTitle;
 
   EventModel({
     this.eventId,
@@ -49,7 +49,7 @@ class EventModel {
     this.keywords,
     this.register,
     this.regDatetime,
-    this.businessName,
+    this.businessTitle,
   });
 
   // ignore: non_constant_identifier_names
@@ -71,7 +71,7 @@ class EventModel {
       "keywords" : keywords,
       "register" : register,
       "regDatetime" : regDatetime,
-      "businessName" : businessName,
+      "businessTitle" : businessTitle,
     };
   }
 
@@ -99,7 +99,7 @@ class EventModel {
       keywords : map["keywords"],
       register: map["register"],
       regDatetime: MyUtil.toDatetime(map["regDatetime"]),
-      businessName: map["businessName"],
+      businessTitle: map["businessTitle"],
     );
   }
 

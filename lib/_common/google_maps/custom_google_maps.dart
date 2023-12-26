@@ -44,7 +44,7 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
 
     // 행사 마커 변수 초기화
     eventId = widget.eventState?.eventId ?? "1";
-    eventName = widget.eventState?.businessName ?? "행사 장소";
+    eventName = widget.eventState?.businessTitle ?? "행사 장소";
     eventLatitudeState = widget.eventState?.latitude ?? 37.32512;
     eventLongitudeState = widget.eventState?.longitude ?? 127.9887;
 
