@@ -82,6 +82,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
       this.state = state;
     }
 
+
     return state.applyState!;
   }
 
@@ -112,9 +113,13 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     return state;
   }
 
-  // void setUpdateAuth(String? uid, String auth) {
-  //   businessRepository.updateBusinessAuth(uid, auth);
+  // void updateBusinessAuth() async {
+  //   ref.read(userProvider.notifier).setState("approve");
   // }
+
+  void setUpdateAuth(String uid) {
+    businessRepository.updateBusinessAuth(uid, state);
+  }
 
 
 

@@ -96,7 +96,9 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         accountName: Text(state!.displayName!),
         accountEmail: Text(state!.email!),
         otherAccountsPictures: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active), color: Colors.white)
+          IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_active), color: Colors.white)
         ],
       );
     }

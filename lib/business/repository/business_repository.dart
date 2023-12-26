@@ -67,7 +67,21 @@ class BusinessRepository {
 
   }
 
+  void updateBusinessAuth(String uid, BusinessModel businessModel) async {
+    String uId = "${"GOOGLE_OAUTH".toLowerCase()}_${uid}";
 
+    BusinessModel businessModel2 = BusinessModel();
+    businessModel2 = businessModel.copyWith(applyState: "approve");
+
+    // Map<String, dynamic>? map = await selectBusinessAuth(uid);
+    // Map<String, dynamic>? businessAuthMap = map!["businessAuth"];
+
+    // if(businessAuthMap != null) {
+    //   businessAuthMap["applyState"] = "approve";
+    // }
+
+    // _firestore.collection("user").doc(uId).update({"businessAuth": businessModel2});
+  }
 
 
 

@@ -54,7 +54,7 @@ class EventListComponent extends StatelessWidget {
                   ),
                   // color: Colors.white,
                   child: Text(
-                    dday(startDatetime ?? DateTime.now()),
+                    dday(startDatetime ?? DateTime.now(), endDatetime!),
                     style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class EventListComponent extends StatelessWidget {
                   ),
                 ),
                 Expanded(child: Container()),
-                // EventListComponentCounter(startDatetime: startDatetime ?? DateTime.now()),
+                EventListComponentCounter(startDatetime: startDatetime!, endDatetime: endDatetime ?? DateTime.now()),
                 // Text(distance),
               ],
             ),
@@ -92,7 +92,8 @@ class EventListComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text((startDatetime != null) ? DateFormat("yyyy.MM.dd").format(startDatetime!) : "-"),
+                Text((startDatetime != null) ? "${DateFormat("yyyy.MM.dd").format(startDatetime!)} ~ " : "-"),
+                Text((endDatetime != null) ? DateFormat("yyyy.MM.dd").format(endDatetime!) : "-"),
               ],
             )
           ],
@@ -101,8 +102,9 @@ class EventListComponent extends StatelessWidget {
     );
   }
 
-  String dday(DateTime startDatetime) {
+  String dday(DateTime startDatetime, DateTime endDatetime) {
     DateTime startday = startDatetime;
+    DateTime endday = endDatetime;
     DateTime today = DateTime.now();
 
     DateFormat formatter = DateFormat("yyyy-MM-dd");
@@ -111,10 +113,11 @@ class EventListComponent extends StatelessWidget {
     String formattedToday = formatter.format(today);
 
     String strDday;
-    if(formattedStartday == formattedToday) {
+    // if(formattedStartday == formattedToday) {
+    if(today.isAfter(startday) && today.isBefore(endday)) {
       strDday = "D-day!";
     } else {
-      Duration duration = startday.difference(today);
+      Duration duration = endday.difference(today);
       int dayDiff = duration.inDays + 1;
       strDday = "D-$dayDiff";
     }
@@ -125,15 +128,17 @@ class EventListComponent extends StatelessWidget {
 }
 
 class EventListComponentCounter extends StatefulWidget {
+  DateTime endDatetime;
   DateTime startDatetime;
   DateTime nowDatetime = DateTime.now();
   Duration? duration;
 
   EventListComponentCounter({
-    Key? key,
+    super.key,
     required this.startDatetime,
-  }) : super(key: key) {
-    duration = nowDatetime.difference(startDatetime);
+    required this.endDatetime,
+  }) {
+    duration = nowDatetime.difference(endDatetime);
   }
 
   @override
@@ -179,10 +184,10 @@ class _EventListComponentCounterState extends State<EventListComponentCounter> {
     var ss = (bb % 60).toInt();
 
     return
-      widget.duration!.abs().inDays < 2 ?
+      widget.nowDatetime.isAfter(widget.startDatetime) && widget.nowDatetime.isBefore(widget.endDatetime) ?
       Container(
         child: Text(
-          "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")}",
+          "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")} 남음",
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,

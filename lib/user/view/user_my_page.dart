@@ -34,7 +34,11 @@ class UserMyPage extends ConsumerWidget {
                     otherAccountsPictures: [
                       state.businessModel?.applyState == "approve" ?
                         IconButton(onPressed: (){}, icon: const Icon(Icons.business), color: Colors.white)
-                          : IconButton(onPressed: (){}, icon: const Icon(Icons.person), color: Colors.white),
+                          : IconButton(
+                              onPressed: () {
+                                ref.read(businessProvider.notifier).setUpdateAuth(state.userUid!);
+                              },
+                              icon: const Icon(Icons.person), color: Colors.white),
                     ],
                   ),
                 ],
