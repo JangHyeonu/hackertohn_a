@@ -35,8 +35,13 @@ class UserMyPage extends ConsumerWidget {
                       state.businessModel?.applyState == "approve" ?
                         IconButton(onPressed: (){}, icon: const Icon(Icons.business), color: Colors.white)
                           : IconButton(
-                              onPressed: () {
-                                ref.read(businessProvider.notifier).setUpdateAuth(state.userUid!);
+                              onPressed: () async {
+                                bool isUpdated = await ref.read(businessProvider.notifier).modifyBusinessAuth(state.userUid!);
+                                if(isUpdated) {
+                                  Fluttertoast.showToast(msg: "비즈니스 계정으로 승인되었습니다.\n다시 로그인해주세요.");
+                                } else {
+                                  Fluttertoast.showToast(msg: "비즈니스 계정 승인 실패하였습니다.\n다시 시도해주세요.");
+                                }
                               },
                               icon: const Icon(Icons.person), color: Colors.white),
                     ],
@@ -91,7 +96,7 @@ class UserMyPage extends ConsumerWidget {
                         return;
                       }
 
-                      if(businessState.applyState == "apply") {
+                      if(state.businessModel?.applyState == "apply") {
                         Fluttertoast.showToast(
                             msg: "신청서가 접수되어 인증이 진행 중입니다.",
                             gravity: ToastGravity.CENTER,
