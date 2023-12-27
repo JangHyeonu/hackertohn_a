@@ -23,7 +23,11 @@ class EventRepository {
   // TODO :: 정렬 기준 변경 -> 'startDatetime'  :: Firestore로는 구현이 힘들것 같음
   Future<List<EventModel>> readList({String? searchText, int? limit, bool? needInit}) async {
     // 디버깅용 출력
-    debugPrint(CommonMessage.DEBUG_REPOSITORY_READ_LIST(searchText: searchText, limitCount: limit, needInit: needInit ?? false));
+    debugPrint(CommonMessage.LOG_REPOSITORY(
+      className: runtimeType.toString(),
+      functionName: "readList",
+      logData: {"searchText": searchText, "limitCount": limit ?? readListDefaultLimit, "needInit": needInit ?? false}
+    ));
 
     // 결과
     List<Map<String, dynamic>> resultMap = [];
@@ -78,6 +82,11 @@ class EventRepository {
 
   // 행사 상세 조회
   Future<EventModel> read(String eventId) async {
+
+    debugPrint(CommonMessage.LOG_REPOSITORY(
+        className: runtimeType.toString(),
+        functionName: "read",
+        logData: {"eventId": eventId}));
     // 결과
     Map<String, dynamic> resultMap = {};
 

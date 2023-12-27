@@ -52,7 +52,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
     final businessModel = ref.watch(businessProvider);
 
     debugPrint(
-        CommonMessage.DEBUG_SCREEN_BUILD(screenName: runtimeType.toString()));
+        CommonMessage.LOG_SCREEN_BUILD(className: runtimeType.toString()));
 
     return DefaultLayout(
         sideBarOffYn: false,

@@ -67,7 +67,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(CommonMessage.DEBUG_SCREEN_BUILD(screenName: runtimeType.toString()));
+    debugPrint(CommonMessage.LOG_SCREEN_BUILD(className: runtimeType.toString()));
 
     // 키보드 감지
     searchKeyboardFn();

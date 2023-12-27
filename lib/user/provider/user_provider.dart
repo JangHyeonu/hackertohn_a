@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:seeya_hackthon_a/_common/firebse_messaging/custom_firebase_messaging.dart';
-import 'package:seeya_hackthon_a/_common/user/user_function.dart';
 import 'package:seeya_hackthon_a/business/model/business_model.dart';
-import 'package:seeya_hackthon_a/business/provider/business_provider.dart';
 import 'package:seeya_hackthon_a/user/model/user_model.dart';
 import 'package:seeya_hackthon_a/user/repository/user_repository.dart';
 
@@ -88,6 +86,5 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
       return true;
     }
   }
-
 
 }
