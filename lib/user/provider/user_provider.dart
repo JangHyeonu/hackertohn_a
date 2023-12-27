@@ -54,6 +54,11 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
     }
   }
 
+  UserModel? getLoginUser() {
+    return state;
+  }
+
+
   // 유저의 비즈니스 계정 인증 신청에 따른 상태값 변경
   void setState(String userState) {
     UserModel updatedUser = state!.copyWith(
