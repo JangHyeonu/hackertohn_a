@@ -100,7 +100,7 @@ class EventRepository {
 
   // 행사 등록 / 수정
   Future<bool> register(EventModel model) async {
-    UserModel userModel = UserStateNotifier.getInstance2().state!;
+    UserModel userModel = UserStateNotifier.getInstance().state!;
 
     if(userModel.userUid == "" || model.startDatetime == null || model.endDatetime == null) {
       return false;

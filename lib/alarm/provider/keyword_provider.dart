@@ -23,7 +23,7 @@ class KeywordListStateNotifier extends StateNotifier<List<KeywordModel>> {
   Future<List<KeywordModel>> readList() async {
     debugPrint("KeywordListStateNotifier :: readList :: start");
 
-    String? userUid = UserStateNotifier.getInstance2().state!.userUid;
+    String? userUid = UserStateNotifier.getInstance().state!.userUid;
 
     // 유저 구분값이 유효하지 않은 경우
     if(userUid == null || userUid == "") {

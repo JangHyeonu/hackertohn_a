@@ -40,7 +40,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
   void login ({ required UserCredential userCredential }) async {
 
     // 파이어베이스 인증 후 user 데이터 조회
-    Map<String, dynamic>? userMap = await userRepository!.fireBaseAuth(credential: userCredential);
+    Map<String, dynamic>? userMap = await userRepository!.firebaseAuth(credential: userCredential);
 
     if(userMap == null) {
       return;
@@ -65,7 +65,7 @@ class UserStateNotifier extends StateNotifier<UserModel?> {
       phoneNumber: userMap['phoneNumber'],
       photoUrl: userCredential.user!.photoURL,
       businessModel: businessAuth ?? BusinessModel(),
-      auth: auth,
+      auth: userMap['auth'] ?? "user",
       messagingToken: CustomFirebaseMessaging.instance.getToken() ?? userMap['messagingToken'],
     );
     

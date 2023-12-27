@@ -36,7 +36,7 @@ class AlarmRepository {
     }
 
     final docRef = _firestore.collection("alarm")
-        .where("userUid", isEqualTo:UserStateNotifier.getInstance2().state!.userUid!)
+        .where("userUid", isEqualTo:UserStateNotifier.getInstance().state!.userUid!)
         .orderBy("regDatetime", descending: true)
         .limit(10);
 

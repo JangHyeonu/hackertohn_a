@@ -76,16 +76,24 @@ class UserModel {
   // UserModel -> Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return {
-      "userUid" : userUid,
-      "email" : email,
-      "displayName" : displayName,
-      "phoneNumber" : phoneNumber,
-      "photoUrl" : photoUrl,
+      "userUid": userUid,
+      "email": email,
+      "displayName": displayName,
+      "phoneNumber": phoneNumber,
+      "photoUrl": photoUrl,
       // "state" : state,
-      "auth" : auth,
-      "messagingToken" : messagingToken,
+      "auth": auth,
+      "messagingToken": messagingToken,
     };
   }
 
-
+  // UserModel -> Map<String, dynamic>
+  Map<String, dynamic> toMapAll() {
+    Map<String, dynamic> result = toMap();
+    result["id"] = id;
+    result["password"] = password;
+    result["joinType"] = joinType;
+    result["businessModel"] = businessModel?.toJson();
+    return result;
+  }
 }

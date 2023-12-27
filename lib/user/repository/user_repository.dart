@@ -38,15 +38,6 @@ class UserRepository {
       }
     });
 
-    // // 사업자 정보의 승인값이 승인상태('approve')라면 권한('auth')값을 'business'로 변경
-    // if(userData?["businessAuth"]?["applyState"] == "approve") {
-    //   userData?["auth"] = "business";
-    //
-    //   _firestore.collection("user").doc("google_oauth_${credential.user!.uid}").update(
-    //     {"auth": userData?["auth"]}
-    //   );
-    // }
-
     return result;
   }
 
@@ -55,8 +46,6 @@ class UserRepository {
     debugPrint("OAuthJoin :: ");
 
     try {
-      Map<String, dynamic> userMap;
-
       UserModel userModel = UserModel(
         userUid: credential.user?.uid,
         id: id,
@@ -65,45 +54,18 @@ class UserRepository {
         displayName: credential.user?.displayName,
         phoneNumber: credential.user?.phoneNumber,
         photoUrl: credential.user?.photoURL,
-        joinType: joinType.name.toString(),
+        joinType: joinType,
         auth: "user",
       );
 
+      Map<String, dynamic> userMap = userModel.toMapAll();
 
-      if(uid != null) {
-        userModel.
-        userMap = {
-          "userUid": credential.user?.uid,
-          "id": null,
-          "password": null,
-          "email": credential.user?.email,
-          "displayName": credential.user?.displayName,
-          "phoneNumber": credential.user?.phoneNumber,
-          "photoUrl": credential.user?.photoURL,
-          "joinType": joinType.name.toString(),
-          "auth": "user",
-        };
-        await _firestore.collection("user").doc("${joinType.name.toLowerCase()}_${uid}")
-          .set(userMap);
-
-      } else {
-        userMap = {
-          "userUid": credential.user?.uid,
-          "id": null,
-          "password": null,
-          "email": credential.user?.email,
-          "displayName": credential.user?.displayName,
-          "phoneNumber": credential.user?.phoneNumber,
-          "photoUrl": credential.user?.photoURL,
-          "joinType": joinType.name.toString(),
-          "auth": "user",
-        };
-
-        UserModel.fromJson(userMap);
-
-        await _firestore.collection("user").add(
-          userMap
-        );
+      if(uid != null) {   // 고정 UID가 있는 경우
+        // UID 강제 입력
+        userMap["userUid"] = uid;
+        await _firestore.collection("user").doc("${joinType.name.toLowerCase()}_$uid").set(userMap);
+      } else {            // 고정 UID가 없는 경우
+        await _firestore.collection("user").add(userMap);
       }
     } catch(exception) {
       debugPrint('User Join Error : $exception');
