@@ -110,6 +110,36 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
 
     if(!(state == null || state.email == "")) {
       customColumn = [
+        state.auth == "business" ?
+        ExpansionTile(
+          title: const Text('나의 행사'),
+          shape: InputBorder.none,
+          leading: const Icon(Icons.business),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.playlist_add_check),
+                    title: const Text('등록 행사 목록'),
+                    onTap: () {
+                      context.go("/event/regEventList");
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.playlist_add),
+                    title: const Text('행사 등록'),
+                    onTap: () {
+                      context.go("/event/edit");
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+            : Container(),
         ListTile(
           leading: const Icon(Icons.add_alert_rounded),
           title: const Text('나의 알림'),
@@ -124,36 +154,6 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
             context.go("/user/my-page");
           },
         ),
-        state.auth == "business" ?
-          ExpansionTile(
-            title: const Text('나의 행사'),
-            shape: InputBorder.none,
-            leading: const Icon(Icons.business),
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.playlist_add),
-                      title: const Text('등록 행사 목록'),
-                      onTap: () {
-                        context.go("/event/regEventList");
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.playlist_add),
-                      title: const Text('행사 등록'),
-                      onTap: () {
-                        context.go("/event/edit");
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
-        : Container(),
       ];
     }
 

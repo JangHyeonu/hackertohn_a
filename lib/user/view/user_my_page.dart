@@ -120,7 +120,7 @@ class UserMyPage extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.grey[200],
+                          color: Colors.grey[300],
                           child: const Padding(
                             padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                             child: Text("나의 활동"),
@@ -148,7 +148,7 @@ class UserMyPage extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.grey[200],
+                          color: Colors.grey[300],
                           child: const Padding(
                             padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                             child: Text("기타"),
@@ -175,7 +175,7 @@ class UserMyPage extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.grey[200],
+                          color: Colors.grey[300],
                           child: const Padding(
                             padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                             child: Text("소식 및 지원"),
