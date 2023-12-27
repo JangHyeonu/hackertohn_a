@@ -216,7 +216,7 @@ class _EventListComponentCounterState extends State<EventListComponentCounter> {
           "${hh.abs().toString()}:${mm.abs().toString().padLeft(2, "0")}:${ss.toString().padLeft(2, "0")} 남음",
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 14,
             letterSpacing: 2
           ),
         ),
@@ -226,7 +226,7 @@ class _EventListComponentCounterState extends State<EventListComponentCounter> {
           "진행 예정",
           style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 14,
               letterSpacing: 2
           ),
         ),
