@@ -81,7 +81,7 @@ class KeywordComponentState extends ConsumerState<KeywordComponent> {
                       ),
                       Expanded(child: Container()),
                       Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsets.only(right: 16.0),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.2,
                           alignment: Alignment.centerRight,
@@ -132,7 +132,7 @@ class KeywordComponentState extends ConsumerState<KeywordComponent> {
                               // 키워드 목록 다시 조회
                               ref.read(keywordListProvider.notifier).readList();
                             },
-                            child: const Text("등록", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2),),
+                            child: const Text("등록", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2, fontSize: 12),),
                           ),
                         ),
                       )

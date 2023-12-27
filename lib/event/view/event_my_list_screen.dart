@@ -6,6 +6,8 @@ import 'package:seeya_hackthon_a/event/component/event_list_component.dart';
 import 'package:seeya_hackthon_a/_common/component/text_form_button_component.dart';
 import 'package:seeya_hackthon_a/_common/layout/default_layout.dart';
 import 'package:seeya_hackthon_a/event/provider/event_provider.dart';
+import 'package:seeya_hackthon_a/user/model/user_model.dart';
+import 'package:seeya_hackthon_a/user/provider/user_provider.dart';
 
 import '../../_common/message/common_message.dart';
 
@@ -20,6 +22,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
   late ScrollController _controller;
   final FocusNode _focusNode = FocusNode();
   late double bottomSize;
+  late UserModel loginUser;
 
   String? _searchText;
   TextEditingController searchTextEditingController = TextEditingController();
@@ -49,7 +52,11 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
     _controller = ScrollController();
     _controller.addListener(fn);
 
-    ref.read(eventListProvider.notifier).readList();
+    loginUser = ref.read(userProvider.notifier).getLoginUser()!;
+
+    // ref.read(eventListProvider.notifier).readList().then((value) {
+    //   value!.where((element) => element.register == loginUser.userUid);
+    // });
   }
 
   @override
@@ -66,47 +73,47 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
     searchKeyboardFn();
 
     // 행사 목록 관리 provider
-    final state = ref.watch(eventListProvider);
+    final state = ref.watch(eventListProvider).where((element) => element.register == loginUser.userUid).toList();
 
     return DefaultLayout(
       sideBarOffYn: false,
-
+      title: "나의 등록행사 목록",
       // 키보드가 올라오는 영역 중 검색어 영역만 고정하기
       isResize: false,
-      bottomSheetWidget: SafeArea(
-        child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: TextFormButtonComponent(
-            focusNode: _focusNode,
-            textFormWidth: MediaQuery.of(context).size.width / 1.4,
-            buttonText: "검색",
-            buttonClickEvent: () => {
-              ref
-                  .read(eventListProvider.notifier)
-                  .readList(searchText: _searchText, needInit: true)
-                  .then((value) {
-                if (value!.isNotEmpty) {
-                  FocusScope.of(context).unfocus();
-                }
-              }),
-            },
-            onChangeEvent: (p0) {
-              setState(() {
-                _searchText = p0;
-              });
-            },
-            textEditingController: searchTextEditingController,
-            inputDecoration: const InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              border: InputBorder.none,
-              icon: Icon(Icons.search),
-              hintText: "검색어를 입력하세요",
-            ),
-          ),
-        ),
-      ),
+      // bottomSheetWidget: SafeArea(
+      //   child: Padding(
+      //     padding:
+      //         EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      //     child: TextFormButtonComponent(
+      //       focusNode: _focusNode,
+      //       textFormWidth: MediaQuery.of(context).size.width / 1.5,
+      //       buttonText: "검색",
+      //       buttonClickEvent: () => {
+      //         ref
+      //             .read(eventListProvider.notifier)
+      //             .readList(searchText: _searchText, needInit: true)
+      //             .then((value) {
+      //           if (value!.isNotEmpty) {
+      //             FocusScope.of(context).unfocus();
+      //           }
+      //         }),
+      //       },
+      //       onChangeEvent: (p0) {
+      //         setState(() {
+      //           _searchText = p0;
+      //         });
+      //       },
+      //       textEditingController: searchTextEditingController,
+      //       inputDecoration: const InputDecoration(
+      //         fillColor: Colors.white,
+      //         filled: true,
+      //         border: InputBorder.none,
+      //         icon: Icon(Icons.search),
+      //         hintText: "검색어를 입력하세요",
+      //       ),
+      //     ),
+      //   ),
+      // ),
 
       child: RefreshIndicator(
         // 새로고침
@@ -145,6 +152,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
                                 color: Colors.grey[200],
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8.0)),
+
                               ),
                               child: Container(
                                 height: MediaQuery.of(context).size.height / 7,
@@ -197,6 +205,14 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
                                 color: Colors.grey[200],
                                 borderRadius:
                                   const BorderRadius.all(Radius.circular(8.0)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 0.0,
+                                      offset: const Offset(0,7),
+                                    )
+                                  ]
                               ),
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",
@@ -204,6 +220,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
                                 businessTitle: state[index].businessTitle,
                                 startDatetime: state[index].startDatetime,
                                 endDatetime: state[index].endDatetime,
+                                keyword: state[index].keywords,
                               ),
                             ),
                           ),

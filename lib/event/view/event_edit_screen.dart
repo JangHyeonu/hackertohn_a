@@ -56,6 +56,7 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
 
     return DefaultLayout(
         sideBarOffYn: false,
+        isResize: true,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -64,27 +65,30 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
+                        Padding(
+                          padding: const EdgeInsets.only(right: 24.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
                                 barrierDismissible: false,
                                 context: context,
                                 builder: (context) {
                                   return const BusinessSelectPopupScreen();
                                 });
-                          },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Icon(Icons.fact_check_outlined),
-                                SizedBox(width: 8.0),
-                                Text("사업자 선택"),
-                              ],
+                            },
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.fact_check_outlined),
+                                  SizedBox(width: 8.0),
+                                  Text("사업자 선택"),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        Expanded(child: Container()),
                         Container(
                           height: MediaQuery.of(context).size.height / 20,
                           width: MediaQuery.of(context).size.width / 2,
@@ -462,7 +466,6 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                             onChanged: (value) {
                               state.caution = value;
                             },
-                            controller: TextEditingController(text: state.caution),
                             decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.feedback_outlined),
                               border: OutlineInputBorder(
@@ -479,7 +482,6 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                           onChanged: (value) {
                             state.keywords = value;
                           },
-                          controller: TextEditingController(text: state.keywords),
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.text_snippet),
                             border: OutlineInputBorder(
@@ -544,9 +546,9 @@ class EventEditScreenState extends ConsumerState<EventEditScreen> {
                   ),
                 ],
               ),
-
             ],
           ),
-        ));
+        )
+    );
   }
 }

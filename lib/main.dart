@@ -15,6 +15,7 @@ import 'package:seeya_hackthon_a/business/view/business_main_screen.dart';
 import 'package:seeya_hackthon_a/event/view/event_detail_screen.dart';
 import 'package:seeya_hackthon_a/event/view/event_edit_screen.dart';
 import 'package:seeya_hackthon_a/event/view/event_list_screen.dart';
+import 'package:seeya_hackthon_a/event/view/event_my_list_screen.dart';
 import 'package:seeya_hackthon_a/firebase_options.dart';
 import 'package:seeya_hackthon_a/user/view/user_join_screen.dart';
 import 'package:seeya_hackthon_a/user/view/user_my_page.dart';
@@ -104,7 +105,7 @@ class MyApp extends StatelessWidget {
               ),
               GoRoute(
                 path: "myList",
-                builder: (context, state) => EventListScreen(),
+                builder: (context, state) => EventMyListScreen(),
               ),
               GoRoute(
                 path: "edit",

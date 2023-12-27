@@ -67,10 +67,6 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
 
   Future<String> applyBusinessAuth(BusinessModel state, BuildContext context) async {
 
-    if(state == null) {
-      return state.applyState!;
-    }
-
     // 사용자의 인증 입력 데이터 DB 저장 로직
     bool isInsert = await businessRepository.applyBusinessAuth(state);
 
@@ -84,7 +80,7 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
       this.state = state;
     }
 
-    return state.applyState!;
+    return state.applyState ?? "apply";
   }
 
   // businessAuth 조회하기
@@ -114,9 +110,20 @@ class BusinessStateNotifier extends StateNotifier<BusinessModel> {
     return state;
   }
 
-  // void setUpdateAuth(String? uid, String auth) {
-  //   businessRepository.updateBusinessAuth(uid, auth);
+  // void updateBusinessAuth() async {
+  //   ref.read(userProvider.notifier).setState("approve");
   // }
+
+  Future<bool> modifyBusinessAuth(String uid) async {
+    BusinessModel? businessModel = await getBusinessAuth(uid);
+
+    if(businessModel == null || businessModel.applyState == null) {
+      return false;
+    }
+
+    bool isUpdated = await businessRepository.updateBusinessAuth(uid, businessModel);
+    return isUpdated;
+  }
 
 
 

@@ -34,7 +34,16 @@ class UserMyPage extends ConsumerWidget {
                     otherAccountsPictures: [
                       state.businessModel?.applyState == "approve" ?
                         IconButton(onPressed: (){}, icon: const Icon(Icons.business), color: Colors.white)
-                          : IconButton(onPressed: (){}, icon: const Icon(Icons.person), color: Colors.white),
+                          : IconButton(
+                              onPressed: () async {
+                                bool isUpdated = await ref.read(businessProvider.notifier).modifyBusinessAuth(state.userUid!);
+                                if(isUpdated) {
+                                  Fluttertoast.showToast(msg: "비즈니스 계정으로 승인되었습니다.\n다시 로그인해주세요.");
+                                } else {
+                                  Fluttertoast.showToast(msg: "비즈니스 계정 승인 실패하였습니다.\n다시 시도해주세요.");
+                                }
+                              },
+                              icon: const Icon(Icons.person), color: Colors.white),
                     ],
                   ),
                 ],
@@ -87,7 +96,7 @@ class UserMyPage extends ConsumerWidget {
                         return;
                       }
 
-                      if(businessState.applyState == "apply") {
+                      if(state.businessModel?.applyState == "apply") {
                         Fluttertoast.showToast(
                             msg: "신청서가 접수되어 인증이 진행 중입니다.",
                             gravity: ToastGravity.CENTER,
@@ -111,7 +120,7 @@ class UserMyPage extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.grey[200],
+                          color: Colors.grey[300],
                           child: const Padding(
                             padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                             child: Text("나의 활동"),
@@ -139,7 +148,7 @@ class UserMyPage extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.grey[200],
+                          color: Colors.grey[300],
                           child: const Padding(
                             padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                             child: Text("기타"),
@@ -166,7 +175,7 @@ class UserMyPage extends ConsumerWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          color: Colors.grey[200],
+                          color: Colors.grey[300],
                           child: const Padding(
                             padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
                             child: Text("소식 및 지원"),

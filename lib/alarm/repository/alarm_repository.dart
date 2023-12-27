@@ -67,9 +67,7 @@ class AlarmRepository {
   Future<bool> delete({String? alarmId}) async {
     bool result = false;
 
-    final docRef = _firestore.collection("alarm").doc(alarmId).delete().then((value) {
-      result = true;
-    }, onError: () => result = false);
+    await _firestore.collection("alarm").doc(alarmId).delete().then((value) => result = true);
 
     return result;
   }

@@ -56,6 +56,14 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 5.0,
+                        spreadRadius: 0.0,
+                        offset: const Offset(0,7),
+                      )
+                    ]
                 ),
                 child: EventListComponent(
                   eventId: eventId,
@@ -63,6 +71,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                   businessTitle: state.businessTitle,
                   startDatetime: state.startDatetime,
                   endDatetime: state.endDatetime,
+                  keyword: state.keywords,
                 ),
               ),
             ),
@@ -190,16 +199,19 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width / 4,
                           height: MediaQuery.of(context).size.height / 8.8,
+                          child: Image.asset("assets/image/noimage.gif", fit: BoxFit.fitHeight),
                         ),
                         Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width / 4,
                           height: MediaQuery.of(context).size.height / 8.8,
+                          child: Image.asset("assets/image/noimage.gif", fit: BoxFit.fitHeight),
                         ),
                         Container(
                           color: Colors.white,
                           width: MediaQuery.of(context).size.width / 4,
                           height: MediaQuery.of(context).size.height / 8.8,
+                          child: Image.asset("assets/image/noimage.gif", fit: BoxFit.fitHeight),
                         )
                       ],
                     ),

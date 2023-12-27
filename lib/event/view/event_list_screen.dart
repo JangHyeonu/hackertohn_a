@@ -80,7 +80,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: TextFormButtonComponent(
             focusNode: _focusNode,
-            textFormWidth: MediaQuery.of(context).size.width / 1.4,
+            textFormWidth: MediaQuery.of(context).size.width / 1.5,
             buttonText: "검색",
             buttonClickEvent: () => {
               ref
@@ -102,7 +102,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
               fillColor: Colors.white,
               filled: true,
               border: InputBorder.none,
-              icon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search),
               hintText: "검색어를 입력하세요",
             ),
           ),
@@ -187,7 +187,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                               )
                             : Container(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
                           child: InkWell(
                             onTap: () {
                               context
@@ -198,6 +198,14 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                                 color: Colors.grey[200],
                                 borderRadius:
                                   const BorderRadius.all(Radius.circular(8.0)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 0.0,
+                                      offset: const Offset(0,7),
+                                    )
+                                  ]
                               ),
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",
@@ -205,6 +213,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
                                 businessTitle: state[index].businessTitle,
                                 startDatetime: state[index].startDatetime,
                                 endDatetime: state[index].endDatetime,
+                                keyword: state[index].keywords,
                               ),
                             ),
                           ),
