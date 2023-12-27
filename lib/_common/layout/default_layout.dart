@@ -48,7 +48,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
             drawerHeader(state),
             (state == null || state.email == "" ?
               TextButton(
-                child: const Text("로그인"),
+                child: const Text("로그인", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2)),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -59,7 +59,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
               )
                 :
               TextButton(
-                child: const Text("로그아웃"),
+                child: const Text("로그아웃", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2)),
                 onPressed: () {
                   ref.read(userProvider.notifier).logout();
 
@@ -124,7 +124,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
                     leading: const Icon(Icons.playlist_add_check),
                     title: const Text('등록 행사 목록'),
                     onTap: () {
-                      context.go("/event/regEventList");
+                      context.go("/event/myList");
                     },
                   ),
                   ListTile(

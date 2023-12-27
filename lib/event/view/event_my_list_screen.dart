@@ -70,7 +70,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
 
     return DefaultLayout(
       sideBarOffYn: false,
-
+      title: "나의 등록행사 목록",
       // 키보드가 올라오는 영역 중 검색어 영역만 고정하기
       isResize: false,
       bottomSheetWidget: SafeArea(
@@ -79,7 +79,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: TextFormButtonComponent(
             focusNode: _focusNode,
-            textFormWidth: MediaQuery.of(context).size.width / 1.4,
+            textFormWidth: MediaQuery.of(context).size.width / 1.5,
             buttonText: "검색",
             buttonClickEvent: () => {
               ref
@@ -145,6 +145,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
                                 color: Colors.grey[200],
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8.0)),
+
                               ),
                               child: Container(
                                 height: MediaQuery.of(context).size.height / 7,
@@ -197,6 +198,14 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
                                 color: Colors.grey[200],
                                 borderRadius:
                                   const BorderRadius.all(Radius.circular(8.0)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 0.0,
+                                      offset: const Offset(0,7),
+                                    )
+                                  ]
                               ),
                               child: EventListComponent(
                                 eventId: state[index].eventId ?? "",
@@ -204,6 +213,7 @@ class EventListScreenState extends ConsumerState<EventMyListScreen> {
                                 businessTitle: state[index].businessTitle,
                                 startDatetime: state[index].startDatetime,
                                 endDatetime: state[index].endDatetime,
+                                keyword: state[index].keywords,
                               ),
                             ),
                           ),
