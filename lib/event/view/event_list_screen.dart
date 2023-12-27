@@ -80,7 +80,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: TextFormButtonComponent(
             focusNode: _focusNode,
-            textFormWidth: MediaQuery.of(context).size.width / 1.4,
+            textFormWidth: MediaQuery.of(context).size.width / 1.5,
             buttonText: "검색",
             buttonClickEvent: () => {
               ref
@@ -102,7 +102,7 @@ class EventListScreenState extends ConsumerState<EventListScreen> {
               fillColor: Colors.white,
               filled: true,
               border: InputBorder.none,
-              icon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search),
               hintText: "검색어를 입력하세요",
             ),
           ),
